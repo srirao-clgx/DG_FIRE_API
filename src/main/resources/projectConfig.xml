@@ -1,0 +1,3602 @@
+<Project projectName="CoreLogic_Digital_Gateway" projectDesc="CoreLogic Digital Gateway">
+  <testSuites>
+    <testsuite testSuiteID="Test_Suite_01">
+      <testSuiteName>DG_Test_Suite</testSuiteName>
+      <testSuiteDesc>Test Suite for DG Test Cases</testSuiteDesc>
+      <testCases>
+        <testCase id="Test_Suite_01%TC01" isDataDriven="false">
+          <testcaseSummary>01_SSOT_Tax_QA1</testcaseSummary>
+          <tcGroup>Tax,Regression</tcGroup>
+          <testSteps/>
+        </testCase>
+        <testCase id="Test_Suite_01%TC02" isDataDriven="false" dataSrcPath="">
+          <testcaseSummary>02_Generic_PTE_Pull_QA1</testcaseSummary>
+          <tcGroup>Tax,Regression</tcGroup>
+          <testSteps>
+            <testStep id="Test_Suite_01%TC02%TS01" isDataDriven="false" waitForExecution="false">
+              <serviceID>S02%PTE_Pull_Submit_QA1_REST_02%INT01%OPR01</serviceID>
+              <stepSummary>01_PTE_Pull_Submit</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="E1672BE6-68AB-45BA-9DE7-B1BA6AC5D08E"/>
+                  <InputData fieldName="action" expectedValue="Submit"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="cl:KeyValue" expectedValue="TCProperties.LoanIdentifier"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation/>
+              </validations>
+              <scriptText></scriptText>
+            </testStep>
+            <testStep id="Test_Suite_01%TC02%TS02" isDataDriven="false" waitForExecution="true" waitTime="15">
+              <serviceID>S02%PTE_Pull_Retrieve_QA1_REST_03%INT01%OPR01</serviceID>
+              <stepSummary>02_PTE_Pull_Retrieve</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="E1672BE6-68AB-45BA-9DE7-B1BA6AC5D08E"/>
+                  <InputData fieldName="action" expectedValue="Retrieve"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue" expectedValue="|TS01#//cl:DEAL/cl:KEYS/cl:KEY[2]/cl:KeyValue/text()|"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[2]/cl:KeyValue" expectedValue="|TS01#//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue/text()|"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation>
+                  <FieldValidation fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                </fieldValidation>
+              </validations>
+              <scriptText>import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
+import groovy.xml.*;
+
+
+	def host = &quot;CLPQN1VQINPLT01&quot;
+	def port = 27017
+	def userName = &quot;dkotoyan&quot;
+	def password = &quot;H2r\$cvGy&quot;
+	def databaseName = &quot;globalgatewaydb&quot;
+	def responsexml = &quot;Response xml&quot;
+	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
+	
+	sleep(5000); 
+	ServerAddress serverAddress = new ServerAddress(host, port); 
+    MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray()); 
+    MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential)); 
+  	DB db = mongoClient.getDB(databaseName);     
+  	       
+  	System.out.println(&quot;Successfully connected to Mongo Database.&quot;);
+
+try {
+  	
+  	responsexml = responseHolder.get(testStep.getId()).getResponse();
+	
+  	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
+	  	
+  	def response = new XmlParser().parseText(responsexml);
+  	
+  	def respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][1][ns.KeyValue].text();
+  	
+  	if respondingPartyOrderId not like %CLG% then
+  	respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][0][ns.KeyValue].text();
+  
+	System.out.println (&quot;Responding Party Order Id is: \n&quot; + respondingPartyOrderId);
+  		
+  	
+  	DBCollection coll = db.getCollection(&quot;orderMessages&quot;);
+  	BasicDBObject query = new BasicDBObject();
+  	  	
+  	query.put(&quot;orderId&quot;, respondingPartyOrderId);
+  	
+  	//DBCursor curs = coll.find(query)
+    int orderMessagesRowCount = coll.find(query).count();
+  	System.out.println(&quot;Count of records: &quot; + orderMessagesRowCount);
+  	
+  	/* while(curs.hasNext()) {
+   	   DBObject o = curs.next();
+       System.out.println(o.toString());
+  }*/
+	
+	assert orderMessagesRowCount == 8 : &quot;Number of Rows should be 8&quot;;
+  	
+	}
+	catch (AssertionError asserterror){ 
+      throw new Exception(&quot;Records Count does not match &quot;+ asserterror.getMessage()); 
+    } 
+	catch (Exception e) {
+      System.out.println(&quot;Oh No....Exception&quot;);
+  	  e.printStackTrace();
+  	} 
+	finally{
+      	System.out.println(&quot;Finally....Closing DB Connection&quot;);
+      	mongoClient.close();
+    }
+
+
+</scriptText>
+            </testStep>
+          </testSteps>
+        </testCase>
+        <testCase id="Test_Suite_01%TC03" isDataDriven="false" dataSrcPath="">
+          <testcaseSummary>03_Network_Capitol_Push_QA1</testcaseSummary>
+          <tcGroup>Regression</tcGroup>
+          <testSteps>
+            <testStep id="Test_Suite_01%TC03%TS01" isDataDriven="false" waitForExecution="false" waitTime="">
+              <serviceID>S02%PUSH_Network_Capitol_QA1_REST_04%INT01%OPR01</serviceID>
+              <stepSummary>01_Network_Capitol_Push_Submit_QA1</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="28b93f37-db80-411f-88a0-e085d3008b81"/>
+                  <InputData fieldName="action" expectedValue="Submit"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue" expectedValue="TCProperties.LoanIdentifier"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation>
+                  <FieldValidation fieldName="StatusName" expectedValue="Success"/>
+                  <FieldValidation fieldName="StatusDescription" expectedValue="Acknowledgement"/>
+                </fieldValidation>
+              </validations>
+              <scriptText>import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
+import groovy.xml.*;
+
+
+	def host = &quot;CLPQN1VQINPLT01&quot;
+	def port = 27017
+	def userName = &quot;dkotoyan&quot;
+	def password = &quot;H2r\$cvGy&quot;
+	def databaseName = &quot;globalgatewaydb&quot;
+	def responsexml = &quot;Response xml&quot;
+	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
+	
+	sleep(5000);
+	ServerAddress serverAddress = new ServerAddress(host, port);
+    MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
+    MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+  	DB db = mongoClient.getDB(databaseName);    
+  	      
+  	System.out.println(&quot;Successfully connected to Mongo Database.&quot;);
+
+try {
+  		
+  	responsexml = responseHolder.get(testStep.getId()).getResponse();
+	
+  	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
+	  	
+  	def response = new XmlParser().parseText(responsexml);
+  	
+  	def respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][0][ns.KeyValue].text();
+  	
+	System.out.println (&quot;Responding Party Order Id is: \n&quot; + respondingPartyOrderId);
+  	
+  
+  	DBCollection coll = db.getCollection(&quot;orderMessages&quot;);
+  	BasicDBObject query = new BasicDBObject();
+  	  	
+  	query.put(&quot;orderId&quot;, respondingPartyOrderId);
+  	
+  	//DBCursor curs = coll.find(query)
+    int orderMessagesRowCount = coll.find(query).count();
+  	System.out.println(&quot;Count of records: &quot; + orderMessagesRowCount);
+  	
+  	/* while(curs.hasNext()) {
+   	   DBObject o = curs.next();
+       System.out.println(o.toString());
+  }*/
+	
+	assert orderMessagesRowCount == 8 : &quot;Number of Rows should be 8&quot;;
+  	
+	}
+	catch (AssertionError asserterror){
+      throw new Exception(&quot;Records Count does not match &quot;+ asserterror.getMessage());
+    }
+	catch (Exception e) {
+      System.out.println(&quot;Oh No....Exception&quot;);
+  	  e.printStackTrace();
+  	}
+	finally{
+      	System.out.println(&quot;Finally....Closing DB Connection&quot;);
+      	mongoClient.close();
+    }
+
+</scriptText>
+            </testStep>
+          </testSteps>
+        </testCase>
+        <testCase id="Test_Suite_01%TC04" isDataDriven="false">
+          <testcaseSummary>04_Cascading_AVM_Report_Type_QA1</testcaseSummary>
+          <tcGroup>Regression</tcGroup>
+          <testSteps>
+            <testStep id="Test_Suite_01%TC04%TS01" isDataDriven="false" waitForExecution="false" waitTime="">
+              <serviceID>S02%Cascading_AVM_Report_Type_QA1_REST_05%INT01%OPR01</serviceID>
+              <stepSummary>01_Cascading_AVM_Report_Type_QA1</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="E03134FC-B9AF-40CB-9E71-840C0EBE1E06"/>
+                  <InputData fieldName="action" expectedValue="Original"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue" expectedValue="TCProperties.LoanIdentifier"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation>
+                  <FieldValidation fieldName="StatusCode" expectedValue="1999"/>
+                </fieldValidation>
+              </validations>
+              <scriptText>import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
+import groovy.xml.*;
+
+
+	def host = &quot;CLPQN1VQINPLT01&quot;
+	def port = 27017
+	def userName = &quot;dkotoyan&quot;
+	def password = &quot;H2r\$cvGy&quot;
+	def databaseName = &quot;globalgatewaydb&quot;
+	def responsexml = &quot;Response xml&quot;
+	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
+	
+
+try {
+  	
+  	sleep(5000);
+	ServerAddress serverAddress = new ServerAddress(host, port);
+    MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
+    MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+    
+  	DB db = mongoClient.getDB(databaseName);    
+  	      
+  	System.out.println(&quot;Awesome....Successfully connected to Mongo Database.&quot;);
+	
+  	responsexml = responseHolder.get(testStep.getId()).getResponse();
+	
+  	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
+	  	
+  	def response = new XmlParser().parseText(responsexml);
+  	
+  	def respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][7][ns.KeyValue].text();
+  	
+	System.out.println (&quot;Responding Party Order Id is: \n&quot; + respondingPartyOrderId);
+  	
+	
+  	
+  	DBCollection coll = db.getCollection(&quot;orderMessages&quot;);
+  	BasicDBObject query = new BasicDBObject();
+  	  	
+  	query.put(&quot;orderId&quot;, respondingPartyOrderId);
+  	
+  	//DBCursor curs = coll.find(query)
+    int orderMessagesRowCount = coll.find(query).count();
+  	System.out.println(&quot;Count of records: &quot; + orderMessagesRowCount);
+  	
+  	/* while(curs.hasNext()) {
+   	   DBObject o = curs.next();
+       System.out.println(o.toString());
+  }*/
+	
+	assert orderMessagesRowCount == 4 : &quot;Number of Rows should be 4&quot;
+  	
+	}
+	catch (Exception e) {
+      System.out.println(&quot;Oh No....Exception&quot;);
+  	  e.printStackTrace();
+  	} 
+	finally{
+      	System.out.println(&quot;Finally....Closing DB Connection&quot;);
+      	mongoClient.close();
+    }
+</scriptText>
+            </testStep>
+          </testSteps>
+        </testCase>
+        <testCase id="Test_Suite_01%TC05" isDataDriven="false">
+          <testcaseSummary>05_GeoAVMCore_M34_QA1</testcaseSummary>
+          <tcGroup>Regression</tcGroup>
+          <testSteps>
+            <testStep id="Test_Suite_01%TC05%TS01" isDataDriven="false" waitForExecution="false" waitTime="">
+              <serviceID>S02%GeoAVMCore_M34_QA1_REST_06%INT01%OPR01</serviceID>
+              <stepSummary>GeoAVMCore_M34_QA1</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="E03134FC-B9AF-40CB-9E71-840C0EBE1E06"/>
+                  <InputData fieldName="action" expectedValue="Original"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="cl:KeyValue" expectedValue="TCProperties.LoanIdentifier"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation>
+                  <FieldValidation fieldName="StatusCode" expectedValue="1999"/>
+                </fieldValidation>
+              </validations>
+              <scriptText>import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
+import groovy.xml.*;
+
+
+	def host = &quot;CLPQN1VQINPLT01&quot;
+	def port = 27017
+	def userName = &quot;dkotoyan&quot;
+	def password = &quot;H2r\$cvGy&quot;
+	def databaseName = &quot;globalgatewaydb&quot;
+	def responsexml = &quot;Response xml&quot;
+	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
+	
+
+try {
+  	
+  	sleep(5000);
+	ServerAddress serverAddress = new ServerAddress(host, port);
+    MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
+    MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+    
+  	DB db = mongoClient.getDB(databaseName);    
+  	      
+  	System.out.println(&quot;Awesome....Successfully connected to Mongo Database.&quot;);
+	
+  	responsexml = responseHolder.get(testStep.getId()).getResponse();
+	
+  	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
+	  	
+  	def response = new XmlParser().parseText(responsexml);
+  	
+  	def respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][2][ns.KeyValue].text();
+  	
+	System.out.println (&quot;Responding Party Order Id is: \n&quot; + respondingPartyOrderId);
+  	
+	
+  	
+  	DBCollection coll = db.getCollection(&quot;orderMessages&quot;);
+  	BasicDBObject query = new BasicDBObject();
+  	  	
+  	query.put(&quot;orderId&quot;, respondingPartyOrderId);
+  	
+  	//DBCursor curs = coll.find(query)
+    int orderMessagesRowCount = coll.find(query).count();
+  	System.out.println(&quot;Count of records: &quot; + orderMessagesRowCount);
+  	
+  	/* while(curs.hasNext()) {
+   	   DBObject o = curs.next();
+       System.out.println(o.toString());
+  }*/
+	
+	assert orderMessagesRowCount == 4 : &quot;Number of Rows should be 4&quot;
+  	
+	}
+	catch (Exception e) {
+      System.out.println(&quot;Oh No....Exception&quot;);
+  	  e.printStackTrace();
+  	} 
+	finally{
+      	System.out.println(&quot;Finally....Closing DB Connection&quot;);
+      	mongoClient.close();
+    }
+</scriptText>
+            </testStep>
+          </testSteps>
+        </testCase>
+        <testCase id="Test_Suite_01%TC06" isDataDriven="false">
+          <testcaseSummary>06_GeoAVMPrecision_M34_QA1</testcaseSummary>
+          <tcGroup>Regression</tcGroup>
+          <testSteps>
+            <testStep id="Test_Suite_01%TC06%TS01" isDataDriven="false" waitForExecution="false" waitTime="">
+              <serviceID>S02%GeoAVMPrecision_M34_QA1_REST_07%INT01%OPR01</serviceID>
+              <stepSummary>01_GeoAVMPrecision_M34_QA1</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="E03134FC-B9AF-40CB-9E71-840C0EBE1E06"/>
+                  <InputData fieldName="action" expectedValue="Original"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue" expectedValue="TCProperties.LoanIdentifier"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation>
+                  <FieldValidation fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <FieldValidation fieldName="StatusCode" expectedValue="1999"/>
+                </fieldValidation>
+              </validations>
+              <scriptText>import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
+import groovy.xml.*;
+
+
+	def host = &quot;CLPQN1VQINPLT01&quot;
+	def port = 27017
+	def userName = &quot;dkotoyan&quot;
+	def password = &quot;H2r\$cvGy&quot;
+	def databaseName = &quot;globalgatewaydb&quot;
+	def responsexml = &quot;Response xml&quot;
+	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
+	
+
+try {
+  	
+  	sleep(5000);
+	ServerAddress serverAddress = new ServerAddress(host, port);
+    MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
+    MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+    
+  	DB db = mongoClient.getDB(databaseName);    
+  	      
+  	System.out.println(&quot;Awesome....Successfully connected to Mongo Database.&quot;);
+	
+  	responsexml = responseHolder.get(testStep.getId()).getResponse();
+	
+  	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
+	  	
+  	def response = new XmlParser().parseText(responsexml);
+  	
+  	def respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][7][ns.KeyValue].text();
+  	
+	System.out.println (&quot;Responding Party Order Id is: \n&quot; + respondingPartyOrderId);
+  	
+	
+  	
+  	DBCollection coll = db.getCollection(&quot;orderMessages&quot;);
+  	BasicDBObject query = new BasicDBObject();
+  	  	
+  	query.put(&quot;orderId&quot;, respondingPartyOrderId);
+  	
+  	//DBCursor curs = coll.find(query)
+    int orderMessagesRowCount = coll.find(query).count();
+  	System.out.println(&quot;Count of records: &quot; + orderMessagesRowCount);
+  	
+  	/* while(curs.hasNext()) {
+   	   DBObject o = curs.next();
+       System.out.println(o.toString());
+  }*/
+	
+	assert orderMessagesRowCount == 4 : &quot;Number of Rows should be 4&quot;
+  	
+	}
+	catch (Exception e) {
+      System.out.println(&quot;Oh No....Exception&quot;);
+  	  e.printStackTrace();
+  	} 
+	finally{
+      	System.out.println(&quot;Finally....Closing DB Connection&quot;);
+      	mongoClient.close();
+    }
+
+</scriptText>
+            </testStep>
+          </testSteps>
+        </testCase>
+        <testCase id="Test_Suite_01%TC07" isDataDriven="false" dataSrcPath="">
+          <testcaseSummary>07_LoanSafe_Suite_LSCM_QA1</testcaseSummary>
+          <tcGroup>Regression</tcGroup>
+          <testSteps>
+            <testStep id="Test_Suite_01%TC07%TS01" isDataDriven="false" waitForExecution="false" waitTime="">
+              <serviceID>S02%LoanSafe_Suite_LSCM_Submit_QA1_REST_08%INT01%OPR01</serviceID>
+              <stepSummary>01_LoanSafe_Suite_LSCM_Submit_QA1</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="0db9be25-3b6f-4250-99e7-da4fb4e2c5da"/>
+                  <InputData fieldName="action" expectedValue="Submit"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue" expectedValue="TCProperties.LoanIdentifier"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation/>
+              </validations>
+              <scriptText></scriptText>
+            </testStep>
+            <testStep id="Test_Suite_01%TC07%TS02" isDataDriven="false" waitForExecution="true" waitTime="2">
+              <serviceID>S02%LoanSafe_Suite_LSCM_Reissue_QA1_REST_09%INT01%OPR01</serviceID>
+              <stepSummary>02_LoanSafe_Suite_LSCM_Reissue_QA1</stepSummary>
+              <stepData useFiles="false">
+                <inputFilePath></inputFilePath>
+                <inputData>
+                  <InputData fieldName="apikey" expectedValue="0db9be25-3b6f-4250-99e7-da4fb4e2c5da"/>
+                  <InputData fieldName="action" expectedValue="Reissue"/>
+                  <InputData fieldName="LoanIdentifier" expectedValue="TCProperties.LoanIdentifier"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue" expectedValue="|TS01#//cl:DEAL/cl:KEYS/cl:KEY[1]/cl:KeyValue/text()|"/>
+                  <InputData fieldName="//cl:DEAL/cl:KEYS/cl:KEY[2]/cl:KeyValue" expectedValue="|TS01#//cl:DEAL/cl:KEYS/cl:KEY[2]/cl:KeyValue/text()|"/>
+                </inputData>
+              </stepData>
+              <validations hasvalidationfile="false">
+                <validationfilepath></validationfilepath>
+                <fieldValidation>
+                  <FieldValidation fieldName="StatusCode" expectedValue="1999"/>
+                </fieldValidation>
+              </validations>
+              <scriptText></scriptText>
+            </testStep>
+          </testSteps>
+        </testCase>
+      </testCases>
+    </testsuite>
+  </testSuites>
+  <services>
+    <service serviceID="S01" serviceType="SOAP">
+      <wsdlService/>
+    </service>
+    <service serviceID="S02" serviceType="REST">
+      <wsdlService>
+        <SoapService soapServiceID="SSOT_Tax_QA1_REST_01">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://qa1.globalgateway.corelogic.com/order/taxservicerequest/" oprID="OPR01" postAsQueryString="false" oprMethod="POST">
+                  <actionUrl>https://qa1.globalgateway.corelogic.com/order/taxservicerequest/ssot</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:ser=&quot;http://www.corelogic.com/clp/g2/service&quot;&gt;
+    &lt;soapenv:Header/&gt;
+    &lt;soapenv:Body&gt;
+        &lt;ser:ServiceRequest&gt;
+            &lt;DEAL xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+                  xmlns:wells=&quot;http://service.wellsfargo.com/entity/USO/2012&quot;&gt;
+                &lt;ABOUT_VERSIONS&gt;
+                    &lt;ABOUT_VERSION SequenceNumber=&quot;1&quot;&gt;
+                        &lt;CreatedDatetime&gt;2015-12-01T12:34:56Z&lt;/CreatedDatetime&gt;
+                    &lt;/ABOUT_VERSION&gt;
+                &lt;/ABOUT_VERSIONS&gt;
+                &lt;COLLATERALS&gt;
+                    &lt;COLLATERAL SequenceNumber=&quot;1&quot;&gt;
+                        &lt;SUBJECT_PROPERTY&gt;
+                            &lt;ADDRESS&gt;
+                                &lt;AddressAdditionalLineText&gt;&lt;/AddressAdditionalLineText&gt;
+                                &lt;AddressLineText&gt;108 Sandburg ct&lt;/AddressLineText&gt;
+                                &lt;AddressType&gt;Primary&lt;/AddressType&gt;
+                                &lt;CityName&gt;Ames&lt;/CityName&gt;
+                                &lt;CountryCode&gt;USA&lt;/CountryCode&gt;
+                                &lt;CountryName&gt;United States&lt;/CountryName&gt;
+                                &lt;CountyName&gt;&lt;/CountyName&gt;
+                                &lt;PostalCode&gt;50014&lt;/PostalCode&gt;
+                                &lt;StateCode&gt;IA&lt;/StateCode&gt;
+                                &lt;StreetName&gt;Sandburg ct&lt;/StreetName&gt;
+                                &lt;StreetPrimaryNumberText&gt;108&lt;/StreetPrimaryNumberText&gt;
+                                &lt;StreetSuffixText&gt;ct&lt;/StreetSuffixText&gt;
+                                &lt;EXTENSION&gt;
+                                    &lt;OTHER&gt;
+                                        &lt;wells:ADDRESS&gt;
+                                            &lt;wells:AddressEndUnitIdentifier&gt;&lt;/wells:AddressEndUnitIdentifier&gt;
+                                            &lt;wells:AddressFormatType&gt;StreetAddress&lt;/wells:AddressFormatType&gt;
+                                            &lt;!--wells:BoxIdentifier&gt;12&lt;/wells:BoxIdentifier--&gt;
+                                            &lt;!--wells:HighwayContractRouteNbr&gt;45&lt;/wells:HighwayContractRouteNbr--&gt;
+                                            &lt;wells:PropertyLocationDescription&gt;myPropertyLocationDescription&lt;/wells:PropertyLocationDescription&gt;
+                                            &lt;wells:StandardizedAddressOverriddenIndicator&gt;true&lt;/wells:StandardizedAddressOverriddenIndicator&gt;
+                                        &lt;/wells:ADDRESS&gt;
+                                    &lt;/OTHER&gt;
+                                &lt;/EXTENSION&gt;
+                            &lt;/ADDRESS&gt;
+                            &lt;IMPROVEMENT&gt;
+                                &lt;STRUCTURE&gt;
+                                    &lt;STRUCTURE_DETAIL&gt;
+                                        &lt;StoriesNumber&gt;2&lt;/StoriesNumber&gt;
+                                    &lt;/STRUCTURE_DETAIL&gt;
+                                &lt;/STRUCTURE&gt;
+                            &lt;/IMPROVEMENT&gt;
+                            &lt;LEGAL_DESCRIPTIONS&gt;
+                                &lt;LEGAL_DESCRIPTION SequenceNumber=&quot;1&quot;&gt;
+                                    &lt;PARSED_LEGAL_DESCRIPTION&gt;
+                                        &lt;PLATTED_LANDS&gt;
+                                            &lt;PLATTED_LAND SequenceNumber=&quot;1&quot;&gt;
+                                                &lt;PlatIdentifier&gt;myPlatIdentifier&lt;/PlatIdentifier&gt;
+                                            &lt;/PLATTED_LAND&gt;
+                                        &lt;/PLATTED_LANDS&gt;
+                                        &lt;UNPLATTED_LANDS&gt;
+                                            &lt;UNPLATTED_LAND SequenceNumber=&quot;1&quot;&gt;
+                                                &lt;RangeIdentifier&gt;myRangeIdentifier&lt;/RangeIdentifier&gt;
+                                            &lt;/UNPLATTED_LAND&gt;
+                                        &lt;/UNPLATTED_LANDS&gt;
+                                    &lt;/PARSED_LEGAL_DESCRIPTION&gt;
+                                    &lt;UNPARSED_LEGAL_DESCRIPTIONS&gt;
+                                        &lt;UNPARSED_LEGAL_DESCRIPTION SequenceNumber=&quot;1&quot;&gt;
+                                            &lt;UnparsedLegalDescription&gt;myUnparsedLegalDescription&lt;/UnparsedLegalDescription&gt;
+                                        &lt;/UNPARSED_LEGAL_DESCRIPTION&gt;
+                                    &lt;/UNPARSED_LEGAL_DESCRIPTIONS&gt;
+                                &lt;/LEGAL_DESCRIPTION&gt;
+                            &lt;/LEGAL_DESCRIPTIONS&gt;
+                            &lt;LOCATION_IDENTIFIER&gt;
+                                &lt;FIPS_INFORMATION&gt;
+                                    &lt;FIPSCountyCode&gt;myFIPSCountyCode&lt;/FIPSCountyCode&gt;
+                                &lt;/FIPS_INFORMATION&gt;
+                            &lt;/LOCATION_IDENTIFIER&gt;
+                            &lt;PROPERTY_DETAIL&gt;
+                                &lt;ConstructionStatusType&gt;Complete&lt;/ConstructionStatusType&gt;
+                                &lt;PropertyEstimatedValueAmount&gt;250000&lt;/PropertyEstimatedValueAmount&gt;
+                                &lt;PropertyStructureBuiltYear&gt;1972&lt;/PropertyStructureBuiltYear&gt;
+                                &lt;PropertyUsageType&gt;PrimaryResidence&lt;/PropertyUsageType&gt;
+                                &lt;EXTENSION&gt;
+                                    &lt;OTHER&gt;
+                                        &lt;wells:PROPERTY_DETAIL&gt;
+                                            &lt;wells:TitleCategoryType&gt;SingleFamily&lt;/wells:TitleCategoryType&gt;
+                                        &lt;/wells:PROPERTY_DETAIL&gt;
+                                    &lt;/OTHER&gt;
+                                &lt;/EXTENSION&gt;
+                            &lt;/PROPERTY_DETAIL&gt;
+                        &lt;/SUBJECT_PROPERTY&gt;
+                    &lt;/COLLATERAL&gt;
+                &lt;/COLLATERALS&gt;
+                &lt;LOANS&gt;
+                    &lt;LOAN LoanRoleType=&quot;SubjectLoan&quot; SequenceNumber=&quot;1&quot;&gt;
+                        &lt;CLOSING_INFORMATION&gt;
+                            &lt;CLOSING_INFORMATION_DETAIL&gt;
+                                &lt;ClosingDate&gt;2016-01-01&lt;/ClosingDate&gt;
+                                &lt;DisbursementDate&gt;2015-12-01&lt;/DisbursementDate&gt;
+                                &lt;LoanEstimatedClosingDate&gt;2015-08-14&lt;/LoanEstimatedClosingDate&gt;
+                            &lt;/CLOSING_INFORMATION_DETAIL&gt;
+                        &lt;/CLOSING_INFORMATION&gt;
+                        &lt;DOCUMENT_SPECIFIC_DATA_SETS&gt;
+                            &lt;DOCUMENT_SPECIFIC_DATA_SET SequenceNumber=&quot;1&quot;&gt;
+                                &lt;URLA&gt;
+                                    &lt;URLA_DETAIL&gt;
+                                        &lt;PurchasePriceAmount&gt;250000&lt;/PurchasePriceAmount&gt;
+                                    &lt;/URLA_DETAIL&gt;
+                                &lt;/URLA&gt;
+                            &lt;/DOCUMENT_SPECIFIC_DATA_SET&gt;
+                        &lt;/DOCUMENT_SPECIFIC_DATA_SETS&gt;
+                        &lt;LOAN_DETAIL&gt;
+                            &lt;LoanFundingDate&gt;2015-01-01&lt;/LoanFundingDate&gt;
+                        &lt;/LOAN_DETAIL&gt;
+                        &lt;LOAN_IDENTIFIERS&gt;
+                            &lt;LOAN_IDENTIFIER SequenceNumber=&quot;1&quot;&gt;
+                                &lt;LoanIdentifier&gt;LOANID-BS-2017-15-06-0555&lt;/LoanIdentifier&gt;
+                                &lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+                            &lt;/LOAN_IDENTIFIER&gt;
+                            &lt;LOAN_IDENTIFIER SequenceNumber=&quot;2&quot;&gt;
+                                &lt;LoanIdentifier&gt;ServicerLoan123&lt;/LoanIdentifier&gt;
+                                &lt;LoanIdentifierType&gt;ServicerLoan&lt;/LoanIdentifierType&gt;
+                            &lt;/LOAN_IDENTIFIER&gt;
+                            &lt;LOAN_IDENTIFIER SequenceNumber=&quot;3&quot;&gt;
+                                &lt;LoanIdentifier&gt;ServicingClientCode&lt;/LoanIdentifier&gt;
+                                &lt;LoanIdentifierType&gt;Other&lt;/LoanIdentifierType&gt;
+                            &lt;/LOAN_IDENTIFIER&gt;
+                        &lt;/LOAN_IDENTIFIERS&gt;
+                        &lt;LOAN_STATUSES&gt;
+                            &lt;LOAN_STATUS SequenceNumber=&quot;1&quot;&gt;
+                                &lt;LoanStatusIdentifier&gt;myLoanStatusIdentifier&lt;/LoanStatusIdentifier&gt;
+                            &lt;/LOAN_STATUS&gt;
+                        &lt;/LOAN_STATUSES&gt;
+                        &lt;ORIGINATION_SYSTEMS&gt;
+                            &lt;ORIGINATION_SYSTEM SequenceNumber=&quot;1&quot;&gt;
+                                &lt;LoanOriginationSystemName&gt;myLoanOriginationSystemName&lt;/LoanOriginationSystemName&gt;
+                            &lt;/ORIGINATION_SYSTEM&gt;
+                        &lt;/ORIGINATION_SYSTEMS&gt;
+                        &lt;TERMS_OF_LOAN&gt;
+                            &lt;LoanPurposeType&gt;Purchase&lt;/LoanPurposeType&gt;
+                            &lt;!--LoanPurposeTypeOtherDescription&gt;SomeOtherType&lt;/LoanPurposeTypeOtherDescription--&gt;
+                        &lt;/TERMS_OF_LOAN&gt;
+                    &lt;/LOAN&gt;
+                &lt;/LOANS&gt;
+                &lt;PARTIES&gt;
+                    &lt;!-- NOTE:- LG will pass list of property owners. --&gt;
+                    &lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+                        &lt;INDIVIDUAL&gt;
+                            &lt;NAME&gt;
+                                &lt;FirstName&gt;Joe&lt;/FirstName&gt;
+                                &lt;!-- Not on Wells list --&gt;
+                                &lt;FullName&gt;Joe Bob Tester&lt;/FullName&gt;
+                                &lt;LastName&gt;Tester&lt;/LastName&gt;
+                                &lt;MiddleName&gt;Bob&lt;/MiddleName&gt;
+                                &lt;!-- Not on Wells list --&gt;
+                                &lt;PrefixName&gt;myPrefix&lt;/PrefixName&gt;
+                                &lt;!-- Not on Wells list --&gt;
+                                &lt;SuffixName&gt;mySuffix&lt;/SuffixName&gt;
+                            &lt;/NAME&gt;
+                        &lt;/INDIVIDUAL&gt;
+                        &lt;ROLES&gt;
+                            &lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+                                &lt;ROLE_DETAIL&gt;
+                                    &lt;PartyRoleType&gt;PropertyOwner&lt;/PartyRoleType&gt;
+                                &lt;/ROLE_DETAIL&gt;
+                            &lt;/ROLE&gt;
+                        &lt;/ROLES&gt;
+                    &lt;/PARTY&gt;
+                    &lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+                        &lt;LEGAL_ENTITY&gt;
+                            &lt;LEGAL_ENTITY_DETAIL&gt;
+                                &lt;FullName&gt;myLegalEntity&lt;/FullName&gt;
+                            &lt;/LEGAL_ENTITY_DETAIL&gt;
+                        &lt;/LEGAL_ENTITY&gt;
+                        &lt;ROLES&gt;
+                            &lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+                                &lt;ROLE_DETAIL&gt;
+                                    &lt;PartyRoleType&gt;PropertyOwner&lt;/PartyRoleType&gt;
+                                &lt;/ROLE_DETAIL&gt;
+                            &lt;/ROLE&gt;
+                        &lt;/ROLES&gt;
+                    &lt;/PARTY&gt;
+                    &lt;PARTY SequenceNumber=&quot;3&quot;&gt;
+                        &lt;ROLES&gt;
+                            &lt;ROLE&gt;
+                                &lt;RETURN_TO&gt;
+                                    &lt;PREFERRED_RESPONSES&gt;
+                                        &lt;PREFERRED_RESPONSE&gt;
+                                            &lt;PreferredResponseDestinationDescription&gt;PROD-G&lt;/PreferredResponseDestinationDescription&gt;
+                                            &lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+                                            &lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+                                        &lt;/PREFERRED_RESPONSE&gt;
+                                    &lt;/PREFERRED_RESPONSES&gt;
+                                &lt;/RETURN_TO&gt;
+                                &lt;ROLE_DETAIL&gt;
+                                    &lt;PartyRoleType&gt;SubmittingParty&lt;/PartyRoleType&gt;
+                                &lt;/ROLE_DETAIL&gt;
+                            &lt;/ROLE&gt;
+                        &lt;/ROLES&gt;
+                    &lt;/PARTY&gt;
+                    &lt;PARTY SequenceNumber=&quot;4&quot;&gt;
+                        &lt;ROLES&gt;
+                            &lt;ROLE&gt;
+                                &lt;RETURN_TO&gt;
+                                    &lt;PREFERRED_RESPONSES&gt;
+                                        &lt;PREFERRED_RESPONSE&gt;
+                                            &lt;PreferredResponseDestinationDescription&gt;http://clpqn1vdinplt01.infosolco.net:8080/WF_ACK&lt;/PreferredResponseDestinationDescription&gt;
+                                            &lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+                                            &lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+                                        &lt;/PREFERRED_RESPONSE&gt;
+                                    &lt;/PREFERRED_RESPONSES&gt;
+                                &lt;/RETURN_TO&gt;
+                                &lt;ROLE_DETAIL&gt;
+                                    &lt;PartyRoleType&gt;RespondToParty&lt;/PartyRoleType&gt;
+                                &lt;/ROLE_DETAIL&gt;
+                            &lt;/ROLE&gt;
+                        &lt;/ROLES&gt;
+                    &lt;/PARTY&gt;
+                &lt;/PARTIES&gt;
+                &lt;SERVICES&gt;
+                    &lt;SERVICE SequenceNumber=&quot;1&quot;&gt;
+                        &lt;SERVICE_PRODUCT&gt;
+                            &lt;SERVICE_PRODUCT_REQUEST&gt;
+                                &lt;SERVICE_PRODUCT_DETAIL&gt;
+                                    &lt;ServiceProductIdentifier&gt;CLTAX101&lt;/ServiceProductIdentifier&gt;
+                                    &lt;EXTENSION&gt;
+                                        &lt;OTHER&gt;
+                                            &lt;wells:SERVICE_PRODUCT_DETAIL&gt;
+                                                &lt;wells:RequestCommentText&gt;Initial tax estimation request&lt;/wells:RequestCommentText&gt;
+                                            &lt;/wells:SERVICE_PRODUCT_DETAIL&gt;
+                                        &lt;/OTHER&gt;
+                                    &lt;/EXTENSION&gt;
+                                &lt;/SERVICE_PRODUCT_DETAIL&gt;
+                            &lt;/SERVICE_PRODUCT_REQUEST&gt;
+                        &lt;/SERVICE_PRODUCT&gt;
+                        &lt;EXTENSION&gt;
+                            &lt;OTHER&gt;
+                                &lt;wells:SERVICE&gt;
+                                    &lt;wells:SERVICE_DETAIL&gt;
+                                        &lt;wells:RequestType&gt;Submit&lt;/wells:RequestType&gt;
+                                    &lt;/wells:SERVICE_DETAIL&gt;
+                                &lt;/wells:SERVICE&gt;
+                            &lt;/OTHER&gt;
+                        &lt;/EXTENSION&gt;
+                    &lt;/SERVICE&gt;
+                &lt;/SERVICES&gt;
+                &lt;EXTENSION&gt;
+                    &lt;OTHER&gt;
+                        &lt;wells:DEAL&gt;
+                            &lt;wells:KEYS&gt;
+                                &lt;wells:KEY&gt;
+                                    &lt;wells:KeyIdentifierType&gt;ClientOrderNumber&lt;/wells:KeyIdentifierType&gt;
+                                    &lt;wells:KeyValue&gt;ORDNUM-BS-2015-NOV&lt;/wells:KeyValue&gt;
+                                &lt;/wells:KEY&gt;
+                                &lt;wells:KEY&gt;
+                                    &lt;wells:KeyIdentifierType&gt;ApplicationID&lt;/wells:KeyIdentifierType&gt;
+                                    &lt;wells:KeyValue&gt;APP-ID-BS-NOV&lt;/wells:KeyValue&gt;
+                                &lt;/wells:KEY&gt;
+                                &lt;wells:KEY&gt;
+                                    &lt;wells:KeyIdentifierType&gt;ProductRequestReferenceNumber&lt;/wells:KeyIdentifierType&gt;
+                                    &lt;wells:KeyValue&gt;PRODREQ-BS-NOV&lt;/wells:KeyValue&gt;
+                                &lt;/wells:KEY&gt;
+                                &lt;wells:KEY&gt;
+                                    &lt;wells:KeyIdentifierType&gt;StatusCorrelationID&lt;/wells:KeyIdentifierType&gt;
+                                    &lt;wells:KeyValue&gt;CorrelationID-BS&lt;/wells:KeyValue&gt;
+                                &lt;/wells:KEY&gt;
+                                &lt;wells:KEY&gt;
+                                    &lt;wells:KeyIdentifierType&gt;MasterSessionID&lt;/wells:KeyIdentifierType&gt;
+                                    &lt;wells:KeyValue&gt;MASTER-SESSNID-BS-LOANID-BS-2015-15-06-889&lt;/wells:KeyValue&gt;
+                                &lt;/wells:KEY&gt;
+                            &lt;/wells:KEYS&gt;
+                        &lt;/wells:DEAL&gt;
+                    &lt;/OTHER&gt;
+                &lt;/EXTENSION&gt;
+            &lt;/DEAL&gt;
+        &lt;/ser:ServiceRequest&gt;
+    &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="PTE_Pull_Submit_QA1_REST_02">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://QA1.globalgateway.corelogic.com/order/taxservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://QA1.globalgateway.corelogic.com/order/taxservicerequest/pte</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;MESSAGE xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; MISMOReferenceModelIdentifier=&quot;3.4[B324]&quot; xsi:schemaLocation=&quot;http://www.mismo.org/residential/2009/schemas file:///C:/data/clg2-configuration/schema/taxpte/taxpte_common/consumer-xsd/CORELOGIC_MISMO_3.4.0_B324.xsd&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;!--Optional--&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;!--Required--&gt;
+											&lt;CreatedDatetime&gt;2016-02-25T13:28:02.431Z&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--Optional--&gt;
+													&lt;AddressAdditionalLineText&gt;2nd address line&lt;/AddressAdditionalLineText&gt;
+													&lt;!--Required: valid enums: HighwayContract;Individual;RuralRoute;Other--&gt;
+													&lt;AddressFormatType&gt;Individual&lt;/AddressFormatType&gt;
+													&lt;!--Conditionally Required when AddressFormatType=&quot;Other&quot; and value is LegalLotDescription,Unparsed--&gt;
+													&lt;AddressFormatTypeOtherDescription/&gt;
+													&lt;!--Conditionally Required when AddressFormatTypeOtherDescription = &quot;Unparsed&quot;--&gt;
+													&lt;AddressLineText&gt;2490 N SYNC SW AVE&lt;/AddressLineText&gt;
+													&lt;!--Required--&gt;
+													&lt;AddressType&gt;Primary&lt;/AddressType&gt;
+													&lt;!--Optional--&gt;
+													&lt;AddressUnitDesignatorType&gt;Other&lt;/AddressUnitDesignatorType&gt;
+													&lt;!--Optional--&gt;
+													&lt;AddressUnitIdentifier&gt;12&lt;/AddressUnitIdentifier&gt;
+													&lt;!--Required--&gt;
+													&lt;CityName&gt;UPLAND&lt;/CityName&gt;
+													&lt;!--Required--&gt;
+													&lt;CountyName&gt;SAN BERNARDINO&lt;/CountyName&gt;
+													&lt;!--Conditionally Required when AddressFormatType = &quot;HighwayContract&quot;
+													&lt;HighwayContractRouteIdentifier&gt;HWY 15&lt;/HighwayContractRouteIdentifier&gt; --&gt;
+													&lt;!--Required--&gt;
+													&lt;PostalCode&gt;91784&lt;/PostalCode&gt;
+													&lt;!--Conditionally Required when AddressFormatType = &quot;RuralRoute&quot;
+													&lt;RuralRouteBoxIdentifier&gt;RR BOX 13&lt;/RuralRouteBoxIdentifier&gt;--&gt;
+													&lt;!--Conditionally Required when AddressFormatType = &quot;RuralRoute&quot;
+													&lt;RuralRouteIdentifier&gt;RR 11&lt;/RuralRouteIdentifier&gt;--&gt;
+													&lt;!--Required--&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+													&lt;!--Conditionally Required when AddressFormatType = &quot;Individual&quot;--&gt;
+													&lt;StreetName&gt;EUCLID AVE&lt;/StreetName&gt;
+													&lt;!--Optional--&gt;
+													&lt;StreetPostDirectionalText&gt;SW&lt;/StreetPostDirectionalText&gt;
+													&lt;!--Optional--&gt;
+													&lt;StreetPreDirectionalText&gt;N&lt;/StreetPreDirectionalText&gt;
+													&lt;!--Conditionally Required when AddressFormatType = &quot;Individual&quot;--&gt;
+													&lt;StreetPrimaryNumberText&gt;2490&lt;/StreetPrimaryNumberText&gt;
+													&lt;!--Optional--&gt;
+													&lt;StreetSuffixText&gt;AVE&lt;/StreetSuffixText&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:ADDRESS&gt;
+																&lt;!--Optional--&gt;
+																&lt;cl:AddressEndUnitIdentifier&gt;12&lt;/cl:AddressEndUnitIdentifier&gt;
+																&lt;!--Conditionally Required when AddressFormatType = &quot;HighwayContract&quot; 
+																&lt;cl:HighwayContractRouteBoxIdentifier&gt;HWY 15 BOX 10&lt;/cl:HighwayContractRouteBoxIdentifier&gt;--&gt;
+																&lt;!--Conditionally Required when AddressFormatType = &quot;LegalLotDescription&quot;
+																&lt;cl:PropertyLocationDescription&gt;Property Location Description&lt;/cl:PropertyLocationDescription&gt;--&gt;
+															&lt;/cl:ADDRESS&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/ADDRESS&gt;
+												&lt;IMPROVEMENT&gt;
+													&lt;STRUCTURE&gt;
+														&lt;STRUCTURE_DETAIL&gt;
+															&lt;!--Optional--&gt;
+															&lt;StoriesCount&gt;2&lt;/StoriesCount&gt;
+														&lt;/STRUCTURE_DETAIL&gt;
+													&lt;/STRUCTURE&gt;
+												&lt;/IMPROVEMENT&gt;
+												&lt;LOCATION_IDENTIFIER&gt;
+													&lt;FIPS_INFORMATION&gt;
+														&lt;!--Optional--&gt;
+														&lt;FIPSCountyCode&gt;036&lt;/FIPSCountyCode&gt;
+													&lt;/FIPS_INFORMATION&gt;
+												&lt;/LOCATION_IDENTIFIER&gt;
+												&lt;PROPERTY_DETAIL&gt;
+													&lt;!--Optional--&gt;
+													&lt;ConstructionStatusType&gt;Existing&lt;/ConstructionStatusType&gt;
+													&lt;!--Conditionally Required if PurchasePriceAmount not sent--&gt;
+													&lt;PropertyEstimatedValueAmount&gt;682000&lt;/PropertyEstimatedValueAmount&gt;
+													&lt;!--Optional--&gt;
+													&lt;PropertyUsageType&gt;PrimaryResidence&lt;/PropertyUsageType&gt;
+												&lt;/PROPERTY_DETAIL&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;DOCUMENT_SPECIFIC_DATA_SETS&gt;
+												&lt;DOCUMENT_SPECIFIC_DATA_SET&gt;
+													&lt;URLA&gt;
+														&lt;URLA_DETAIL&gt;
+															&lt;!--Conditionally Required if PropertyEstimatedValueAmount not sent--&gt;
+															&lt;PurchasePriceAmount&gt;575000&lt;/PurchasePriceAmount&gt;
+														&lt;/URLA_DETAIL&gt;
+													&lt;/URLA&gt;
+												&lt;/DOCUMENT_SPECIFIC_DATA_SET&gt;
+											&lt;/DOCUMENT_SPECIFIC_DATA_SETS&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;!--Required CLGG--&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;!--Required CLGG--&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+											&lt;ORIGINATION_SYSTEMS&gt;
+												&lt;ORIGINATION_SYSTEM&gt;
+													&lt;!--Optional--&gt;
+													&lt;LoanOriginationSystemName&gt;myLoanOriginationSystemName&lt;/LoanOriginationSystemName&gt;
+												&lt;/ORIGINATION_SYSTEM&gt;
+											&lt;/ORIGINATION_SYSTEMS&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--Optional--&gt;
+													&lt;FullName&gt;Client Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER&gt;
+															&lt;!--Optional--&gt;
+															&lt;PartyRoleIdentifier&gt;88880&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Optional--&gt;
+														&lt;PartyRoleType&gt;Client&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--Optional--&gt;
+													&lt;FullName&gt;Lender Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER&gt;
+															&lt;!--Optional--&gt;
+															&lt;PartyRoleIdentifier&gt;88880&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Optional--&gt;
+														&lt;PartyRoleType&gt;Lender&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;3&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--Optional--&gt;
+													&lt;FullName&gt;Lender Branch Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER&gt;
+															&lt;!--Optional--&gt;
+															&lt;PartyRoleIdentifier&gt;LenderBranchID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Optional--&gt;
+														&lt;PartyRoleType&gt;LenderBranch&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;4&quot;&gt;
+											&lt;INDIVIDUAL&gt;
+												&lt;CONTACT_POINTS&gt;
+													&lt;CONTACT_POINT SequenceNumber=&quot;1&quot;&gt;
+														&lt;CONTACT_POINT_EMAIL&gt;
+															&lt;!--Optional--&gt;
+															&lt;ContactPointEmailValue&gt;loanofficer@email.com&lt;/ContactPointEmailValue&gt;
+														&lt;/CONTACT_POINT_EMAIL&gt;
+														&lt;CONTACT_POINT_DETAIL&gt;
+															&lt;!--Optional--&gt;
+															&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+														&lt;/CONTACT_POINT_DETAIL&gt;
+													&lt;/CONTACT_POINT&gt;
+													&lt;CONTACT_POINT SequenceNumber=&quot;2&quot;&gt;
+														&lt;CONTACT_POINT_TELEPHONE&gt;
+															&lt;!--Optional--&gt;
+															&lt;ContactPointTelephoneValue&gt;8004445555&lt;/ContactPointTelephoneValue&gt;
+														&lt;/CONTACT_POINT_TELEPHONE&gt;
+														&lt;CONTACT_POINT_DETAIL&gt;
+															&lt;!--Optional--&gt;
+															&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+														&lt;/CONTACT_POINT_DETAIL&gt;
+													&lt;/CONTACT_POINT&gt;
+													&lt;CONTACT_POINT SequenceNumber=&quot;3&quot;&gt;
+														&lt;CONTACT_POINT_TELEPHONE&gt;
+															&lt;!--Optional--&gt;
+															&lt;ContactPointFaxValue&gt;8004445557&lt;/ContactPointFaxValue&gt;
+														&lt;/CONTACT_POINT_TELEPHONE&gt;
+														&lt;CONTACT_POINT_DETAIL&gt;
+															&lt;!--Optional--&gt;
+															&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+														&lt;/CONTACT_POINT_DETAIL&gt;
+													&lt;/CONTACT_POINT&gt;
+												&lt;/CONTACT_POINTS&gt;
+												&lt;NAME&gt;
+													&lt;!--Optional--&gt;
+													&lt;FullName&gt;Loan Officer Name&lt;/FullName&gt;
+												&lt;/NAME&gt;
+											&lt;/INDIVIDUAL&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER&gt;
+															&lt;!--Optional--&gt;
+															&lt;PartyRoleIdentifier&gt;LoanOfficerID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Optional--&gt;
+														&lt;PartyRoleType&gt;LoanOfficer&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;5&quot;&gt;
+											&lt;!--Can only use Entity Name or Individual--&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--Optional--&gt;
+													&lt;FullName&gt;Requesting Party Entity Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER&gt;
+															&lt;!--Optional--&gt;
+															&lt;PartyRoleIdentifier&gt;88880&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Optional--&gt;
+														&lt;PartyRoleType&gt;RequestingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;!--Optional--&gt;
+														&lt;InternalAccountIdentifier&gt;InternalAccountID&lt;/InternalAccountIdentifier&gt;
+														&lt;!--Optional--&gt;
+														&lt;RequestedByName&gt;Requestor Name&lt;/RequestedByName&gt;
+														&lt;!--Optional--&gt;
+														&lt;RequestingPartyBranchIdentifier&gt;RequestingPartyBranchID&lt;/RequestingPartyBranchIdentifier&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;!--Required CLGG--&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;12083&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;!--Required CLGG--&gt;
+																	&lt;cl:LoginAccountPassword&gt;pwd12083&lt;/cl:LoginAccountPassword&gt;
+																	&lt;!--Optional: Only used if Requesting Party contains INDIVIDUAL element--&gt;
+																	&lt;cl:RequestingPartyLegalEntityFullName&gt;RequestingPartyEntityFullName&lt;/cl:RequestingPartyLegalEntityFullName&gt;
+																	&lt;!--Optional: Only used if Requesting Party contains INDIVIDUAL element--&gt;
+																	&lt;cl:RequestingPartyLegalEntityIdentifier&gt;RequestingPartyEntityID&lt;/cl:RequestingPartyLegalEntityIdentifier&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;6&quot;&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE&gt;
+																&lt;!--Optional--&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;!--Optional--&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;!--Optional--&gt;
+																&lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Optional--&gt;
+														&lt;PartyRoleType&gt;SubmittingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;SUBMITTING_PARTY&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:SUBMITTING_PARTY&gt;
+																	&lt;!--Optional--&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;12083&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;!--Optional--&gt;
+																	&lt;cl:LoginAccountPassword&gt;pwd12083&lt;/cl:LoginAccountPassword&gt;
+																	&lt;!--Optional: Only used if Submitting Party contains INDIVIDUAL--&gt;
+																	&lt;cl:SubmittingPartyLegalEntityFullName&gt;SubmittingPartyEntityFullName&lt;/cl:SubmittingPartyLegalEntityFullName&gt;
+																	&lt;!--Optional: Only used if Requesting Party contains INDIVIDUAL--&gt;
+																	&lt;cl:SubmittingPartyLegalEntityIdentifier&gt;SubmittingPartyEntityID&lt;/cl:SubmittingPartyLegalEntityIdentifier&gt;
+																&lt;/cl:SUBMITTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/SUBMITTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;5&quot;&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE&gt;
+																&lt;!--Optional--&gt;
+																&lt;PreferredResponseDestinationDescription&gt;https://qa2.globalgateway.corelogic.com&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;!--Optional--&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;!--Optional--&gt;
+																&lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Optional--&gt;
+														&lt;PartyRoleType&gt;RespondToParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;TAX&gt;
+												&lt;EXTENSION&gt;
+													&lt;OTHER&gt;
+														&lt;cl:TAX&gt;
+															&lt;cl:TAX_REQUEST&gt;
+																&lt;cl:TAX_REQUEST_DETAIL&gt;
+																	&lt;!--Required--&gt;
+																	&lt;cl:TaxRequestActionType&gt;Submit&lt;/cl:TaxRequestActionType&gt;
+																&lt;/cl:TAX_REQUEST_DETAIL&gt;
+															&lt;/cl:TAX_REQUEST&gt;
+														&lt;/cl:TAX&gt;
+													&lt;/OTHER&gt;
+												&lt;/EXTENSION&gt;
+											&lt;/TAX&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;!--Required CLGG--&gt;
+														&lt;ServiceProductIdentifier&gt;TAX0203&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="E1672BE6-68AB-45BA-9DE7-B1BA6AC5D08E" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Submit" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="PTE_Pull_Retrieve_QA1_REST_03">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://QA1.globalgateway.corelogic.com/order/taxservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://QA1.globalgateway.corelogic.com/order/taxservicerequest/pte</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;MESSAGE xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot; xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;CreatedDatetime&gt;2017-01-26T16:07:29.5137983-05:00&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressFormatType&gt;Individual&lt;/AddressFormatType&gt;
+													&lt;AddressLineText&gt;21 Woodbine Rd&lt;/AddressLineText&gt;
+													&lt;AddressType&gt;Primary&lt;/AddressType&gt;
+													&lt;AddressUnitIdentifier/&gt;
+													&lt;CityName&gt;Florham Park&lt;/CityName&gt;
+													&lt;CountryName&gt;Morris&lt;/CountryName&gt;
+													&lt;PostalCode&gt;07932&lt;/PostalCode&gt;
+													&lt;RuralRouteBoxIdentifier/&gt;
+													&lt;StateCode&gt;NJ&lt;/StateCode&gt;
+													&lt;StreetName&gt;TERRACE&lt;/StreetName&gt;
+													&lt;StreetPostDirectionalText/&gt;
+													&lt;StreetPreDirectionalText/&gt;
+													&lt;StreetPrimaryNumberText&gt;354&lt;/StreetPrimaryNumberText&gt;
+													&lt;StreetSuffixText&gt;Ave&lt;/StreetSuffixText&gt;
+												&lt;/ADDRESS&gt;
+												&lt;IMPROVEMENT&gt;
+													&lt;STRUCTURE&gt;
+														&lt;STRUCTURE_DETAIL&gt;
+															&lt;StoriesCount&gt;0&lt;/StoriesCount&gt;
+														&lt;/STRUCTURE_DETAIL&gt;
+													&lt;/STRUCTURE&gt;
+												&lt;/IMPROVEMENT&gt;
+												&lt;PROPERTY_DETAIL&gt;
+													&lt;PropertyEstimatedValueAmount&gt;250000&lt;/PropertyEstimatedValueAmount&gt;
+													&lt;PropertyUsageType&gt;PrimaryResidence&lt;/PropertyUsageType&gt;
+												&lt;/PROPERTY_DETAIL&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;DOCUMENT_SPECIFIC_DATA_SETS&gt;
+												&lt;DOCUMENT_SPECIFIC_DATA_SET&gt;
+													&lt;URLA&gt;
+														&lt;URLA_DETAIL&gt;
+															&lt;PurchasePriceAmount&gt;250000.00&lt;/PurchasePriceAmount&gt;
+														&lt;/URLA_DETAIL&gt;
+													&lt;/URLA&gt;
+												&lt;/DOCUMENT_SPECIFIC_DATA_SET&gt;
+											&lt;/DOCUMENT_SPECIFIC_DATA_SETS&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+											&lt;ORIGINATION_SYSTEMS&gt;
+												&lt;ORIGINATION_SYSTEM&gt;
+													&lt;LoanOriginationSystemName&gt;Encompass&lt;/LoanOriginationSystemName&gt;
+												&lt;/ORIGINATION_SYSTEM&gt;
+											&lt;/ORIGINATION_SYSTEMS&gt;
+											&lt;TERMS_OF_LOAN&gt;
+												&lt;LoanPurposeType&gt;MortgageModification&lt;/LoanPurposeType&gt;
+											&lt;/TERMS_OF_LOAN&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;RequestingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;12083&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;cl:LoginAccountPassword&gt;pwd12083&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;5&quot;&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;RespondToParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;TAX&gt;
+												&lt;EXTENSION&gt;
+													&lt;OTHER&gt;
+														&lt;cl:TAX&gt;
+															&lt;cl:TAX_REQUEST&gt;
+																&lt;cl:TAX_REQUEST_DETAIL&gt;
+																	&lt;cl:TaxRequestActionType&gt;Retrieve&lt;/cl:TaxRequestActionType&gt;
+																&lt;/cl:TAX_REQUEST_DETAIL&gt;
+															&lt;/cl:TAX_REQUEST&gt;
+														&lt;/cl:TAX&gt;
+													&lt;/OTHER&gt;
+												&lt;/EXTENSION&gt;
+											&lt;/TAX&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;ServiceProductIdentifier&gt;TAX0203&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;RespondingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;FulfillmentPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;528418&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="E1672BE6-68AB-45BA-9DE7-B1BA6AC5D08E" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Retrieve" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="PUSH_Network_Capitol_QA1_REST_04">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://qa1.globalgateway.corelogic.com/order/taxservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://qa1.globalgateway.corelogic.com/order/taxservicerequest/pte</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;MESSAGE MISMOReferenceModelIdentifier=&quot;3.4[B324]&quot; xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;!--Optional--&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;!--Required--&gt;
+											&lt;CreatedDatetime&gt;2016-02-25T13:28:02.431Z&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--Required--&gt;
+													&lt;AddressFormatType&gt;Individual&lt;/AddressFormatType&gt;
+													&lt;!--Required--&gt;
+													&lt;AddressType&gt;Primary&lt;/AddressType&gt;
+													&lt;!--Required--&gt;
+													&lt;CityName&gt;UPLAND&lt;/CityName&gt;
+													&lt;!--Required--&gt;
+													&lt;PostalCode&gt;91784&lt;/PostalCode&gt;
+													&lt;!--Required--&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+													&lt;!--Conditionally Required when AddressFormatType = &quot;Individual&quot;--&gt;
+													&lt;StreetName&gt;EUCLID AVE&lt;/StreetName&gt;
+													&lt;!--Conditionally Required when AddressFormatType = &quot;Individual&quot;--&gt;
+													&lt;StreetPrimaryNumberText&gt;2490&lt;/StreetPrimaryNumberText&gt;
+												&lt;/ADDRESS&gt;
+												&lt;PROPERTY_DETAIL&gt;
+													&lt;!--Conditionally Required if PurchasePriceAmount not sent--&gt;
+													&lt;PropertyEstimatedValueAmount&gt;682000&lt;/PropertyEstimatedValueAmount&gt;
+													&lt;!--Required--&gt;
+													&lt;PropertyUsageType&gt;PrimaryResidence&lt;/PropertyUsageType&gt;
+												&lt;/PROPERTY_DETAIL&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;!--Required CLGG--&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;!--Required CLGG--&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+											&lt;ORIGINATION_SYSTEMS&gt;
+												&lt;ORIGINATION_SYSTEM&gt;
+													&lt;!--Required--&gt;
+													&lt;LoanOriginationSystemName&gt;LoanOriginationSystemName&lt;/LoanOriginationSystemName&gt;
+												&lt;/ORIGINATION_SYSTEM&gt;
+											&lt;/ORIGINATION_SYSTEMS&gt;
+											&lt;TERMS_OF_LOAN&gt;
+												&lt;!--Required--&gt;
+												&lt;LoanPurposeType&gt;Purchase&lt;/LoanPurposeType&gt;
+											&lt;/TERMS_OF_LOAN&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--Required Field--&gt;
+													&lt;FullName&gt;LOSClientName&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;!--Required CLGG--&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;12092&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;!--Required CLGG--&gt;
+																	&lt;cl:LoginAccountPassword&gt;psd12083&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;!--Required--&gt;
+																&lt;PreferredResponseDestinationDescription&gt;http://localhost:7003&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;!--Required--&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;!--Required--&gt;
+																&lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--Required--&gt;
+														&lt;PartyRoleType&gt;RespondToParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;TAX&gt;
+												&lt;EXTENSION&gt;
+													&lt;OTHER&gt;
+														&lt;cl:TAX&gt;
+															&lt;cl:TAX_REQUEST&gt;
+																&lt;cl:TAX_REQUEST_DETAIL&gt;
+																	&lt;!--Required--&gt;
+																	&lt;cl:TaxRequestActionType&gt;Submit&lt;/cl:TaxRequestActionType&gt;
+																&lt;/cl:TAX_REQUEST_DETAIL&gt;
+															&lt;/cl:TAX_REQUEST&gt;
+														&lt;/cl:TAX&gt;
+													&lt;/OTHER&gt;
+												&lt;/EXTENSION&gt;
+											&lt;/TAX&gt;
+											&lt;REPORTING_INFORMATION&gt;
+												&lt;!--Required CLGG--&gt;
+												&lt;ReportingInformationIdentifier&gt;GG123456&lt;/ReportingInformationIdentifier&gt;
+												&lt;ReportingInformationName&gt;GlobalGatewayLenderIdentifier&lt;/ReportingInformationName&gt;
+											&lt;/REPORTING_INFORMATION&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;!--Required CLGG--&gt;
+														&lt;ServiceProductIdentifier&gt;TAX0201&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;!--Required CLGG: aka ConsumerRefId--&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;GlobalGatewayLenderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;0224201705&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="28b93f37-db80-411f-88a0-e085d3008b81" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Submit" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="GeoAVMPrecision_M34_QA1_REST_07">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://qa1.globalgateway.corelogic.com/order/valuationservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://qa1.globalgateway.corelogic.com/order/valuationservicerequest/avm</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;MESSAGE xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot; xmlns:mismo=&quot;http://www.mismo.org/residential/2009/schemas&quot; MISMOReferenceModelIdentifier=&quot;3.4[B324]&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://www.mismo.org/residential/2009/schemas
+C:\AVM_Schema\Mar9\Client\CORELOGIC_MISMO_3.4.0_B324.xsd&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;CreatedDatetime&gt;2017-03-10T09:02:24.045-05:00&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;PL&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;202 HARTNELL PL&lt;/AddressLineText&gt;
+													&lt;CityName&gt;SACRAMENTO&lt;/CityName&gt;
+													&lt;CountyName&gt;SACRAMENTO&lt;/CountyName&gt;
+													&lt;PlusFourZipCode&gt;4567&lt;/PlusFourZipCode&gt;
+													&lt;PostalCode&gt;95825&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+													&lt;StreetName&gt;HARTNELL&lt;/StreetName&gt;
+													&lt;StreetPostDirectionalText&gt;E&lt;/StreetPostDirectionalText&gt;
+													&lt;StreetPreDirectionalText&gt;N&lt;/StreetPreDirectionalText&gt;
+													&lt;StreetPrimaryNumberText/&gt;
+													&lt;StreetSuffixText/&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:ADDRESS&gt;
+																&lt;cl:StandardizedStreetPrimaryNumberText&gt;202-EA&lt;/cl:StandardizedStreetPrimaryNumberText&gt;
+																&lt;cl:StreetPrimaryNumberFromText&gt;7318&lt;/cl:StreetPrimaryNumberFromText&gt;
+																&lt;cl:StreetPrimaryNumberToText&gt;205&lt;/cl:StreetPrimaryNumberToText&gt;
+																&lt;cl:StreetPrimaryNumberSuffix&gt;200&lt;/cl:StreetPrimaryNumberSuffix&gt;
+															&lt;/cl:ADDRESS&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/ADDRESS&gt;
+												&lt;LEGAL_DESCRIPTIONS&gt;
+													&lt;LEGAL_DESCRIPTION&gt;
+														&lt;PARCEL_IDENTIFICATIONS&gt;
+															&lt;PARCEL_IDENTIFICATION&gt;
+																&lt;ParcelIdentificationType&gt;ParcelIdentificationNumber&lt;/ParcelIdentificationType&gt;
+																&lt;ParcelIdentifier&gt;3333333344444444444&lt;/ParcelIdentifier&gt;
+															&lt;/PARCEL_IDENTIFICATION&gt;
+														&lt;/PARCEL_IDENTIFICATIONS&gt;
+													&lt;/LEGAL_DESCRIPTION&gt;
+												&lt;/LEGAL_DESCRIPTIONS&gt;
+												&lt;LOCATION_IDENTIFIER&gt;
+													&lt;FIPS_INFORMATION&gt;
+														&lt;FIPSCountyCode&gt;06067&lt;/FIPSCountyCode&gt;
+													&lt;/FIPS_INFORMATION&gt;
+													&lt;GENERAL_IDENTIFIER&gt;
+														&lt;MunicipalityName&gt;Sacramento&lt;/MunicipalityName&gt;
+													&lt;/GENERAL_IDENTIFIER&gt;
+												&lt;/LOCATION_IDENTIFIER&gt;
+												&lt;PROPERTY_DETAIL&gt;
+													&lt;PropertyEstimatedValueAmount&gt;1342343&lt;/PropertyEstimatedValueAmount&gt;
+													&lt;PropertyUsageType&gt;SecondHome&lt;/PropertyUsageType&gt;
+													&lt;PropertyUsageTypeOtherDescription&gt;Other&lt;/PropertyUsageTypeOtherDescription&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:PROPERTY_DETAIL&gt;
+																&lt;cl:PropertyType&gt;SingleFamilyResidential&lt;/cl:PropertyType&gt;
+																&lt;cl:PropertyTypeOtherDescription&gt;other&lt;/cl:PropertyTypeOtherDescription&gt;
+															&lt;/cl:PROPERTY_DETAIL&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/PROPERTY_DETAIL&gt;
+												&lt;PROPERTY_VALUATIONS&gt;
+													&lt;PROPERTY_VALUATION&gt;
+														&lt;PROPERTY_VALUATION_DETAIL&gt;
+															&lt;PropertyValuationAmount&gt;575000&lt;/PropertyValuationAmount&gt;
+														&lt;/PROPERTY_VALUATION_DETAIL&gt;
+													&lt;/PROPERTY_VALUATION&gt;
+												&lt;/PROPERTY_VALUATIONS&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;DOCUMENT_SPECIFIC_DATA_SETS&gt;
+												&lt;DOCUMENT_SPECIFIC_DATA_SET&gt;
+													&lt;URLA&gt;
+														&lt;URLA_DETAIL&gt;
+															&lt;BorrowerRequestedLoanAmount&gt;232212&lt;/BorrowerRequestedLoanAmount&gt;
+														&lt;/URLA_DETAIL&gt;
+													&lt;/URLA&gt;
+												&lt;/DOCUMENT_SPECIFIC_DATA_SET&gt;
+											&lt;/DOCUMENT_SPECIFIC_DATA_SETS&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;FullName&gt;Requesting Party Full Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;hildasue Ter&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;5004 Main St&lt;/AddressLineText&gt;
+													&lt;CityName&gt;Fremont&lt;/CityName&gt;
+													&lt;PostalCode&gt;94555&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT-G&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;PreferredResponseFormatType&gt;PDF&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER SequenceNumber=&quot;1&quot;&gt;
+															&lt;!--xprow8--&gt;
+															&lt;!--Value Assigned by CoreLogic--&gt;
+															&lt;PartyRoleIdentifier&gt;LOSCoreLogicClientID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;RequestingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;InternalAccountIdentifier&gt;InternalAccountID&lt;/InternalAccountIdentifier&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;PREC000002&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;cl:LoginAccountPassword&gt;test123&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;FullName&gt;SubmittingParty System Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;1200&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;Parl place Blvd&lt;/AddressLineText&gt;
+													&lt;CityName&gt;San Mateo&lt;/CityName&gt;
+													&lt;PostalCode&gt;94403&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT-G&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;PreferredResponseFormatType&gt;PDF&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;SubmittingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;3&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;FullName&gt;Receiving Party System Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;2316&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;12 Main St&lt;/AddressLineText&gt;
+													&lt;CityName&gt;Foster City&lt;/CityName&gt;
+													&lt;PostalCode&gt;94404&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;ReceivingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY&gt;
+											&lt;INDIVIDUAL&gt;
+												&lt;NAME&gt;
+													&lt;FirstName&gt;Ruben&lt;/FirstName&gt;
+													&lt;LastName&gt;Christoper&lt;/LastName&gt;
+													&lt;MiddleName&gt;Rohan&lt;/MiddleName&gt;
+												&lt;/NAME&gt;
+											&lt;/INDIVIDUAL&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;BORROWER&gt;
+														&lt;BORROWER_DETAIL&gt;
+															&lt;BorrowerClassificationType&gt;Primary&lt;/BorrowerClassificationType&gt;
+														&lt;/BORROWER_DETAIL&gt;
+													&lt;/BORROWER&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;Borrower&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY&gt;
+											&lt;INDIVIDUAL&gt;
+												&lt;NAME&gt;
+													&lt;FirstName&gt;Mathew&lt;/FirstName&gt;
+													&lt;LastName&gt;Andrew&lt;/LastName&gt;
+												&lt;/NAME&gt;
+											&lt;/INDIVIDUAL&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PROPERTY_OWNER&gt;
+														&lt;PropertyOwnerStatusType&gt;Current&lt;/PropertyOwnerStatusType&gt;
+													&lt;/PROPERTY_OWNER&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;PropertyOwner&lt;/PartyRoleType&gt;
+														&lt;PartyRoleTypeAdditionalDescription&gt;1&lt;/PartyRoleTypeAdditionalDescription&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY&gt;
+											&lt;INDIVIDUAL&gt;
+												&lt;NAME&gt;
+													&lt;FirstName&gt;Kristen&lt;/FirstName&gt;
+													&lt;LastName&gt;Marx&lt;/LastName&gt;
+												&lt;/NAME&gt;
+											&lt;/INDIVIDUAL&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PROPERTY_OWNER&gt;
+														&lt;PropertyOwnerStatusType&gt;Current&lt;/PropertyOwnerStatusType&gt;
+													&lt;/PROPERTY_OWNER&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;PropertyOwner&lt;/PartyRoleType&gt;
+														&lt;PartyRoleTypeAdditionalDescription&gt;2&lt;/PartyRoleTypeAdditionalDescription&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;VALUATION&gt;
+												&lt;VALUATION_REQUEST&gt;
+													&lt;VALUATION_REQUEST_DETAIL&gt;
+														&lt;ValuationRequestActionType&gt;Original&lt;/ValuationRequestActionType&gt;
+														&lt;ValuationRequestCommentText&gt;Valuation Request Comment Text&lt;/ValuationRequestCommentText&gt;
+													&lt;/VALUATION_REQUEST_DETAIL&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:VALUATION_REQUEST&gt;
+																&lt;cl:VALUATION_REQUEST_PRODUCT_DETAIL&gt;
+																	&lt;cl:IncludeSearchCriteriaIndicator&gt;true&lt;/cl:IncludeSearchCriteriaIndicator&gt;
+																	&lt;cl:PropertySearchCriteriaStrictMatchIndicator&gt;true&lt;/cl:PropertySearchCriteriaStrictMatchIndicator&gt;
+																	&lt;cl:ValuationDate&gt;2016-09-29&lt;/cl:ValuationDate&gt;
+																&lt;/cl:VALUATION_REQUEST_PRODUCT_DETAIL&gt;
+																&lt;cl:VALUATION_REQUEST_SEARCH_CRITERIA&gt;
+																	&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH&gt;
+																		&lt;cl:GeographicConstraintType&gt;SameMunicipalityTownship&lt;/cl:GeographicConstraintType&gt;
+																		&lt;cl:LivingAreaFromNumber&gt;222&lt;/cl:LivingAreaFromNumber&gt;
+																		&lt;cl:LivingAreaToNumber&gt;232&lt;/cl:LivingAreaToNumber&gt;
+																		&lt;cl:PoolOptionType&gt;PropertiesWithAndWithoutPools&lt;/cl:PoolOptionType&gt;
+																		&lt;cl:SaleDateFromDate&gt;2011-09-21&lt;/cl:SaleDateFromDate&gt;
+																		&lt;cl:SaleDateToDate&gt;2012-12-31&lt;/cl:SaleDateToDate&gt;
+																		&lt;cl:SalePriceFromAmount&gt;230000&lt;/cl:SalePriceFromAmount&gt;
+																		&lt;cl:SalePriceToAmount&gt;900000&lt;/cl:SalePriceToAmount&gt;
+																		&lt;cl:MonthsBackNumber&gt;12&lt;/cl:MonthsBackNumber&gt;
+																		&lt;cl:BedroomsFromNumber&gt;2&lt;/cl:BedroomsFromNumber&gt;
+																		&lt;cl:BedroomsToNumber&gt;5&lt;/cl:BedroomsToNumber&gt;
+																		&lt;cl:BathroomsFromNumber&gt;2&lt;/cl:BathroomsFromNumber&gt;
+																		&lt;cl:BathroomsToNumber&gt;5&lt;/cl:BathroomsToNumber&gt;
+																		&lt;cl:LotSizeFromNumber&gt;1230&lt;/cl:LotSizeFromNumber&gt;
+																		&lt;cl:LotSizeToNumber&gt;4560&lt;/cl:LotSizeToNumber&gt;
+																		&lt;cl:CompFarmRecCountOnlyIndicator&gt;true&lt;/cl:CompFarmRecCountOnlyIndicator&gt;
+																		&lt;cl:IncludeStreetMapIndicator&gt;false&lt;/cl:IncludeStreetMapIndicator&gt;
+																		&lt;cl:LastSaleDateFrom&gt;2012-12-31&lt;/cl:LastSaleDateFrom&gt;
+																		&lt;cl:LastSaleDateTo&gt;2013-12-31&lt;/cl:LastSaleDateTo&gt;
+																		&lt;cl:LastRecordingDateFrom&gt;2012-11-11&lt;/cl:LastRecordingDateFrom&gt;
+																		&lt;cl:LastRecordingDateTo&gt;2013-12-11&lt;/cl:LastRecordingDateTo&gt;
+																		&lt;cl:PropertyStructureBuiltYearFromNumber&gt;2009&lt;/cl:PropertyStructureBuiltYearFromNumber&gt;
+																		&lt;cl:PropertyStructureBuiltYearToNumber&gt;2014&lt;/cl:PropertyStructureBuiltYearToNumber&gt;
+																		&lt;cl:AddressLineText&gt;1200 PARK PLACE&lt;/cl:AddressLineText&gt;
+																		&lt;cl:AddressUnitIdentifier&gt;500&lt;/cl:AddressUnitIdentifier&gt;
+																		&lt;cl:CityName&gt;San Mateo&lt;/cl:CityName&gt;
+																		&lt;cl:StateCode&gt;CA&lt;/cl:StateCode&gt;
+																		&lt;cl:PostalCode&gt;94403&lt;/cl:PostalCode&gt;
+																		&lt;cl:PropertyStructureBuiltYear&gt;2011&lt;/cl:PropertyStructureBuiltYear&gt;
+																		&lt;cl:LandUseTypeDescription&gt;SFR&lt;/cl:LandUseTypeDescription&gt;
+																		&lt;cl:GrossLivingAreaSquareFeetNumber&gt;3100&lt;/cl:GrossLivingAreaSquareFeetNumber&gt;
+																		&lt;cl:TotalRoomCount&gt;9&lt;/cl:TotalRoomCount&gt;
+																		&lt;cl:BedroomCount&gt;5&lt;/cl:BedroomCount&gt;
+																		&lt;cl:FullBathroomCount&gt;4&lt;/cl:FullBathroomCount&gt;
+																		&lt;cl:PartialBathroomCount&gt;3&lt;/cl:PartialBathroomCount&gt;
+																		&lt;cl:NumberOfYearsFromSubjectAge&gt;12&lt;/cl:NumberOfYearsFromSubjectAge&gt;
+																		&lt;cl:ListingStatuses&gt;Listing Statusess&lt;/cl:ListingStatuses&gt;
+																		&lt;cl:LotSizeAreaNumber&gt;1650&lt;/cl:LotSizeAreaNumber&gt;
+																		&lt;cl:LandUseCode&gt;SQFT&lt;/cl:LandUseCode&gt;
+																	&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH&gt;
+																	&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH_LAND_USE&gt;
+																		&lt;cl:ResidentialType&gt;ManufacturedHousing&lt;/cl:ResidentialType&gt;
+																		&lt;cl:ResidentialIncomeAndOtherType&gt;CommonArea&lt;/cl:ResidentialIncomeAndOtherType&gt;
+																		&lt;cl:CommercialType&gt;AutoEquipment&lt;/cl:CommercialType&gt;
+																		&lt;cl:IndustrialType&gt;Commercial_Industrial&lt;/cl:IndustrialType&gt;
+																		&lt;cl:VacantLandType&gt;CommonLand&lt;/cl:VacantLandType&gt;
+																		&lt;cl:AgriculturalType&gt;AvocadoGrove&lt;/cl:AgriculturalType&gt;
+																		&lt;cl:PublicAndSemiPublicType&gt;CountyProperty&lt;/cl:PublicAndSemiPublicType&gt;
+																		&lt;cl:RecreationalType&gt;BilliardHall&lt;/cl:RecreationalType&gt;
+																		&lt;cl:TransportationAndUtilityType&gt;GasProduction&lt;/cl:TransportationAndUtilityType&gt;
+																		&lt;cl:SameAsSubjectType&gt;Ignore&lt;/cl:SameAsSubjectType&gt;
+																		&lt;cl:OtherLandUseDescription&gt;Other Land Use Description&lt;/cl:OtherLandUseDescription&gt;
+																		&lt;cl:NewConstruction&gt;new Construction&lt;/cl:NewConstruction&gt;
+																		&lt;cl:PreviouslyOccupied&gt;previously Occupied&lt;/cl:PreviouslyOccupied&gt;
+																		&lt;cl:Unknown&gt;unknown&lt;/cl:Unknown&gt;
+																	&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH_LAND_USE&gt;
+																	&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATES&gt;
+																		&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATE&gt;
+																			&lt;cl:LatitudeIdentifier&gt;78&lt;/cl:LatitudeIdentifier&gt;
+																			&lt;cl:LongitudeIdentifier&gt;56&lt;/cl:LongitudeIdentifier&gt;
+																		&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATE&gt;
+																	&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATES&gt;
+																&lt;/cl:VALUATION_REQUEST_SEARCH_CRITERIA&gt;
+															&lt;/cl:VALUATION_REQUEST&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/VALUATION_REQUEST&gt;
+											&lt;/VALUATION&gt;
+											&lt;REPORTING_INFORMATION&gt;
+												&lt;ReportingInformationIdentifier&gt;Calyx009983&lt;/ReportingInformationIdentifier&gt;
+												&lt;ReportingInformationName&gt;GlobalGatewayLenderIdentifier&lt;/ReportingInformationName&gt;
+											&lt;/REPORTING_INFORMATION&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;ServiceProductDescription&gt;AVM&lt;/ServiceProductDescription&gt;
+														&lt;ServiceProductIdentifier&gt;AVMGEOP1&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier1&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID1&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier2&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID2&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier3&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID3&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier4&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID4&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier5&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID5&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="E03134FC-B9AF-40CB-9E71-840C0EBE1E06" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Original" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="GeoAVMCore_M34_QA1_REST_06">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://qa1.globalgateway.corelogic.com/order/valuationservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://qa1.globalgateway.corelogic.com/order/valuationservicerequest/avm</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;MESSAGE xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot; MISMOReferenceModelIdentifier=&quot;3.4[B324]&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;CreatedDatetime&gt;2016-08-01T03:02:24.045-05:00&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressLineText&gt;3049 MAGNUM DR&lt;/AddressLineText&gt;
+													&lt;CityName&gt;SAN JOSE&lt;/CityName&gt;
+													&lt;CountyName&gt;Santa Clara&lt;/CountyName&gt;
+													&lt;PostalCode&gt;95135&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+													&lt;StreetName&gt;3049&lt;/StreetName&gt;
+													&lt;StreetPrimaryNumberText&gt;MAGNUM&lt;/StreetPrimaryNumberText&gt;
+													&lt;StreetSuffixText&gt;CT&lt;/StreetSuffixText&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+											&lt;ORIGINATION_SYSTEMS&gt;
+												&lt;ORIGINATION_SYSTEM&gt;
+													&lt;LoanOriginationSystemName&gt;Calyx Software Origination System&lt;/LoanOriginationSystemName&gt;
+												&lt;/ORIGINATION_SYSTEM&gt;
+											&lt;/ORIGINATION_SYSTEMS&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;FullName&gt;ABC Lender&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;PreferredResponseFormatType&gt;PDF&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;RequestingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;CALYXTEST&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;cl:LoginAccountPassword&gt;test123&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE&gt;
+																&lt;PreferredResponseDestinationDescription&gt;https://design.calyxpath.com&lt;/PreferredResponseDestinationDescription&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;SubmittingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;VALUATION&gt;
+												&lt;VALUATION_REQUEST&gt;
+													&lt;VALUATION_REQUEST_DETAIL&gt;
+														&lt;ValuationRequestActionType&gt;Original&lt;/ValuationRequestActionType&gt;
+													&lt;/VALUATION_REQUEST_DETAIL&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:VALUATION_REQUEST&gt;
+																&lt;cl:VALUATION_REQUEST_PRODUCT_DETAIL&gt;
+																	&lt;cl:CascadingAVMReportType&gt;Full&lt;/cl:CascadingAVMReportType&gt;
+																	&lt;cl:CascadingAVMReportTypeOtherDescription&gt;Populate if Type is Other&lt;/cl:CascadingAVMReportTypeOtherDescription&gt;
+																	&lt;cl:CascadingAVMReturnType&gt;AllAVMs&lt;/cl:CascadingAVMReturnType&gt;
+																	&lt;cl:CascadingAVMReturnTypeOtherDescription&gt;Populate if Type is Other&lt;/cl:CascadingAVMReturnTypeOtherDescription&gt;
+																	&lt;cl:IncludeSearchCriteriaIndicator&gt;true&lt;/cl:IncludeSearchCriteriaIndicator&gt;
+																&lt;/cl:VALUATION_REQUEST_PRODUCT_DETAIL&gt;
+															&lt;/cl:VALUATION_REQUEST&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/VALUATION_REQUEST&gt;
+											&lt;/VALUATION&gt;
+											&lt;REPORTING_INFORMATION&gt;
+												&lt;ReportingInformationIdentifier&gt;GG123456&lt;/ReportingInformationIdentifier&gt;
+												&lt;ReportingInformationName&gt;GlobalGatewayLenderIdentifier&lt;/ReportingInformationName&gt;
+											&lt;/REPORTING_INFORMATION&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;ServiceProductDescription&gt;GEOAVM Core&lt;/ServiceProductDescription&gt;
+														&lt;ServiceProductIdentifier&gt;AVMGEOC1&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="E03134FC-B9AF-40CB-9E71-840C0EBE1E06" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Original" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="Cascading_AVM_Report_Type_QA1_REST_05">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://qa1.globalgateway.corelogic.com/order/valuationservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://qa1.globalgateway.corelogic.com/order/valuationservicerequest/avm</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;MESSAGE xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot; xmlns:mismo=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; MISMOReferenceModelIdentifier=&quot;3.4[B324]&quot; xsi:schemaLocation=&quot;http://www.mismo.org/residential/2009/schemas file:///C:/AVM_Schema/Onsite_M34/Client/CORELOGIC_MISMO_3.4.0_B324.xsd&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;CreatedDatetime&gt;2017-03-10T09:02:24.045-05:00&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;PL&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;202 HARTNELL PL&lt;/AddressLineText&gt;
+													&lt;CityName&gt;SACRAMENTO&lt;/CityName&gt;
+													&lt;CountyName&gt;SACRAMENTO&lt;/CountyName&gt;
+													&lt;PlusFourZipCode&gt;4567&lt;/PlusFourZipCode&gt;
+													&lt;PostalCode&gt;95825&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+													&lt;StreetName&gt;HARTNELL&lt;/StreetName&gt;
+													&lt;StreetPostDirectionalText&gt;E&lt;/StreetPostDirectionalText&gt;
+													&lt;StreetPreDirectionalText&gt;N&lt;/StreetPreDirectionalText&gt;
+													&lt;StreetPrimaryNumberText/&gt;
+													&lt;StreetSuffixText/&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:ADDRESS&gt;
+																&lt;cl:StandardizedStreetPrimaryNumberText&gt;202-EA&lt;/cl:StandardizedStreetPrimaryNumberText&gt;
+																&lt;cl:StreetPrimaryNumberFromText&gt;7318&lt;/cl:StreetPrimaryNumberFromText&gt;
+																&lt;cl:StreetPrimaryNumberToText&gt;205&lt;/cl:StreetPrimaryNumberToText&gt;
+																&lt;cl:StreetPrimaryNumberSuffix&gt;200&lt;/cl:StreetPrimaryNumberSuffix&gt;
+															&lt;/cl:ADDRESS&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/ADDRESS&gt;
+												&lt;LEGAL_DESCRIPTIONS&gt;
+													&lt;LEGAL_DESCRIPTION&gt;
+														&lt;PARCEL_IDENTIFICATIONS&gt;
+															&lt;PARCEL_IDENTIFICATION&gt;
+																&lt;ParcelIdentificationType&gt;ParcelIdentificationNumber&lt;/ParcelIdentificationType&gt;
+																&lt;ParcelIdentifier&gt;3333333344444444444&lt;/ParcelIdentifier&gt;
+															&lt;/PARCEL_IDENTIFICATION&gt;
+														&lt;/PARCEL_IDENTIFICATIONS&gt;
+													&lt;/LEGAL_DESCRIPTION&gt;
+												&lt;/LEGAL_DESCRIPTIONS&gt;
+												&lt;LOCATION_IDENTIFIER&gt;
+													&lt;FIPS_INFORMATION&gt;
+														&lt;FIPSCountyCode&gt;06067&lt;/FIPSCountyCode&gt;
+													&lt;/FIPS_INFORMATION&gt;
+													&lt;GENERAL_IDENTIFIER&gt;
+														&lt;MunicipalityName&gt;Sacramento&lt;/MunicipalityName&gt;
+													&lt;/GENERAL_IDENTIFIER&gt;
+												&lt;/LOCATION_IDENTIFIER&gt;
+												&lt;PROPERTY_DETAIL&gt;
+													&lt;PropertyEstimatedValueAmount&gt;1342343&lt;/PropertyEstimatedValueAmount&gt;
+													&lt;PropertyUsageType&gt;SecondHome&lt;/PropertyUsageType&gt;
+													&lt;PropertyUsageTypeOtherDescription&gt;Other&lt;/PropertyUsageTypeOtherDescription&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:PROPERTY_DETAIL&gt;
+																&lt;cl:PropertyType&gt;SingleFamilyResidential&lt;/cl:PropertyType&gt;
+																&lt;cl:PropertyTypeOtherDescription&gt;other&lt;/cl:PropertyTypeOtherDescription&gt;
+															&lt;/cl:PROPERTY_DETAIL&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/PROPERTY_DETAIL&gt;
+												&lt;PROPERTY_VALUATIONS&gt;
+													&lt;PROPERTY_VALUATION&gt;
+														&lt;PROPERTY_VALUATION_DETAIL&gt;
+															&lt;PropertyValuationAmount&gt;575000&lt;/PropertyValuationAmount&gt;
+														&lt;/PROPERTY_VALUATION_DETAIL&gt;
+													&lt;/PROPERTY_VALUATION&gt;
+												&lt;/PROPERTY_VALUATIONS&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;DOCUMENT_SPECIFIC_DATA_SETS&gt;
+												&lt;DOCUMENT_SPECIFIC_DATA_SET&gt;
+													&lt;URLA&gt;
+														&lt;URLA_DETAIL&gt;
+															&lt;BorrowerRequestedLoanAmount&gt;232212&lt;/BorrowerRequestedLoanAmount&gt;
+														&lt;/URLA_DETAIL&gt;
+													&lt;/URLA&gt;
+												&lt;/DOCUMENT_SPECIFIC_DATA_SET&gt;
+											&lt;/DOCUMENT_SPECIFIC_DATA_SETS&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;FullName&gt;Requesting Party Full Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;hildasue Ter&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;5004 Main St&lt;/AddressLineText&gt;
+													&lt;CityName&gt;Fremont&lt;/CityName&gt;
+													&lt;PostalCode&gt;94555&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT-G&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;PreferredResponseFormatType&gt;PDF&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER SequenceNumber=&quot;1&quot;&gt;
+															&lt;!--xprow8--&gt;
+															&lt;!--Value Assigned by CoreLogic--&gt;
+															&lt;PartyRoleIdentifier&gt;LOSCoreLogicClientID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;RequestingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;InternalAccountIdentifier&gt;InternalAccountID&lt;/InternalAccountIdentifier&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;PREC000002&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;cl:LoginAccountPassword&gt;test123&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;FullName&gt;SubmittingParty System Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;1200&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;Parl place Blvd&lt;/AddressLineText&gt;
+													&lt;CityName&gt;San Mateo&lt;/CityName&gt;
+													&lt;PostalCode&gt;94403&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT-G&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;PreferredResponseFormatType&gt;PDF&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;SubmittingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;3&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;FullName&gt;Receiving Party System Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;AddressAdditionalLineText&gt;2316&lt;/AddressAdditionalLineText&gt;
+													&lt;AddressLineText&gt;12 Main St&lt;/AddressLineText&gt;
+													&lt;CityName&gt;Foster City&lt;/CityName&gt;
+													&lt;PostalCode&gt;94404&lt;/PostalCode&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;ReceivingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY&gt;
+											&lt;INDIVIDUAL&gt;
+												&lt;NAME&gt;
+													&lt;FirstName&gt;Ruben&lt;/FirstName&gt;
+													&lt;LastName&gt;Christoper&lt;/LastName&gt;
+													&lt;MiddleName&gt;Rohan&lt;/MiddleName&gt;
+												&lt;/NAME&gt;
+											&lt;/INDIVIDUAL&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;BORROWER&gt;
+														&lt;BORROWER_DETAIL&gt;
+															&lt;BorrowerClassificationType&gt;Primary&lt;/BorrowerClassificationType&gt;
+														&lt;/BORROWER_DETAIL&gt;
+													&lt;/BORROWER&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;Borrower&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY&gt;
+											&lt;INDIVIDUAL&gt;
+												&lt;NAME&gt;
+													&lt;FirstName&gt;Mathew&lt;/FirstName&gt;
+													&lt;LastName&gt;Andrew&lt;/LastName&gt;
+												&lt;/NAME&gt;
+											&lt;/INDIVIDUAL&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PROPERTY_OWNER&gt;
+														&lt;PropertyOwnerStatusType&gt;Current&lt;/PropertyOwnerStatusType&gt;
+													&lt;/PROPERTY_OWNER&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;PropertyOwner&lt;/PartyRoleType&gt;
+														&lt;PartyRoleTypeAdditionalDescription&gt;1&lt;/PartyRoleTypeAdditionalDescription&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY&gt;
+											&lt;INDIVIDUAL&gt;
+												&lt;NAME&gt;
+													&lt;FirstName&gt;Kristen&lt;/FirstName&gt;
+													&lt;LastName&gt;Marx&lt;/LastName&gt;
+												&lt;/NAME&gt;
+											&lt;/INDIVIDUAL&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PROPERTY_OWNER&gt;
+														&lt;PropertyOwnerStatusType&gt;Current&lt;/PropertyOwnerStatusType&gt;
+													&lt;/PROPERTY_OWNER&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;PropertyOwner&lt;/PartyRoleType&gt;
+														&lt;PartyRoleTypeAdditionalDescription&gt;2&lt;/PartyRoleTypeAdditionalDescription&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;VALUATION&gt;
+												&lt;VALUATION_REQUEST&gt;
+													&lt;VALUATION_REQUEST_DETAIL&gt;
+														&lt;ValuationRequestActionType&gt;Original&lt;/ValuationRequestActionType&gt;
+														&lt;ValuationRequestCommentText&gt;Valuation Request Comment Text&lt;/ValuationRequestCommentText&gt;
+													&lt;/VALUATION_REQUEST_DETAIL&gt;
+													&lt;EXTENSION&gt;
+														&lt;OTHER&gt;
+															&lt;cl:VALUATION_REQUEST&gt;
+																&lt;cl:VALUATION_REQUEST_PRODUCT_DETAIL&gt;
+																&lt;cl:CascadingAVMReportType&gt;Brief&lt;/cl:CascadingAVMReportType&gt;
+																&lt;cl:CascadingAVMReportTypeOtherDescription&gt;Other&lt;/cl:CascadingAVMReportTypeOtherDescription&gt;
+																&lt;cl:CascadingAVMReturnType&gt;AllAVMs&lt;/cl:CascadingAVMReturnType&gt;
+																&lt;cl:CascadingAVMReturnTypeOtherDescription&gt;Other&lt;/cl:CascadingAVMReturnTypeOtherDescription&gt;
+																&lt;cl:IncludeSearchCriteriaIndicator&gt;false&lt;/cl:IncludeSearchCriteriaIndicator&gt;
+																&lt;/cl:VALUATION_REQUEST_PRODUCT_DETAIL&gt;
+																&lt;cl:VALUATION_REQUEST_SEARCH_CRITERIA&gt;
+																	&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH&gt;
+																		&lt;cl:GeographicConstraintType&gt;SameMunicipalityTownship&lt;/cl:GeographicConstraintType&gt;
+																		&lt;cl:LivingAreaFromNumber&gt;222&lt;/cl:LivingAreaFromNumber&gt;
+																		&lt;cl:LivingAreaToNumber&gt;232&lt;/cl:LivingAreaToNumber&gt;
+																		&lt;cl:PoolOptionType&gt;PropertiesWithAndWithoutPools&lt;/cl:PoolOptionType&gt;
+																		&lt;cl:SaleDateFromDate&gt;2011-09-21&lt;/cl:SaleDateFromDate&gt;
+																		&lt;cl:SaleDateToDate&gt;2012-12-31&lt;/cl:SaleDateToDate&gt;
+																		&lt;cl:SalePriceFromAmount&gt;230000&lt;/cl:SalePriceFromAmount&gt;
+																		&lt;cl:SalePriceToAmount&gt;900000&lt;/cl:SalePriceToAmount&gt;
+																		&lt;cl:MonthsBackNumber&gt;12&lt;/cl:MonthsBackNumber&gt;
+																		&lt;cl:BedroomsFromNumber&gt;2&lt;/cl:BedroomsFromNumber&gt;
+																		&lt;cl:BedroomsToNumber&gt;5&lt;/cl:BedroomsToNumber&gt;
+																		&lt;cl:BathroomsFromNumber&gt;2&lt;/cl:BathroomsFromNumber&gt;
+																		&lt;cl:BathroomsToNumber&gt;5&lt;/cl:BathroomsToNumber&gt;
+																		&lt;cl:LotSizeFromNumber&gt;1230&lt;/cl:LotSizeFromNumber&gt;
+																		&lt;cl:LotSizeToNumber&gt;4560&lt;/cl:LotSizeToNumber&gt;
+																		&lt;cl:CompFarmRecCountOnlyIndicator&gt;true&lt;/cl:CompFarmRecCountOnlyIndicator&gt;
+																		&lt;cl:IncludeStreetMapIndicator&gt;false&lt;/cl:IncludeStreetMapIndicator&gt;
+																		&lt;cl:LastSaleDateFrom&gt;2012-12-31&lt;/cl:LastSaleDateFrom&gt;
+																		&lt;cl:LastSaleDateTo&gt;2013-12-31&lt;/cl:LastSaleDateTo&gt;
+																		&lt;cl:LastRecordingDateFrom&gt;2012-11-11&lt;/cl:LastRecordingDateFrom&gt;
+																		&lt;cl:LastRecordingDateTo&gt;2013-12-11&lt;/cl:LastRecordingDateTo&gt;
+																		&lt;cl:PropertyStructureBuiltYearFromNumber&gt;2009&lt;/cl:PropertyStructureBuiltYearFromNumber&gt;
+																		&lt;cl:PropertyStructureBuiltYearToNumber&gt;2014&lt;/cl:PropertyStructureBuiltYearToNumber&gt;
+																		&lt;cl:AddressLineText&gt;1200 PARK PLACE&lt;/cl:AddressLineText&gt;
+																		&lt;cl:AddressUnitIdentifier&gt;500&lt;/cl:AddressUnitIdentifier&gt;
+																		&lt;cl:CityName&gt;San Mateo&lt;/cl:CityName&gt;
+																		&lt;cl:StateCode&gt;CA&lt;/cl:StateCode&gt;
+																		&lt;cl:PostalCode&gt;94403&lt;/cl:PostalCode&gt;
+																		&lt;cl:PropertyStructureBuiltYear&gt;2011&lt;/cl:PropertyStructureBuiltYear&gt;
+																		&lt;cl:LandUseTypeDescription&gt;SFR&lt;/cl:LandUseTypeDescription&gt;
+																		&lt;cl:GrossLivingAreaSquareFeetNumber&gt;3100&lt;/cl:GrossLivingAreaSquareFeetNumber&gt;
+																		&lt;cl:TotalRoomCount&gt;9&lt;/cl:TotalRoomCount&gt;
+																		&lt;cl:BedroomCount&gt;5&lt;/cl:BedroomCount&gt;
+																		&lt;cl:FullBathroomCount&gt;4&lt;/cl:FullBathroomCount&gt;
+																		&lt;cl:PartialBathroomCount&gt;3&lt;/cl:PartialBathroomCount&gt;
+																		&lt;cl:NumberOfYearsFromSubjectAge&gt;12&lt;/cl:NumberOfYearsFromSubjectAge&gt;
+																		&lt;cl:ListingStatuses&gt;Listing Statusess&lt;/cl:ListingStatuses&gt;
+																		&lt;cl:LotSizeAreaNumber&gt;1650&lt;/cl:LotSizeAreaNumber&gt;
+																		&lt;cl:LandUseCode&gt;SQFT&lt;/cl:LandUseCode&gt;
+																	&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH&gt;
+																	&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH_LAND_USE&gt;
+																		&lt;cl:ResidentialType&gt;ManufacturedHousing&lt;/cl:ResidentialType&gt;
+																		&lt;cl:ResidentialIncomeAndOtherType&gt;CommonArea&lt;/cl:ResidentialIncomeAndOtherType&gt;
+																		&lt;cl:CommercialType&gt;AutoEquipment&lt;/cl:CommercialType&gt;
+																		&lt;cl:IndustrialType&gt;Commercial_Industrial&lt;/cl:IndustrialType&gt;
+																		&lt;cl:VacantLandType&gt;CommonLand&lt;/cl:VacantLandType&gt;
+																		&lt;cl:AgriculturalType&gt;AvocadoGrove&lt;/cl:AgriculturalType&gt;
+																		&lt;cl:PublicAndSemiPublicType&gt;CountyProperty&lt;/cl:PublicAndSemiPublicType&gt;
+																		&lt;cl:RecreationalType&gt;BilliardHall&lt;/cl:RecreationalType&gt;
+																		&lt;cl:TransportationAndUtilityType&gt;GasProduction&lt;/cl:TransportationAndUtilityType&gt;
+																		&lt;cl:SameAsSubjectType&gt;Ignore&lt;/cl:SameAsSubjectType&gt;
+																		&lt;cl:OtherLandUseDescription&gt;Other Land Use Description&lt;/cl:OtherLandUseDescription&gt;
+																		&lt;cl:NewConstruction&gt;new Construction&lt;/cl:NewConstruction&gt;
+																		&lt;cl:PreviouslyOccupied&gt;previously Occupied&lt;/cl:PreviouslyOccupied&gt;
+																		&lt;cl:Unknown&gt;unknown&lt;/cl:Unknown&gt;
+																	&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH_LAND_USE&gt;
+																	&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATES&gt;
+																		&lt;cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATE&gt;
+																			&lt;cl:LatitudeIdentifier&gt;78&lt;/cl:LatitudeIdentifier&gt;
+																			&lt;cl:LongitudeIdentifier&gt;56&lt;/cl:LongitudeIdentifier&gt;
+																		&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATE&gt;
+																	&lt;/cl:VALUATION_REQUEST_COMPARABLE_SEARCH_POLYGON_COORDINATES&gt;
+																&lt;/cl:VALUATION_REQUEST_SEARCH_CRITERIA&gt;
+															&lt;/cl:VALUATION_REQUEST&gt;
+														&lt;/OTHER&gt;
+													&lt;/EXTENSION&gt;
+												&lt;/VALUATION_REQUEST&gt;
+											&lt;/VALUATION&gt;
+											&lt;REPORTING_INFORMATION&gt;
+												&lt;ReportingInformationIdentifier&gt;Calyx009983&lt;/ReportingInformationIdentifier&gt;
+												&lt;ReportingInformationName&gt;GlobalGatewayLenderIdentifier&lt;/ReportingInformationName&gt;
+											&lt;/REPORTING_INFORMATION&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;ServiceProductDescription&gt;AVM&lt;/ServiceProductDescription&gt;
+														&lt;ServiceProductIdentifier&gt;AVMGEOP1&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier1&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID1&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier2&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID2&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier3&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID3&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier4&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID4&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;cl:KeyIdentifier&gt;CustomerReferenceIdentifier5&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;CustRefID5&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="E03134FC-B9AF-40CB-9E71-840C0EBE1E06" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Original" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="LoanSafe_Suite_LSCM_Reissue_QA1_REST_09">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://qa1.globalgateway.corelogic.com/order/fraudservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://qa1.globalgateway.corelogic.com/order/fraudservicerequest/loansafe</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;!--Created: 2/4/17 version 4, author: Ed Macias
+Description: Max MISMO3.4 Reissue Request for C2D LSCM Orders. 
+--&gt;
+&lt;!--xrow287,288,289--&gt;
+&lt;MESSAGE MISMOReferenceModelIdentifier=&quot;3.4[B324]&quot; xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;!--xrow290--&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;!--C2D--&gt;
+											&lt;!--xrow193--&gt;
+											&lt;CreatedDatetime&gt;2016-08-01T03:02:24.045-05:00&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow25--&gt;
+													&lt;!--Required Field if not using StreetPrimaryNumberText and StreetName --&gt;
+													&lt;AddressLineText&gt;202 HARTNELL PL&lt;/AddressLineText&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow26--&gt;
+													&lt;CityName&gt;SACRAMENTO&lt;/CityName&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow30--&gt;
+													&lt;CountyName&gt;San Diego&lt;/CountyName&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow29--&gt;
+													&lt;PlusFourZipCode&gt;4567&lt;/PlusFourZipCode&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow28--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;PostalCode&gt;95825&lt;/PostalCode&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow27--&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+													&lt;!--xrow248 LSCM--&gt;
+													&lt;!--Required Field if not using AddressLineText --&gt;
+													&lt;StreetName&gt;HARTNELL&lt;/StreetName&gt;
+													&lt;!--xrow247 LSCM--&gt;
+													&lt;!--Required Field if not using AddressLineText --&gt;
+													&lt;StreetPrimaryNumberText&gt;202&lt;/StreetPrimaryNumberText&gt;
+												&lt;/ADDRESS&gt;
+												&lt;LEGAL_DESCRIPTIONS&gt;
+													&lt;LEGAL_DESCRIPTION&gt;
+														&lt;PARCEL_IDENTIFICATIONS&gt;
+															&lt;PARCEL_IDENTIFICATION&gt;
+																&lt;ParcelIdentificationType&gt;ParcelIdentificationNumber&lt;/ParcelIdentificationType&gt;
+																&lt;ParcelIdentifier&gt;APN123&lt;/ParcelIdentifier&gt;
+															&lt;/PARCEL_IDENTIFICATION&gt;
+														&lt;/PARCEL_IDENTIFICATIONS&gt;
+													&lt;/LEGAL_DESCRIPTION&gt;
+												&lt;/LEGAL_DESCRIPTIONS&gt;
+												&lt;PROPERTY_DETAIL&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow32--&gt;
+													&lt;PropertyEstimatedValueAmount&gt;1342343&lt;/PropertyEstimatedValueAmount&gt;
+												&lt;/PROPERTY_DETAIL&gt;
+												&lt;PROPERTY_VALUATIONS&gt;
+													&lt;PROPERTY_VALUATION&gt;
+														&lt;PROPERTY_VALUATION_DETAIL&gt;
+															&lt;!--C2D--&gt;
+															&lt;!--row31--&gt;
+															&lt;PropertyValuationAmount&gt;575000&lt;/PropertyValuationAmount&gt;
+														&lt;/PROPERTY_VALUATION_DETAIL&gt;
+													&lt;/PROPERTY_VALUATION&gt;
+												&lt;/PROPERTY_VALUATIONS&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow11--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow11--&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+											&lt;ORIGINATION_SYSTEMS&gt;
+												&lt;ORIGINATION_SYSTEM&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--LOSName--&gt;
+													&lt;!--xprow14--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;LoanOriginationSystemName&gt;ABC Loan Origination System&lt;/LoanOriginationSystemName&gt;
+												&lt;/ORIGINATION_SYSTEM&gt;
+											&lt;/ORIGINATION_SYSTEMS&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;!--RequestingParty/Business Channel--&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;CONTACTS&gt;
+													&lt;CONTACT&gt;
+														&lt;CONTACT_POINTS&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;1&quot;&gt;
+																&lt;CONTACT_POINT_EMAIL&gt;
+																	&lt;!--LOSUserEmail--&gt;
+																	&lt;!--xprow10--&gt;
+																	&lt;ContactPointEmailValue&gt;abc@xyz.com&lt;/ContactPointEmailValue&gt;
+																&lt;/CONTACT_POINT_EMAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;2&quot;&gt;
+																&lt;CONTACT_POINT_TELEPHONE&gt;
+																	&lt;!--xprow37--&gt;
+																	&lt;ContactPointTelephoneValue&gt;8004445555&lt;/ContactPointTelephoneValue&gt;
+																&lt;/CONTACT_POINT_TELEPHONE&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow37--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;3&quot;&gt;
+																&lt;CONTACT_POINT_TELEPHONE&gt;
+																	&lt;!--xprow38--&gt;
+																	&lt;ContactPointFaxValue&gt;8004445557&lt;/ContactPointFaxValue&gt;
+																&lt;/CONTACT_POINT_TELEPHONE&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow38--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+														&lt;/CONTACT_POINTS&gt;
+														&lt;NAME&gt;
+															&lt;!--C2D--&gt;
+															&lt;!--LOSUserFirstName--&gt;
+															&lt;!--xprow11--&gt;
+															&lt;FirstName&gt;John&lt;/FirstName&gt;
+															&lt;!--C2D--&gt;
+															&lt;!--LOSUserRole--&gt;
+															&lt;!--xprow13--&gt;
+															&lt;FunctionalTitleDescription&gt;Underwriter&lt;/FunctionalTitleDescription&gt;
+															&lt;!--C2D--&gt;
+															&lt;!--LOSUserLastName--&gt;
+															&lt;!--xprow12--&gt;
+															&lt;LastName&gt;Doe&lt;/LastName&gt;
+														&lt;/NAME&gt;
+													&lt;/CONTACT&gt;
+												&lt;/CONTACTS&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xprow7--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;FullName&gt;LOSClientName&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--xprow34--&gt;
+													&lt;AddressAdditionalLineText&gt;Line 2&lt;/AddressAdditionalLineText&gt;
+													&lt;!--xprow35--&gt;
+													&lt;AddressLineText&gt;123 Main St&lt;/AddressLineText&gt;
+													&lt;!--xprow31--&gt;
+													&lt;CityName&gt;CityName&lt;/CityName&gt;
+													&lt;!--xprow32--&gt;
+													&lt;PostalCode&gt;90254&lt;/PostalCode&gt;
+													&lt;!--xprow33--&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--if true then return PDF in product response--&gt;
+																&lt;!--rxow203--&gt;
+																&lt;PreferredResponseFormatType&gt;PDF&lt;/PreferredResponseFormatType&gt;
+																&lt;!--xrow203--&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;2&quot;&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--xrow200--&gt;
+																&lt;PreferredResponseFormatType&gt;Other&lt;/PreferredResponseFormatType&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--xrow200--&gt;
+																&lt;PreferredResponseFormatTypeOtherDescription&gt;HTML&lt;/PreferredResponseFormatTypeOtherDescription&gt;
+																&lt;!--if true then return HTML in product response--&gt;
+																&lt;!--xrow200--&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;3&quot;&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--if true then return XML in product response--&gt;
+																&lt;!--rxow203--&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;!--xrow203--&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER SequenceNumber=&quot;1&quot;&gt;
+															&lt;!--xprow8--&gt;
+															&lt;PartyRoleIdentifier&gt;LOSClientID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;RequestingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;LOAN_ORIGINATOR&gt;
+														&lt;!--xrow4--&gt;
+														&lt;!--C2D--&gt;
+														&lt;!--Valid values: Lender, Correspondent, Broker, Other/Home Equity, Other/HELOC--&gt;
+														&lt;!--Business Channel: Lender=Retail, Broker=Wholesale--&gt;
+														&lt;LoanOriginatorType&gt;Lender&lt;/LoanOriginatorType&gt;
+														&lt;!--xrow4--&gt;
+														&lt;LoanOriginatorTypeOtherDescription&gt;Other Client Value&lt;/LoanOriginatorTypeOtherDescription&gt;
+													&lt;/LOAN_ORIGINATOR&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;3&quot;&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;!--C2D--&gt;
+														&lt;!--xrow194--&gt;
+														&lt;InternalAccountIdentifier&gt;InternalAccountID&lt;/InternalAccountIdentifier&gt;
+														&lt;!--xprow9--&gt;
+														&lt;RequestedByName&gt;USER101&lt;/RequestedByName&gt;
+														&lt;!--xprow49--&gt;
+														&lt;RequestingPartyBranchIdentifier&gt;RequestingPartyBranchID&lt;/RequestingPartyBranchIdentifier&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xprow5--&gt;
+																	&lt;cl:AlertServiceIdentifier&gt;AlertServiceId&lt;/cl:AlertServiceIdentifier&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xprow6--&gt;
+																	&lt;cl:ServicerIdentifier&gt;123&lt;/cl:ServicerIdentifier&gt;
+																	&lt;!--GG/C2D Required Field--&gt;
+																	&lt;!--xrow195--&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;vtc2d7&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;!--GG/C2D Required Field--&gt;
+																	&lt;!--xrow196--&gt;
+																	&lt;cl:LoginAccountPassword&gt;qa222&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;!--SubmittingParty--&gt;
+										&lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;CONTACTS&gt;
+													&lt;CONTACT&gt;
+														&lt;CONTACT_DETAIL&gt;
+															&lt;!--xprow51--&gt;
+															&lt;ContactPartyIdentifier&gt;SubmittingPartyContactID123&lt;/ContactPartyIdentifier&gt;
+														&lt;/CONTACT_DETAIL&gt;
+														&lt;CONTACT_POINTS&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;1&quot;&gt;
+																&lt;CONTACT_POINT_EMAIL&gt;
+																	&lt;!--xprow29--&gt;
+																	&lt;ContactPointEmailValue&gt;submittingparty@email.com&lt;/ContactPointEmailValue&gt;
+																&lt;/CONTACT_POINT_EMAIL&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow29--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;2&quot;&gt;
+																&lt;CONTACT_POINT_TELEPHONE&gt;
+																	&lt;!--xprow28--&gt;
+																	&lt;ContactPointTelephoneValue&gt;8004445559&lt;/ContactPointTelephoneValue&gt;
+																&lt;/CONTACT_POINT_TELEPHONE&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow28--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+														&lt;/CONTACT_POINTS&gt;
+														&lt;NAME&gt;
+															&lt;!--xprow27--&gt;
+															&lt;FullName&gt;SubmittingPartyContact Name&lt;/FullName&gt;
+														&lt;/NAME&gt;
+													&lt;/CONTACT&gt;
+												&lt;/CONTACTS&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--xprow30--&gt;
+													&lt;FullName&gt;SubmittingParty System Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--xprow26--&gt;
+													&lt;AddressAdditionalLineText&gt;Line2&lt;/AddressAdditionalLineText&gt;
+													&lt;!--xprow25--&gt;
+													&lt;AddressLineText&gt;12 Main St&lt;/AddressLineText&gt;
+													&lt;!--xprow22--&gt;
+													&lt;CityName&gt;CityName&lt;/CityName&gt;
+													&lt;!--xprow23--&gt;
+													&lt;PostalCode&gt;90256&lt;/PostalCode&gt;
+													&lt;!--xprow24--&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE&gt;
+																&lt;!--xprow17--&gt;
+																&lt;!--IST,UAT,PROD environment--&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER&gt;
+															&lt;!--xprow50--&gt;
+															&lt;PartyRoleIdentifier&gt;SubmittingPartySystemID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;SubmittingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;SUBMITTING_PARTY&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:SUBMITTING_PARTY&gt;
+																	&lt;!--xprow52--&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;vtc2d7&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;!--xprow53--&gt;
+																	&lt;cl:LoginAccountPassword&gt;qa222&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:SUBMITTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/SUBMITTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;PARTY SequenceNumber=&quot;3&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--xrow186--&gt;
+													&lt;FullName&gt;ClientName&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER SequenceNumber=&quot;1&quot;&gt;
+															&lt;!--xprow8--&gt;
+															&lt;PartyRoleIdentifier&gt;ClientID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;!--C2D--&gt;
+														&lt;PartyRoleType&gt;Client&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;FRAUD&gt;
+												&lt;EXTENSION&gt;
+													&lt;OTHER&gt;
+														&lt;cl:FRAUD&gt;
+															&lt;cl:FRAUD_REQUEST&gt;
+																&lt;cl:FRAUD_REQUEST_DETAIL&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xrow198--&gt;
+																	&lt;!--Required Field--&gt;
+																	&lt;cl:FraudRequestActionType&gt;Reissue&lt;/cl:FraudRequestActionType&gt;
+																&lt;/cl:FRAUD_REQUEST_DETAIL&gt;
+																&lt;cl:FRAUD_REQUEST_PRODUCT_DETAIL&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xrow201--&gt;
+																	&lt;cl:IncludeSearchCriteriaIndicator&gt;true&lt;/cl:IncludeSearchCriteriaIndicator&gt;
+																	&lt;!--GG Required Field for Reissue--&gt;
+																	&lt;cl:ReportIdentifier&gt;1488406932283&lt;/cl:ReportIdentifier&gt;
+																&lt;/cl:FRAUD_REQUEST_PRODUCT_DETAIL&gt;
+															&lt;/cl:FRAUD_REQUEST&gt;
+														&lt;/cl:FRAUD&gt;
+													&lt;/OTHER&gt;
+												&lt;/EXTENSION&gt;
+											&lt;/FRAUD&gt;
+											&lt;REPORTING_INFORMATION&gt;
+												&lt;!--Required Field--&gt;
+												&lt;ReportingInformationIdentifier&gt;GG123456&lt;/ReportingInformationIdentifier&gt;
+												&lt;ReportingInformationName&gt;GlobalGatewayLenderIdentifier&lt;/ReportingInformationName&gt;
+											&lt;/REPORTING_INFORMATION&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;!--xrow199--&gt;
+														&lt;ServiceProductDescription&gt;LoanSafeCollateralManager&lt;/ServiceProductDescription&gt;
+														&lt;!--xrow199--&gt;
+														&lt;!--Required Field--&gt;
+														&lt;ServiceProductIdentifier&gt;FRDLSCM1&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;cl:KEY&gt;
+														&lt;!--GG Required Field aka MasterSessionID, ConsumerRefId--&gt;
+														&lt;!--xrow197--&gt;
+														&lt;!--xprow19--&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;!--GG Required Field for Reissue aka CoreLogic Order Id--&gt;
+														&lt;cl:KeyIdentifier&gt;RespondingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+													&lt;cl:KEY&gt;
+														&lt;!--GG Optional Field for Reissue aka CoreLogic Service Provider Order Id--&gt;
+														&lt;cl:KeyIdentifier&gt;FulfillmentPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;1488406932283&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="0db9be25-3b6f-4250-99e7-da4fb4e2c5da" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Reissue" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+        <SoapService soapServiceID="LoanSafe_Suite_LSCM_Submit_QA1_REST_08">
+          <wsdlServiceInterface>
+            <SoapInterface interfaceName="RestServiceByURL" interfaceID="INT01">
+              <wsdlServiceIOperation>
+                <SoapOperation oprName="https://qa1.globalgateway.corelogic.com/order/fraudservicerequest/" oprID="OPR01" postAsQueryString="true" oprMethod="POST">
+                  <actionUrl>https://qa1.globalgateway.corelogic.com/order/fraudservicerequest/loansafe</actionUrl>
+                  <contentType>application/xml</contentType>
+                  <defaultRequest>&lt;MESSAGE MISMOReferenceModelIdentifier=&quot;3.4[B324]&quot; xmlns=&quot;http://www.mismo.org/residential/2009/schemas&quot; xmlns:cl=&quot;http://globalgateway.corelogic.com/order/2015&quot;&gt;
+	&lt;DOCUMENT_SETS&gt;
+		&lt;DOCUMENT_SET&gt;
+			&lt;DOCUMENTS&gt;
+				&lt;DOCUMENT&gt;
+					&lt;DEAL_SETS&gt;
+						&lt;DEAL_SET&gt;
+							&lt;DEALS&gt;
+								&lt;DEAL&gt;
+									&lt;ABOUT_VERSIONS&gt;
+										&lt;ABOUT_VERSION&gt;
+											&lt;!--xrow290--&gt;
+											&lt;AboutVersionIdentifier&gt;3.4&lt;/AboutVersionIdentifier&gt;
+											&lt;!--C2D--&gt;
+											&lt;!--xrow193--&gt;
+											&lt;CreatedDatetime&gt;2016-08-01T03:02:24.045-05:00&lt;/CreatedDatetime&gt;
+										&lt;/ABOUT_VERSION&gt;
+									&lt;/ABOUT_VERSIONS&gt;
+									&lt;COLLATERALS&gt;
+										&lt;COLLATERAL&gt;
+											&lt;SUBJECT_PROPERTY&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow25--&gt;
+													&lt;!--Required Field if not using StreetPrimaryNumberText and StreetName --&gt;
+													&lt;AddressLineText&gt;202 HARTNELL PL&lt;/AddressLineText&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow28--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;PostalCode&gt;95825&lt;/PostalCode&gt;
+												&lt;/ADDRESS&gt;
+												&lt;PROPERTY_DETAIL&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow32--&gt;
+													&lt;PropertyEstimatedValueAmount&gt;1342343&lt;/PropertyEstimatedValueAmount&gt;
+												&lt;/PROPERTY_DETAIL&gt;
+											&lt;/SUBJECT_PROPERTY&gt;
+										&lt;/COLLATERAL&gt;
+									&lt;/COLLATERALS&gt;
+									&lt;LOANS&gt;
+										&lt;LOAN LoanRoleType=&quot;SubjectLoan&quot;&gt;
+											&lt;LOAN_IDENTIFIERS&gt;
+												&lt;LOAN_IDENTIFIER&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow11--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;LoanIdentifier&gt;?&lt;/LoanIdentifier&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xrow11--&gt;
+													&lt;LoanIdentifierType&gt;LenderLoan&lt;/LoanIdentifierType&gt;
+												&lt;/LOAN_IDENTIFIER&gt;
+											&lt;/LOAN_IDENTIFIERS&gt;
+											&lt;ORIGINATION_SYSTEMS&gt;
+												&lt;ORIGINATION_SYSTEM&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--LOSName--&gt;
+													&lt;!--xprow14--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;LoanOriginationSystemName&gt;ABC Loan Origination System&lt;/LoanOriginationSystemName&gt;
+												&lt;/ORIGINATION_SYSTEM&gt;
+											&lt;/ORIGINATION_SYSTEMS&gt;
+										&lt;/LOAN&gt;
+									&lt;/LOANS&gt;
+									&lt;PARTIES&gt;
+										&lt;!--RequestingParty/Business Channel--&gt;
+										&lt;PARTY SequenceNumber=&quot;1&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;CONTACTS&gt;
+													&lt;CONTACT&gt;
+														&lt;CONTACT_POINTS&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;1&quot;&gt;
+																&lt;CONTACT_POINT_EMAIL&gt;
+																	&lt;!--LOSUserEmail--&gt;
+																	&lt;!--xprow10--&gt;
+																	&lt;ContactPointEmailValue&gt;abc@xyz.com&lt;/ContactPointEmailValue&gt;
+																&lt;/CONTACT_POINT_EMAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;2&quot;&gt;
+																&lt;CONTACT_POINT_TELEPHONE&gt;
+																	&lt;!--xprow37--&gt;
+																	&lt;ContactPointTelephoneValue&gt;8004445555&lt;/ContactPointTelephoneValue&gt;
+																&lt;/CONTACT_POINT_TELEPHONE&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow37--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;3&quot;&gt;
+																&lt;CONTACT_POINT_TELEPHONE&gt;
+																	&lt;!--xprow38--&gt;
+																	&lt;ContactPointFaxValue&gt;8004445557&lt;/ContactPointFaxValue&gt;
+																&lt;/CONTACT_POINT_TELEPHONE&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow38--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+														&lt;/CONTACT_POINTS&gt;
+														&lt;NAME&gt;
+															&lt;!--C2D--&gt;
+															&lt;!--LOSUserFirstName--&gt;
+															&lt;!--xprow11--&gt;
+															&lt;FirstName&gt;John&lt;/FirstName&gt;
+															&lt;!--C2D--&gt;
+															&lt;!--LOSUserRole--&gt;
+															&lt;!--xprow13--&gt;
+															&lt;FunctionalTitleDescription&gt;Underwriter&lt;/FunctionalTitleDescription&gt;
+															&lt;!--C2D--&gt;
+															&lt;!--LOSUserLastName--&gt;
+															&lt;!--xprow12--&gt;
+															&lt;LastName&gt;Doe&lt;/LastName&gt;
+														&lt;/NAME&gt;
+													&lt;/CONTACT&gt;
+												&lt;/CONTACTS&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--C2D--&gt;
+													&lt;!--xprow7--&gt;
+													&lt;!--Required Field--&gt;
+													&lt;FullName&gt;LOSClientName&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--xprow34--&gt;
+													&lt;AddressAdditionalLineText&gt;Line 2&lt;/AddressAdditionalLineText&gt;
+													&lt;!--xprow35--&gt;
+													&lt;AddressLineText&gt;123 Main St&lt;/AddressLineText&gt;
+													&lt;!--xprow31--&gt;
+													&lt;CityName&gt;CityName&lt;/CityName&gt;
+													&lt;!--xprow32--&gt;
+													&lt;PostalCode&gt;90254&lt;/PostalCode&gt;
+													&lt;!--xprow33--&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;1&quot;&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--if true then return PDF in product response--&gt;
+																&lt;!--rxow203--&gt;
+																&lt;PreferredResponseFormatType&gt;PDF&lt;/PreferredResponseFormatType&gt;
+																&lt;!--xrow203--&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;2&quot;&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--xrow200--&gt;
+																&lt;PreferredResponseFormatType&gt;Other&lt;/PreferredResponseFormatType&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--xrow200--&gt;
+																&lt;PreferredResponseFormatTypeOtherDescription&gt;HTML&lt;/PreferredResponseFormatTypeOtherDescription&gt;
+																&lt;!--if true then return HTML in product response--&gt;
+																&lt;!--xrow200--&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+															&lt;PREFERRED_RESPONSE SequenceNumber=&quot;3&quot;&gt;
+																&lt;!--C2D--&gt;
+																&lt;!--if true then return XML in product response--&gt;
+																&lt;!--rxow203--&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;!--xrow203--&gt;
+																&lt;PreferredResponseUseEmbeddedFileIndicator&gt;true&lt;/PreferredResponseUseEmbeddedFileIndicator&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER SequenceNumber=&quot;1&quot;&gt;
+															&lt;!--xprow8--&gt;
+															&lt;PartyRoleIdentifier&gt;LOSClientID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;RequestingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;LOAN_ORIGINATOR&gt;
+														&lt;!--xrow4--&gt;
+														&lt;!--C2D--&gt;
+														&lt;!--Valid values: Lender, Correspondent, Broker, Other/Home Equity, Other/HELOC--&gt;
+														&lt;!--Business Channel: Lender=Retail, Broker=Wholesale--&gt;
+														&lt;LoanOriginatorType&gt;Lender&lt;/LoanOriginatorType&gt;
+														&lt;!--xrow4--&gt;
+														&lt;LoanOriginatorTypeOtherDescription&gt;Other Client Value&lt;/LoanOriginatorTypeOtherDescription&gt;
+													&lt;/LOAN_ORIGINATOR&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;3&quot;&gt;
+													&lt;REQUESTING_PARTY&gt;
+														&lt;!--C2D--&gt;
+														&lt;!--xrow194--&gt;
+														&lt;InternalAccountIdentifier&gt;InternalAccountID&lt;/InternalAccountIdentifier&gt;
+														&lt;!--xprow9--&gt;
+														&lt;RequestedByName&gt;USER101&lt;/RequestedByName&gt;
+														&lt;!--xprow49--&gt;
+														&lt;RequestingPartyBranchIdentifier&gt;RequestingPartyBranchID&lt;/RequestingPartyBranchIdentifier&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:REQUESTING_PARTY&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xprow5--&gt;
+																	&lt;cl:AlertServiceIdentifier&gt;AlertServiceId&lt;/cl:AlertServiceIdentifier&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xprow6--&gt;
+																	&lt;cl:ServicerIdentifier&gt;123&lt;/cl:ServicerIdentifier&gt;
+																	&lt;!--GG/C2D Required Field--&gt;
+																	&lt;!--xrow195--&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;CALYXTEST&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;!--GG/C2D Required Field--&gt;
+																	&lt;!--xrow196--&gt;
+																	&lt;cl:LoginAccountPassword&gt;test123&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:REQUESTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/REQUESTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+										&lt;!--SubmittingParty--&gt;
+										&lt;PARTY SequenceNumber=&quot;2&quot;&gt;
+											&lt;LEGAL_ENTITY&gt;
+												&lt;CONTACTS&gt;
+													&lt;CONTACT&gt;
+														&lt;CONTACT_DETAIL&gt;
+															&lt;!--xprow51--&gt;
+															&lt;ContactPartyIdentifier&gt;SubmittingPartyContactID123&lt;/ContactPartyIdentifier&gt;
+														&lt;/CONTACT_DETAIL&gt;
+														&lt;CONTACT_POINTS&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;1&quot;&gt;
+																&lt;CONTACT_POINT_EMAIL&gt;
+																	&lt;!--xprow29--&gt;
+																	&lt;ContactPointEmailValue&gt;submittingparty@email.com&lt;/ContactPointEmailValue&gt;
+																&lt;/CONTACT_POINT_EMAIL&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow29--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+															&lt;CONTACT_POINT SequenceNumber=&quot;2&quot;&gt;
+																&lt;CONTACT_POINT_TELEPHONE&gt;
+																	&lt;!--xprow28--&gt;
+																	&lt;ContactPointTelephoneValue&gt;8004445559&lt;/ContactPointTelephoneValue&gt;
+																&lt;/CONTACT_POINT_TELEPHONE&gt;
+																&lt;CONTACT_POINT_DETAIL&gt;
+																	&lt;!--xprow28--&gt;
+																	&lt;ContactPointRoleType&gt;Work&lt;/ContactPointRoleType&gt;
+																&lt;/CONTACT_POINT_DETAIL&gt;
+															&lt;/CONTACT_POINT&gt;
+														&lt;/CONTACT_POINTS&gt;
+														&lt;NAME&gt;
+															&lt;!--xprow27--&gt;
+															&lt;FullName&gt;SubmittingPartyContact Name&lt;/FullName&gt;
+														&lt;/NAME&gt;
+													&lt;/CONTACT&gt;
+												&lt;/CONTACTS&gt;
+												&lt;LEGAL_ENTITY_DETAIL&gt;
+													&lt;!--xprow30--&gt;
+													&lt;FullName&gt;SubmittingParty System Name&lt;/FullName&gt;
+												&lt;/LEGAL_ENTITY_DETAIL&gt;
+											&lt;/LEGAL_ENTITY&gt;
+											&lt;ADDRESSES&gt;
+												&lt;ADDRESS&gt;
+													&lt;!--xprow26--&gt;
+													&lt;AddressAdditionalLineText&gt;Line2&lt;/AddressAdditionalLineText&gt;
+													&lt;!--xprow25--&gt;
+													&lt;AddressLineText&gt;12 Main St&lt;/AddressLineText&gt;
+													&lt;!--xprow22--&gt;
+													&lt;CityName&gt;CityName&lt;/CityName&gt;
+													&lt;!--xprow23--&gt;
+													&lt;PostalCode&gt;90256&lt;/PostalCode&gt;
+													&lt;!--xprow24--&gt;
+													&lt;StateCode&gt;CA&lt;/StateCode&gt;
+												&lt;/ADDRESS&gt;
+											&lt;/ADDRESSES&gt;
+											&lt;ROLES&gt;
+												&lt;ROLE SequenceNumber=&quot;1&quot;&gt;
+													&lt;RETURN_TO&gt;
+														&lt;PREFERRED_RESPONSES&gt;
+															&lt;PREFERRED_RESPONSE&gt;
+																&lt;!--xprow17--&gt;
+																&lt;!--IST,UAT,PROD environment--&gt;
+																&lt;PreferredResponseDestinationDescription&gt;UAT&lt;/PreferredResponseDestinationDescription&gt;
+																&lt;PreferredResponseFormatType&gt;XML&lt;/PreferredResponseFormatType&gt;
+																&lt;PreferredResponseMethodType&gt;HTTPS&lt;/PreferredResponseMethodType&gt;
+															&lt;/PREFERRED_RESPONSE&gt;
+														&lt;/PREFERRED_RESPONSES&gt;
+													&lt;/RETURN_TO&gt;
+													&lt;PARTY_ROLE_IDENTIFIERS&gt;
+														&lt;PARTY_ROLE_IDENTIFIER&gt;
+															&lt;!--xprow50--&gt;
+															&lt;PartyRoleIdentifier&gt;SubmittingPartySystemID&lt;/PartyRoleIdentifier&gt;
+														&lt;/PARTY_ROLE_IDENTIFIER&gt;
+													&lt;/PARTY_ROLE_IDENTIFIERS&gt;
+													&lt;ROLE_DETAIL&gt;
+														&lt;PartyRoleType&gt;SubmittingParty&lt;/PartyRoleType&gt;
+													&lt;/ROLE_DETAIL&gt;
+												&lt;/ROLE&gt;
+												&lt;ROLE SequenceNumber=&quot;2&quot;&gt;
+													&lt;SUBMITTING_PARTY&gt;
+														&lt;EXTENSION&gt;
+															&lt;OTHER&gt;
+																&lt;cl:SUBMITTING_PARTY&gt;
+																	&lt;!--xprow52--&gt;
+																	&lt;cl:LoginAccountIdentifier&gt;CALYXTEST&lt;/cl:LoginAccountIdentifier&gt;
+																	&lt;!--xprow53--&gt;
+																	&lt;cl:LoginAccountPassword&gt;test123&lt;/cl:LoginAccountPassword&gt;
+																&lt;/cl:SUBMITTING_PARTY&gt;
+															&lt;/OTHER&gt;
+														&lt;/EXTENSION&gt;
+													&lt;/SUBMITTING_PARTY&gt;
+												&lt;/ROLE&gt;
+											&lt;/ROLES&gt;
+										&lt;/PARTY&gt;
+									&lt;/PARTIES&gt;
+									&lt;SERVICES&gt;
+										&lt;SERVICE&gt;
+											&lt;FRAUD&gt;
+												&lt;EXTENSION&gt;
+													&lt;OTHER&gt;
+														&lt;cl:FRAUD&gt;
+															&lt;cl:FRAUD_REQUEST&gt;
+																&lt;cl:FRAUD_REQUEST_DETAIL&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xrow198--&gt;
+																	&lt;!--Required Field--&gt;
+																	&lt;cl:FraudRequestActionType&gt;Submit&lt;/cl:FraudRequestActionType&gt;
+																&lt;/cl:FRAUD_REQUEST_DETAIL&gt;
+																&lt;cl:FRAUD_REQUEST_PRODUCT_DETAIL&gt;
+																	&lt;!--C2D--&gt;
+																	&lt;!--xrow201--&gt;
+																	&lt;cl:IncludeSearchCriteriaIndicator&gt;true&lt;/cl:IncludeSearchCriteriaIndicator&gt;
+																&lt;/cl:FRAUD_REQUEST_PRODUCT_DETAIL&gt;
+															&lt;/cl:FRAUD_REQUEST&gt;
+														&lt;/cl:FRAUD&gt;
+													&lt;/OTHER&gt;
+												&lt;/EXTENSION&gt;
+											&lt;/FRAUD&gt;
+											&lt;REPORTING_INFORMATION&gt;
+												&lt;!--Required Field--&gt;
+												&lt;ReportingInformationIdentifier&gt;GG123456&lt;/ReportingInformationIdentifier&gt;
+												&lt;ReportingInformationName&gt;GlobalGatewayLenderIdentifier&lt;/ReportingInformationName&gt;
+											&lt;/REPORTING_INFORMATION&gt;
+											&lt;SERVICE_PRODUCT&gt;
+												&lt;SERVICE_PRODUCT_REQUEST&gt;
+													&lt;SERVICE_PRODUCT_DETAIL&gt;
+														&lt;!--xrow199--&gt;
+														&lt;ServiceProductDescription&gt;LoanSafeCollateralManager&lt;/ServiceProductDescription&gt;
+														&lt;!--xrow199--&gt;
+														&lt;!--Required Field--&gt;
+														&lt;ServiceProductIdentifier&gt;FRDLSCM1&lt;/ServiceProductIdentifier&gt;
+													&lt;/SERVICE_PRODUCT_DETAIL&gt;
+												&lt;/SERVICE_PRODUCT_REQUEST&gt;
+											&lt;/SERVICE_PRODUCT&gt;
+										&lt;/SERVICE&gt;
+									&lt;/SERVICES&gt;
+									&lt;EXTENSION&gt;
+										&lt;OTHER&gt;
+											&lt;cl:DEAL&gt;
+												&lt;cl:KEYS&gt;
+													&lt;cl:KEY&gt;
+														&lt;!--GG Required Field aka MasterSessionID, ConsumerRefId--&gt;
+														&lt;!--xrow197--&gt;
+														&lt;!--xprow19--&gt;
+														&lt;cl:KeyIdentifier&gt;SubmittingPartyOrderIdentifier&lt;/cl:KeyIdentifier&gt;
+														&lt;cl:KeyValue&gt;?&lt;/cl:KeyValue&gt;
+													&lt;/cl:KEY&gt;
+												&lt;/cl:KEYS&gt;
+											&lt;/cl:DEAL&gt;
+										&lt;/OTHER&gt;
+									&lt;/EXTENSION&gt;
+								&lt;/DEAL&gt;
+							&lt;/DEALS&gt;
+						&lt;/DEAL_SET&gt;
+					&lt;/DEAL_SETS&gt;
+				&lt;/DOCUMENT&gt;
+			&lt;/DOCUMENTS&gt;
+		&lt;/DOCUMENT_SET&gt;
+	&lt;/DOCUMENT_SETS&gt;
+&lt;/MESSAGE&gt;</defaultRequest>
+                  <restParams>
+                    <entry>
+                      <string>apikey</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="apikey" fieldValue="0db9be25-3b6f-4250-99e7-da4fb4e2c5da" fieldType="HEADER"/>
+                    </entry>
+                    <entry>
+                      <string>action</string>
+                      <com.tavant.qa.apiclient.objects.RestParams fieldName="action" fieldValue="Submit" fieldType="QUERY"/>
+                    </entry>
+                  </restParams>
+                </SoapOperation>
+              </wsdlServiceIOperation>
+            </SoapInterface>
+          </wsdlServiceInterface>
+        </SoapService>
+      </wsdlService>
+    </service>
+  </services>
+</Project>

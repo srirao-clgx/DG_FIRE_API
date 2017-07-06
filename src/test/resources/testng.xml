@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="API Test Suite"  <!-- parallel = "instances" --> data-provider-thread-count="50">
+  <test name="API GUI Executor">
+    <classes>
+      <class name="com.tavant.qa.api.TestExecutor"/>
+    </classes>
+  </test> <!-- API GUI Executor -->
+</suite> <!-- API Test Suite -->
