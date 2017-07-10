@@ -1,0 +1,172 @@
+<MESSAGE xmlns="http://www.mismo.org/residential/2009/schemas" xmlns:cl="http://globalgateway.corelogic.com/order/2015" MISMOReferenceModelIdentifier="3.4[B324]">
+	<DOCUMENT_SETS>
+		<DOCUMENT_SET>
+			<DOCUMENTS>
+				<DOCUMENT>
+					<DEAL_SETS>
+						<DEAL_SET>
+							<DEALS>
+								<DEAL>
+									<ABOUT_VERSIONS>
+										<ABOUT_VERSION>
+											<!--Optional-->
+											<AboutVersionIdentifier>3.4</AboutVersionIdentifier>
+											<!--Required-->
+											<CreatedDatetime>2016-02-25T13:28:02.431Z</CreatedDatetime>
+										</ABOUT_VERSION>
+									</ABOUT_VERSIONS>
+									<COLLATERALS>
+										<COLLATERAL>
+											<SUBJECT_PROPERTY>
+												<ADDRESS>
+													<!--Required-->
+													<AddressFormatType>Individual</AddressFormatType>
+													<!--Required-->
+													<AddressType>Primary</AddressType>
+													<!--Required-->
+													<CityName>UPLAND</CityName>
+													<!--Required-->
+													<PostalCode>91784</PostalCode>
+													<!--Required-->
+													<StateCode>CA</StateCode>
+													<!--Conditionally Required when AddressFormatType = "Individual"-->
+													<StreetName>EUCLID AVE</StreetName>
+													<!--Conditionally Required when AddressFormatType = "Individual"-->
+													<StreetPrimaryNumberText>2490</StreetPrimaryNumberText>
+												</ADDRESS>
+												<PROPERTY_DETAIL>
+													<!--Conditionally Required if PurchasePriceAmount not sent-->
+													<PropertyEstimatedValueAmount>682000</PropertyEstimatedValueAmount>
+													<!--Required-->
+													<PropertyUsageType>PrimaryResidence</PropertyUsageType>
+												</PROPERTY_DETAIL>
+											</SUBJECT_PROPERTY>
+										</COLLATERAL>
+									</COLLATERALS>
+									<LOANS>
+										<LOAN LoanRoleType="SubjectLoan">
+											<LOAN_IDENTIFIERS>
+												<LOAN_IDENTIFIER>
+													<!--Required CLGG-->
+													<LoanIdentifier>6692709708515590812</LoanIdentifier>
+													<!--Required CLGG-->
+													<LoanIdentifierType>LenderLoan</LoanIdentifierType>
+												</LOAN_IDENTIFIER>
+											</LOAN_IDENTIFIERS>
+											<ORIGINATION_SYSTEMS>
+												<ORIGINATION_SYSTEM>
+													<!--Required-->
+													<LoanOriginationSystemName>LoanOriginationSystemName</LoanOriginationSystemName>
+												</ORIGINATION_SYSTEM>
+											</ORIGINATION_SYSTEMS>
+											<TERMS_OF_LOAN>
+												<!--Required-->
+												<LoanPurposeType>Purchase</LoanPurposeType>
+											</TERMS_OF_LOAN>
+										</LOAN>
+									</LOANS>
+									<PARTIES>
+										<PARTY SequenceNumber="1">
+											<LEGAL_ENTITY>
+												<LEGAL_ENTITY_DETAIL>
+													<!--Required Field-->
+													<FullName>LOSClientName</FullName>
+												</LEGAL_ENTITY_DETAIL>
+											</LEGAL_ENTITY>
+											<ROLES>
+												<ROLE>
+													<REQUESTING_PARTY>
+														<EXTENSION>
+															<OTHER>
+																<cl:REQUESTING_PARTY>
+																	<!--Required CLGG-->
+																	<cl:LoginAccountIdentifier>12092</cl:LoginAccountIdentifier>
+																	<!--Required CLGG-->
+																	<cl:LoginAccountPassword>psd12083</cl:LoginAccountPassword>
+																</cl:REQUESTING_PARTY>
+															</OTHER>
+														</EXTENSION>
+													</REQUESTING_PARTY>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="2">
+											<ROLES>
+												<ROLE SequenceNumber="1">
+													<RETURN_TO>
+														<PREFERRED_RESPONSES>
+															<PREFERRED_RESPONSE SequenceNumber="1">
+																<!--Required-->
+																<PreferredResponseDestinationDescription>http://localhost:7003</PreferredResponseDestinationDescription>
+																<!--Required-->
+																<PreferredResponseFormatType>XML</PreferredResponseFormatType>
+																<!--Required-->
+																<PreferredResponseMethodType>HTTPS</PreferredResponseMethodType>
+															</PREFERRED_RESPONSE>
+														</PREFERRED_RESPONSES>
+													</RETURN_TO>
+													<ROLE_DETAIL>
+														<!--Required-->
+														<PartyRoleType>RespondToParty</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+									</PARTIES>
+									<SERVICES>
+										<SERVICE>
+											<TAX>
+												<EXTENSION>
+													<OTHER>
+														<cl:TAX>
+															<cl:TAX_REQUEST>
+																<cl:TAX_REQUEST_DETAIL>
+																	<!--Required-->
+																	<cl:TaxRequestActionType>Submit</cl:TaxRequestActionType>
+																</cl:TAX_REQUEST_DETAIL>
+															</cl:TAX_REQUEST>
+														</cl:TAX>
+													</OTHER>
+												</EXTENSION>
+											</TAX>
+											<REPORTING_INFORMATION>
+												<!--Required CLGG-->
+												<ReportingInformationIdentifier>GG123456</ReportingInformationIdentifier>
+												<ReportingInformationName>GlobalGatewayLenderIdentifier</ReportingInformationName>
+											</REPORTING_INFORMATION>
+											<SERVICE_PRODUCT>
+												<SERVICE_PRODUCT_REQUEST>
+													<SERVICE_PRODUCT_DETAIL>
+														<!--Required CLGG-->
+														<ServiceProductIdentifier>TAX0201</ServiceProductIdentifier>
+													</SERVICE_PRODUCT_DETAIL>
+												</SERVICE_PRODUCT_REQUEST>
+											</SERVICE_PRODUCT>
+										</SERVICE>
+									</SERVICES>
+									<EXTENSION>
+										<OTHER>
+											<cl:DEAL>
+												<cl:KEYS>
+													<!--Required CLGG: aka ConsumerRefId-->
+													<cl:KEY>
+														<cl:KeyIdentifier>SubmittingPartyOrderIdentifier</cl:KeyIdentifier>
+														<cl:KeyValue>6692709708515590812</cl:KeyValue>
+													</cl:KEY>
+													<cl:KEY>
+														<cl:KeyIdentifier>GlobalGatewayLenderIdentifier</cl:KeyIdentifier>
+														<cl:KeyValue>0224201705</cl:KeyValue>
+													</cl:KEY>
+												</cl:KEYS>
+											</cl:DEAL>
+										</OTHER>
+									</EXTENSION>
+								</DEAL>
+							</DEALS>
+						</DEAL_SET>
+					</DEAL_SETS>
+				</DOCUMENT>
+			</DOCUMENTS>
+		</DOCUMENT_SET>
+	</DOCUMENT_SETS>
+</MESSAGE>

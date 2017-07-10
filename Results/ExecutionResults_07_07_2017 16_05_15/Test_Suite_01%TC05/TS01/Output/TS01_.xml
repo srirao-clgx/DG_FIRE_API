@@ -1,0 +1,1796 @@
+<?xml version="1.0" encoding="UTF-8"?><MESSAGE xmlns="http://www.mismo.org/residential/2009/schemas"
+         xmlns:ext="http://exslt.org/common"
+         xmlns:cl="http://globalgateway.corelogic.com/order/2015"
+         MISMOReferenceModelIdentifier="3.4">
+   <DOCUMENT_SETS>
+      <DOCUMENT_SET>
+         <DOCUMENTS>
+            <DOCUMENT>
+               <DEAL_SETS>
+                  <DEAL_SET>
+                     <DEALS>
+                        <DEAL>
+                           <ABOUT_VERSIONS>
+                              <ABOUT_VERSION>
+                                 <AboutVersionIdentifier>3.4</AboutVersionIdentifier>
+                                 <CreatedDatetime>2017-07-07T16:05:26.784-07:00</CreatedDatetime>
+                              </ABOUT_VERSION>
+                           </ABOUT_VERSIONS>
+                           <COLLATERALS>
+                              <COLLATERAL>
+                                 <SUBJECT_PROPERTY>
+                                    <ADDRESS>
+                                       <AddressLineText>3049 MAGNUM DR</AddressLineText>
+                                       <CityName>SAN JOSE</CityName>
+                                       <CountyName>SANTA CLARA</CountyName>
+                                       <PostalCode>95135</PostalCode>
+                                       <StateCode>CA</StateCode>
+                                       <StreetName>3049</StreetName>
+                                       <StreetPrimaryNumberText>MAGNUM</StreetPrimaryNumberText>
+                                       <StreetSuffixText>CT</StreetSuffixText>
+                                    </ADDRESS>
+                                 </SUBJECT_PROPERTY>
+                              </COLLATERAL>
+                           </COLLATERALS>
+                           <PARTIES>
+                              <PARTY SequenceNumber="1">
+                                 <ROLES>
+                                    <ROLE>
+                                       <ROLE_DETAIL>
+                                          <PartyRoleType>RequestingParty</PartyRoleType>
+                                       </ROLE_DETAIL>
+                                    </ROLE>
+                                 </ROLES>
+                              </PARTY>
+                              <PARTY SequenceNumber="2">
+                                 <LEGAL_ENTITY>
+                                    <CONTACTS>
+                                       <CONTACT>
+                                          <CONTACT_POINTS>
+                                             <CONTACT_POINT>
+                                                <CONTACT_POINT_EMAIL>
+                                                   <ContactPointEmailValue>Gatewaycustomercare.MTS@corelogic.com</ContactPointEmailValue>
+                                                </CONTACT_POINT_EMAIL>
+                                                <CONTACT_POINT_DETAIL>
+                                                   <ContactPointRoleType>Work</ContactPointRoleType>
+                                                </CONTACT_POINT_DETAIL>
+                                             </CONTACT_POINT>
+                                          </CONTACT_POINTS>
+                                          <NAME>
+                                             <FullName>Client Support Services</FullName>
+                                          </NAME>
+                                       </CONTACT>
+                                    </CONTACTS>
+                                    <LEGAL_ENTITY_DETAIL>
+                                       <FullName>CoreLogic</FullName>
+                                    </LEGAL_ENTITY_DETAIL>
+                                 </LEGAL_ENTITY>
+                                 <ADDRESSES>
+                                    <ADDRESS>
+                                       <AddressLineText>3001 Hackberry Road</AddressLineText>
+                                       <CityName>Irving</CityName>
+                                       <PostalCode>75063</PostalCode>
+                                       <StateCode>TX</StateCode>
+                                    </ADDRESS>
+                                 </ADDRESSES>
+                                 <ROLES>
+                                    <ROLE>
+                                       <PARTY_ROLE_IDENTIFIERS>
+                                          <PARTY_ROLE_IDENTIFIER>
+                                             <PartyRoleIdentifier>CLGG</PartyRoleIdentifier>
+                                          </PARTY_ROLE_IDENTIFIER>
+                                       </PARTY_ROLE_IDENTIFIERS>
+                                       <ROLE_DETAIL>
+                                          <PartyRoleType>RespondingParty</PartyRoleType>
+                                       </ROLE_DETAIL>
+                                    </ROLE>
+                                 </ROLES>
+                              </PARTY>
+                           </PARTIES>
+                           <SERVICES>
+                              <SERVICE>
+                                 <VALUATION>
+                                    <VALUATION_RESPONSE>
+                                       <EXTENSION>
+                                          <OTHER>
+                                             <cl:VALUATION_RESPONSE>
+                                                <cl:CASCADING_AVM_RESULTS>
+                                                   <cl:CASCADING_AVM_RESULT>
+                                                      <cl:CASCADING_AVM_RESULT_DETAIL>
+                                                         <cl:AVMProductTypeDescription>ValuePoint_4</cl:AVMProductTypeDescription>
+                                                      </cl:CASCADING_AVM_RESULT_DETAIL>
+                                                      <PROPERTIES>
+                                                         <PROPERTY ValuationUseType="SubjectProperty" SequenceNumber="1">
+                                                            <ADDRESS>
+                                                               <CityName>SAN JOSE</CityName>
+                                                               <CountyName>SANTA CLARA</CountyName>
+                                                               <PlusFourZipCode>1057</PlusFourZipCode>
+                                                               <PostalCode>95135</PostalCode>
+                                                               <StateCode>CA</StateCode>
+                                                               <StreetName>MAGNUM</StreetName>
+                                                               <StreetPrimaryNumberText>3049</StreetPrimaryNumberText>
+                                                               <StreetSuffixText>DR</StreetSuffixText>
+                                                            </ADDRESS>
+                                                            <IMPROVEMENT>
+                                                               <CAR_STORAGES>
+                                                                  <CAR_STORAGE>
+                                                                     <ParkingSpacesCount>3</ParkingSpacesCount>
+                                                                  </CAR_STORAGE>
+                                                               </CAR_STORAGES>
+                                                               <INTERIOR>
+                                                                  <INTERIOR_ROOM_SUMMARIES>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalBathsCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>3</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalRoomCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>9</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                  </INTERIOR_ROOM_SUMMARIES>
+                                                                  <ROOMS>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>FullBathroom</RoomType>
+                                                                           <RoomTypeSummaryCount>3</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>Bedroom</RoomType>
+                                                                           <RoomTypeSummaryCount>4</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                  </ROOMS>
+                                                               </INTERIOR>
+                                                               <STRUCTURE>
+                                                                  <STRUCTURE_DETAIL>
+                                                                     <StoriesCount>2</StoriesCount>
+                                                                  </STRUCTURE_DETAIL>
+                                                               </STRUCTURE>
+                                                               <SYSTEM>
+                                                                  <COOLING_SYSTEMS>
+                                                                     <COOLING_SYSTEM>
+                                                                        <CoolingSystemType>Centralized</CoolingSystemType>
+                                                                     </COOLING_SYSTEM>
+                                                                  </COOLING_SYSTEMS>
+                                                               </SYSTEM>
+                                                            </IMPROVEMENT>
+                                                            <LEGAL_DESCRIPTIONS>
+                                                               <LEGAL_DESCRIPTION>
+                                                                  <PARCEL_IDENTIFICATIONS>
+                                                                     <PARCEL_IDENTIFICATION>
+                                                                        <ParcelIdentificationType>ParcelIdentificationNumber</ParcelIdentificationType>
+                                                                        <ParcelIdentifier>659-47-030</ParcelIdentifier>
+                                                                     </PARCEL_IDENTIFICATION>
+                                                                  </PARCEL_IDENTIFICATIONS>
+                                                               </LEGAL_DESCRIPTION>
+                                                            </LEGAL_DESCRIPTIONS>
+                                                            <LOCATION_IDENTIFIER>
+                                                               <CENSUS_INFORMATION>
+                                                                  <CensusTractIdentifier>5033.29</CensusTractIdentifier>
+                                                               </CENSUS_INFORMATION>
+                                                               <FIPS_INFORMATION>
+                                                                  <FIPSCountyCode>085</FIPSCountyCode>
+                                                                  <FIPSStateNumericCode>06</FIPSStateNumericCode>
+                                                               </FIPS_INFORMATION>
+                                                               <GENERAL_IDENTIFIER>
+                                                                  <MunicipalityName>06085SA001</MunicipalityName>
+                                                               </GENERAL_IDENTIFIER>
+                                                            </LOCATION_IDENTIFIER>
+                                                            <PROPERTY_DETAIL>
+                                                               <GrossLivingAreaSquareFeetNumber>2663.0</GrossLivingAreaSquareFeetNumber>
+                                                               <LandUseDescription>SFR</LandUseDescription>
+                                                               <PropertyCurrentOccupancyType>OwnerOccupied</PropertyCurrentOccupancyType>
+                                                               <PropertyStructureBuiltYear>1997</PropertyStructureBuiltYear>
+                                                            </PROPERTY_DETAIL>
+                                                            <PROPERTY_TAXES>
+                                                               <PROPERTY_TAX>
+                                                                  <PROPERTY_TAX_DETAIL>
+                                                                     <PropertyTaxAssessmentEndYear>2016</PropertyTaxAssessmentEndYear>
+                                                                     <PropertyTaxAssessmentStartYear>2016</PropertyTaxAssessmentStartYear>
+                                                                     <PropertyTaxImprovementValueAmount>331541.0</PropertyTaxImprovementValueAmount>
+                                                                     <PropertyTaxLandValueAmount>221204.0</PropertyTaxLandValueAmount>
+                                                                     <PropertyTaxTotalAssessedValueAmount>552745.0</PropertyTaxTotalAssessedValueAmount>
+                                                                  </PROPERTY_TAX_DETAIL>
+                                                               </PROPERTY_TAX>
+                                                            </PROPERTY_TAXES>
+                                                            <PROPERTY_VALUATIONS>
+                                                               <PROPERTY_VALUATION>
+                                                                  <AVMS>
+                                                                     <AVM>
+                                                                        <AVMConfidenceScoreValue>76</AVMConfidenceScoreValue>
+                                                                        <AVMDate>2017-07-07</AVMDate>
+                                                                        <AVMHighValueRangeAmount>1443000.0</AVMHighValueRangeAmount>
+                                                                        <AVMLowValueRangeAmount>1250000.0</AVMLowValueRangeAmount>
+                                                                        <AVMOutcomeType>IndicatedValue</AVMOutcomeType>
+                                                                        <AVMValueAmount>1375000.0</AVMValueAmount>
+                                                                        <ForecastStandardDeviationScoreValue>11</ForecastStandardDeviationScoreValue>
+                                                                        <ValuationRequestCascadingReturnType>All</ValuationRequestCascadingReturnType>
+                                                                        <EXTENSION>
+                                                                           <OTHER>
+                                                                              <cl:AVM>
+                                                                                 <cl:AVMHistoryType>Current</cl:AVMHistoryType>
+                                                                                 <cl:AVMPassedAcceptanceCriteriaIndicator>true</cl:AVMPassedAcceptanceCriteriaIndicator>
+                                                                                 <cl:AVMReportIdentifier>1499468717155922</cl:AVMReportIdentifier>
+                                                                                 <cl:CascadingAVMReportType>Full</cl:CascadingAVMReportType>
+                                                                                 <cl:FraudIndicator>false</cl:FraudIndicator>
+                                                                                 <cl:ValuationCommentIdentifier>VP4 Valuation Successful</cl:ValuationCommentIdentifier>
+                                                                              </cl:AVM>
+                                                                           </OTHER>
+                                                                        </EXTENSION>
+                                                                     </AVM>
+                                                                  </AVMS>
+                                                               </PROPERTY_VALUATION>
+                                                            </PROPERTY_VALUATIONS>
+                                                            <SALES_HISTORIES>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>1997-08-13</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>410000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Last</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                            </SALES_HISTORIES>
+                                                            <SITE>
+                                                               <SITE_SIZE_LAYOUT>
+                                                                  <LotSizeAreaNumber>6260</LotSizeAreaNumber>
+                                                                  <UnitOfMeasureType>SquareFeet</UnitOfMeasureType>
+                                                               </SITE_SIZE_LAYOUT>
+                                                            </SITE>
+                                                            <EXTENSION>
+                                                               <OTHER>
+                                                                  <cl:PROPERTY>
+                                                                     <cl:MORTGAGE_HISTORIES>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>327893.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Last</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                     </cl:MORTGAGE_HISTORIES>
+                                                                     <PARTIES>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>GOWDRA VEENA C (TE)</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <PROPERTY_OWNER>
+                                                                                    <PropertyOwnerStatusType>Current</PropertyOwnerStatusType>
+                                                                                 </PROPERTY_OWNER>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertyOwner</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>SHAPELL INDUSTRIES INC</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                     </PARTIES>
+                                                                  </cl:PROPERTY>
+                                                               </OTHER>
+                                                            </EXTENSION>
+                                                         </PROPERTY>
+                                                         <PROPERTY SequenceNumber="2" ValuationUseType="Comparable">
+                                                            <ADDRESS>
+                                                               <CityName>SAN JOSE</CityName>
+                                                               <CountyName>SANTA CLARA</CountyName>
+                                                               <PlusFourZipCode>2051</PlusFourZipCode>
+                                                               <PostalCode>95135</PostalCode>
+                                                               <StateCode>CA</StateCode>
+                                                               <StreetName>FLORENCE PARK</StreetName>
+                                                               <StreetPrimaryNumberText>3103</StreetPrimaryNumberText>
+                                                               <StreetSuffixText>DR</StreetSuffixText>
+                                                            </ADDRESS>
+                                                            <COMPARABLE>
+                                                               <COMPARABLE_DETAIL>
+                                                                  <ComparableIdentifier>1</ComparableIdentifier>
+                                                                  <ProximityToSubjectDescription>0.24</ProximityToSubjectDescription>
+                                                               </COMPARABLE_DETAIL>
+                                                            </COMPARABLE>
+                                                            <IMPROVEMENT>
+                                                               <CAR_STORAGES>
+                                                                  <CAR_STORAGE>
+                                                                     <ParkingSpacesCount>3</ParkingSpacesCount>
+                                                                  </CAR_STORAGE>
+                                                               </CAR_STORAGES>
+                                                               <INTERIOR>
+                                                                  <INTERIOR_ROOM_SUMMARIES>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalBathsCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>3</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalRoomCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>9</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                  </INTERIOR_ROOM_SUMMARIES>
+                                                                  <ROOMS>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>FullBathroom</RoomType>
+                                                                           <RoomTypeSummaryCount>3</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>Bedroom</RoomType>
+                                                                           <RoomTypeSummaryCount>4</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                  </ROOMS>
+                                                               </INTERIOR>
+                                                               <STRUCTURE>
+                                                                  <STRUCTURE_DETAIL>
+                                                                     <StoriesCount>2</StoriesCount>
+                                                                  </STRUCTURE_DETAIL>
+                                                               </STRUCTURE>
+                                                               <SYSTEM>
+                                                                  <COOLING_SYSTEMS>
+                                                                     <COOLING_SYSTEM>
+                                                                        <CoolingSystemType>Centralized</CoolingSystemType>
+                                                                     </COOLING_SYSTEM>
+                                                                  </COOLING_SYSTEMS>
+                                                               </SYSTEM>
+                                                            </IMPROVEMENT>
+                                                            <LEGAL_DESCRIPTIONS>
+                                                               <LEGAL_DESCRIPTION>
+                                                                  <PARCEL_IDENTIFICATIONS>
+                                                                     <PARCEL_IDENTIFICATION>
+                                                                        <ParcelIdentificationType>ParcelIdentificationNumber</ParcelIdentificationType>
+                                                                        <ParcelIdentifier>659-48-063</ParcelIdentifier>
+                                                                     </PARCEL_IDENTIFICATION>
+                                                                  </PARCEL_IDENTIFICATIONS>
+                                                               </LEGAL_DESCRIPTION>
+                                                            </LEGAL_DESCRIPTIONS>
+                                                            <LOCATION_IDENTIFIER>
+                                                               <CENSUS_INFORMATION>
+                                                                  <CensusTractIdentifier>5033.29</CensusTractIdentifier>
+                                                               </CENSUS_INFORMATION>
+                                                               <FIPS_INFORMATION>
+                                                                  <FIPSCountyCode>085</FIPSCountyCode>
+                                                                  <FIPSStateNumericCode>06</FIPSStateNumericCode>
+                                                               </FIPS_INFORMATION>
+                                                               <GENERAL_IDENTIFIER>
+                                                                  <MunicipalityName>06085SA001</MunicipalityName>
+                                                               </GENERAL_IDENTIFIER>
+                                                            </LOCATION_IDENTIFIER>
+                                                            <PROPERTY_DETAIL>
+                                                               <GrossLivingAreaSquareFeetNumber>2663.0</GrossLivingAreaSquareFeetNumber>
+                                                               <LandUseDescription>SFR</LandUseDescription>
+                                                               <PropertyCurrentOccupancyType>OwnerOccupied</PropertyCurrentOccupancyType>
+                                                               <PropertyStructureBuiltYear>1996</PropertyStructureBuiltYear>
+                                                            </PROPERTY_DETAIL>
+                                                            <PROPERTY_TAXES>
+                                                               <PROPERTY_TAX>
+                                                                  <PROPERTY_TAX_DETAIL>
+                                                                     <PropertyTaxAssessmentEndYear>2016</PropertyTaxAssessmentEndYear>
+                                                                     <PropertyTaxAssessmentStartYear>2016</PropertyTaxAssessmentStartYear>
+                                                                     <PropertyTaxImprovementValueAmount>386052.0</PropertyTaxImprovementValueAmount>
+                                                                     <PropertyTaxLandValueAmount>579009.0</PropertyTaxLandValueAmount>
+                                                                     <PropertyTaxTotalAssessedValueAmount>965061.0</PropertyTaxTotalAssessedValueAmount>
+                                                                  </PROPERTY_TAX_DETAIL>
+                                                               </PROPERTY_TAX>
+                                                            </PROPERTY_TAXES>
+                                                            <SALES_HISTORIES>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2017-06-02</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>1425000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Last</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2010-09-03</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>892000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Prior</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                            </SALES_HISTORIES>
+                                                            <SITE>
+                                                               <SITE_SIZE_LAYOUT>
+                                                                  <LotSizeAreaNumber>4816</LotSizeAreaNumber>
+                                                                  <UnitOfMeasureType>SquareFeet</UnitOfMeasureType>
+                                                               </SITE_SIZE_LAYOUT>
+                                                            </SITE>
+                                                            <EXTENSION>
+                                                               <OTHER>
+                                                                  <cl:PROPERTY>
+                                                                     <cl:MORTGAGE_HISTORIES>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>1140000.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Last</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>713350.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Prior</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                     </cl:MORTGAGE_HISTORIES>
+                                                                     <PARTIES>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>YANG ZIGUI</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <PROPERTY_OWNER>
+                                                                                    <PropertyOwnerStatusType>Current</PropertyOwnerStatusType>
+                                                                                 </PROPERTY_OWNER>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertyOwner</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>MA JIHONG</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>SAVADATTI DEEPAK M</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                    <PartyRoleTypeAdditionalDescription>Prior</PartyRoleTypeAdditionalDescription>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                     </PARTIES>
+                                                                  </cl:PROPERTY>
+                                                               </OTHER>
+                                                            </EXTENSION>
+                                                         </PROPERTY>
+                                                         <PROPERTY SequenceNumber="3" ValuationUseType="Comparable">
+                                                            <ADDRESS>
+                                                               <CityName>SAN JOSE</CityName>
+                                                               <CountyName>SANTA CLARA</CountyName>
+                                                               <PlusFourZipCode>1069</PlusFourZipCode>
+                                                               <PostalCode>95135</PostalCode>
+                                                               <StateCode>CA</StateCode>
+                                                               <StreetName>FILAN</StreetName>
+                                                               <StreetPrimaryNumberText>4079</StreetPrimaryNumberText>
+                                                               <StreetSuffixText>WAY</StreetSuffixText>
+                                                            </ADDRESS>
+                                                            <COMPARABLE>
+                                                               <COMPARABLE_DETAIL>
+                                                                  <ComparableIdentifier>2</ComparableIdentifier>
+                                                                  <ProximityToSubjectDescription>0.17</ProximityToSubjectDescription>
+                                                               </COMPARABLE_DETAIL>
+                                                            </COMPARABLE>
+                                                            <IMPROVEMENT>
+                                                               <CAR_STORAGES>
+                                                                  <CAR_STORAGE>
+                                                                     <ParkingSpacesCount>4</ParkingSpacesCount>
+                                                                  </CAR_STORAGE>
+                                                               </CAR_STORAGES>
+                                                               <INTERIOR>
+                                                                  <INTERIOR_ROOM_SUMMARIES>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalBathsCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>3</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalRoomCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>10</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                  </INTERIOR_ROOM_SUMMARIES>
+                                                                  <ROOMS>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>FullBathroom</RoomType>
+                                                                           <RoomTypeSummaryCount>3</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>Bedroom</RoomType>
+                                                                           <RoomTypeSummaryCount>4</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                  </ROOMS>
+                                                               </INTERIOR>
+                                                               <STRUCTURE>
+                                                                  <STRUCTURE_DETAIL>
+                                                                     <StoriesCount>2</StoriesCount>
+                                                                  </STRUCTURE_DETAIL>
+                                                               </STRUCTURE>
+                                                               <SYSTEM>
+                                                                  <COOLING_SYSTEMS>
+                                                                     <COOLING_SYSTEM>
+                                                                        <CoolingSystemType>Centralized</CoolingSystemType>
+                                                                     </COOLING_SYSTEM>
+                                                                  </COOLING_SYSTEMS>
+                                                               </SYSTEM>
+                                                            </IMPROVEMENT>
+                                                            <LEGAL_DESCRIPTIONS>
+                                                               <LEGAL_DESCRIPTION>
+                                                                  <PARCEL_IDENTIFICATIONS>
+                                                                     <PARCEL_IDENTIFICATION>
+                                                                        <ParcelIdentificationType>ParcelIdentificationNumber</ParcelIdentificationType>
+                                                                        <ParcelIdentifier>660-73-006</ParcelIdentifier>
+                                                                     </PARCEL_IDENTIFICATION>
+                                                                  </PARCEL_IDENTIFICATIONS>
+                                                               </LEGAL_DESCRIPTION>
+                                                            </LEGAL_DESCRIPTIONS>
+                                                            <LOCATION_IDENTIFIER>
+                                                               <CENSUS_INFORMATION>
+                                                                  <CensusTractIdentifier>5033.29</CensusTractIdentifier>
+                                                               </CENSUS_INFORMATION>
+                                                               <FIPS_INFORMATION>
+                                                                  <FIPSCountyCode>085</FIPSCountyCode>
+                                                                  <FIPSStateNumericCode>06</FIPSStateNumericCode>
+                                                               </FIPS_INFORMATION>
+                                                               <GENERAL_IDENTIFIER>
+                                                                  <MunicipalityName>06085SA001</MunicipalityName>
+                                                               </GENERAL_IDENTIFIER>
+                                                            </LOCATION_IDENTIFIER>
+                                                            <PROPERTY_DETAIL>
+                                                               <GrossLivingAreaSquareFeetNumber>2860.0</GrossLivingAreaSquareFeetNumber>
+                                                               <LandUseDescription>SFR</LandUseDescription>
+                                                               <PropertyCurrentOccupancyType>OwnerOccupied</PropertyCurrentOccupancyType>
+                                                               <PropertyStructureBuiltYear>2000</PropertyStructureBuiltYear>
+                                                            </PROPERTY_DETAIL>
+                                                            <PROPERTY_TAXES>
+                                                               <PROPERTY_TAX>
+                                                                  <PROPERTY_TAX_DETAIL>
+                                                                     <PropertyTaxAssessmentEndYear>2016</PropertyTaxAssessmentEndYear>
+                                                                     <PropertyTaxAssessmentStartYear>2016</PropertyTaxAssessmentStartYear>
+                                                                     <PropertyTaxImprovementValueAmount>577914.0</PropertyTaxImprovementValueAmount>
+                                                                     <PropertyTaxLandValueAmount>381640.0</PropertyTaxLandValueAmount>
+                                                                     <PropertyTaxTotalAssessedValueAmount>959554.0</PropertyTaxTotalAssessedValueAmount>
+                                                                  </PROPERTY_TAX_DETAIL>
+                                                               </PROPERTY_TAX>
+                                                            </PROPERTY_TAXES>
+                                                            <SALES_HISTORIES>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2017-06-02</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>1439000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Last</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2009-10-29</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>880000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Prior</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                            </SALES_HISTORIES>
+                                                            <SITE>
+                                                               <SITE_SIZE_LAYOUT>
+                                                                  <LotSizeAreaNumber>6500</LotSizeAreaNumber>
+                                                                  <UnitOfMeasureType>SquareFeet</UnitOfMeasureType>
+                                                               </SITE_SIZE_LAYOUT>
+                                                            </SITE>
+                                                            <EXTENSION>
+                                                               <OTHER>
+                                                                  <cl:PROPERTY>
+                                                                     <cl:MORTGAGE_HISTORIES>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>1151110.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Last</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>704000.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Prior</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                     </cl:MORTGAGE_HISTORIES>
+                                                                     <PARTIES>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>HE PING</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <PROPERTY_OWNER>
+                                                                                    <PropertyOwnerStatusType>Current</PropertyOwnerStatusType>
+                                                                                 </PROPERTY_OWNER>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertyOwner</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>SUN SHISHUANG</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>FIRST FEDL BK OF CA</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                    <PartyRoleTypeAdditionalDescription>Prior</PartyRoleTypeAdditionalDescription>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                     </PARTIES>
+                                                                  </cl:PROPERTY>
+                                                               </OTHER>
+                                                            </EXTENSION>
+                                                         </PROPERTY>
+                                                         <PROPERTY SequenceNumber="4" ValuationUseType="Comparable">
+                                                            <ADDRESS>
+                                                               <CityName>SAN JOSE</CityName>
+                                                               <CountyName>SANTA CLARA</CountyName>
+                                                               <PlusFourZipCode>1029</PlusFourZipCode>
+                                                               <PostalCode>95135</PostalCode>
+                                                               <StateCode>CA</StateCode>
+                                                               <StreetName>OLDFIELD</StreetName>
+                                                               <StreetPrimaryNumberText>3035</StreetPrimaryNumberText>
+                                                               <StreetSuffixText>WAY</StreetSuffixText>
+                                                            </ADDRESS>
+                                                            <COMPARABLE>
+                                                               <COMPARABLE_DETAIL>
+                                                                  <ComparableIdentifier>3</ComparableIdentifier>
+                                                                  <ProximityToSubjectDescription>0.40</ProximityToSubjectDescription>
+                                                               </COMPARABLE_DETAIL>
+                                                            </COMPARABLE>
+                                                            <IMPROVEMENT>
+                                                               <CAR_STORAGES>
+                                                                  <CAR_STORAGE>
+                                                                     <ParkingSpacesCount>2</ParkingSpacesCount>
+                                                                  </CAR_STORAGE>
+                                                               </CAR_STORAGES>
+                                                               <IMPROVEMENT_FEATURE>
+                                                                  <AMENITIES>
+                                                                     <AMENITY>
+                                                                        <AmenityCount>1</AmenityCount>
+                                                                        <AmenityType>Fireplace</AmenityType>
+                                                                     </AMENITY>
+                                                                  </AMENITIES>
+                                                               </IMPROVEMENT_FEATURE>
+                                                               <INTERIOR>
+                                                                  <INTERIOR_ROOM_SUMMARIES>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalBathsCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>3</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalRoomCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>9</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                  </INTERIOR_ROOM_SUMMARIES>
+                                                                  <ROOMS>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>FullBathroom</RoomType>
+                                                                           <RoomTypeSummaryCount>3</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>Bedroom</RoomType>
+                                                                           <RoomTypeSummaryCount>5</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                  </ROOMS>
+                                                               </INTERIOR>
+                                                               <STRUCTURE>
+                                                                  <STRUCTURE_DETAIL>
+                                                                     <StoriesCount>2</StoriesCount>
+                                                                  </STRUCTURE_DETAIL>
+                                                               </STRUCTURE>
+                                                            </IMPROVEMENT>
+                                                            <LEGAL_DESCRIPTIONS>
+                                                               <LEGAL_DESCRIPTION>
+                                                                  <PARCEL_IDENTIFICATIONS>
+                                                                     <PARCEL_IDENTIFICATION>
+                                                                        <ParcelIdentificationType>ParcelIdentificationNumber</ParcelIdentificationType>
+                                                                        <ParcelIdentifier>660-26-020</ParcelIdentifier>
+                                                                     </PARCEL_IDENTIFICATION>
+                                                                  </PARCEL_IDENTIFICATIONS>
+                                                               </LEGAL_DESCRIPTION>
+                                                            </LEGAL_DESCRIPTIONS>
+                                                            <LOCATION_IDENTIFIER>
+                                                               <CENSUS_INFORMATION>
+                                                                  <CensusTractIdentifier>5033.29</CensusTractIdentifier>
+                                                               </CENSUS_INFORMATION>
+                                                               <FIPS_INFORMATION>
+                                                                  <FIPSCountyCode>085</FIPSCountyCode>
+                                                                  <FIPSStateNumericCode>06</FIPSStateNumericCode>
+                                                               </FIPS_INFORMATION>
+                                                               <GENERAL_IDENTIFIER>
+                                                                  <MunicipalityName>06085SA001</MunicipalityName>
+                                                               </GENERAL_IDENTIFIER>
+                                                            </LOCATION_IDENTIFIER>
+                                                            <PROPERTY_DETAIL>
+                                                               <GrossLivingAreaSquareFeetNumber>2675.0</GrossLivingAreaSquareFeetNumber>
+                                                               <LandUseDescription>SFR</LandUseDescription>
+                                                               <PropertyCurrentOccupancyType>OwnerOccupied</PropertyCurrentOccupancyType>
+                                                               <PropertyStructureBuiltYear>1976</PropertyStructureBuiltYear>
+                                                            </PROPERTY_DETAIL>
+                                                            <PROPERTY_TAXES>
+                                                               <PROPERTY_TAX>
+                                                                  <PROPERTY_TAX_DETAIL>
+                                                                     <PropertyTaxAssessmentEndYear>2016</PropertyTaxAssessmentEndYear>
+                                                                     <PropertyTaxAssessmentStartYear>2016</PropertyTaxAssessmentStartYear>
+                                                                     <PropertyTaxImprovementValueAmount>457703.0</PropertyTaxImprovementValueAmount>
+                                                                     <PropertyTaxLandValueAmount>457703.0</PropertyTaxLandValueAmount>
+                                                                     <PropertyTaxTotalAssessedValueAmount>915406.0</PropertyTaxTotalAssessedValueAmount>
+                                                                  </PROPERTY_TAX_DETAIL>
+                                                               </PROPERTY_TAX>
+                                                            </PROPERTY_TAXES>
+                                                            <SALES_HISTORIES>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2017-04-28</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>1330000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Last</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2013-02-08</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>880000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Prior</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                            </SALES_HISTORIES>
+                                                            <SITE>
+                                                               <SITE_SIZE_LAYOUT>
+                                                                  <LotSizeAreaNumber>7980</LotSizeAreaNumber>
+                                                                  <UnitOfMeasureType>SquareFeet</UnitOfMeasureType>
+                                                               </SITE_SIZE_LAYOUT>
+                                                            </SITE>
+                                                            <EXTENSION>
+                                                               <OTHER>
+                                                                  <cl:PROPERTY>
+                                                                     <cl:MORTGAGE_HISTORIES>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>1064000.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Last</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>704000.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Prior</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                     </cl:MORTGAGE_HISTORIES>
+                                                                     <PARTIES>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>SAMUEL BENZAM</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <PROPERTY_OWNER>
+                                                                                    <PropertyOwnerStatusType>Current</PropertyOwnerStatusType>
+                                                                                 </PROPERTY_OWNER>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertyOwner</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>GOYAL RUPESH K &amp; ANANTA</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>LAM VU N</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                    <PartyRoleTypeAdditionalDescription>Prior</PartyRoleTypeAdditionalDescription>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                     </PARTIES>
+                                                                  </cl:PROPERTY>
+                                                               </OTHER>
+                                                            </EXTENSION>
+                                                         </PROPERTY>
+                                                         <PROPERTY SequenceNumber="5" ValuationUseType="Comparable">
+                                                            <ADDRESS>
+                                                               <CityName>SAN JOSE</CityName>
+                                                               <CountyName>SANTA CLARA</CountyName>
+                                                               <PlusFourZipCode>1002</PlusFourZipCode>
+                                                               <PostalCode>95135</PostalCode>
+                                                               <StateCode>CA</StateCode>
+                                                               <StreetName>AMOS</StreetName>
+                                                               <StreetPrimaryNumberText>4075</StreetPrimaryNumberText>
+                                                               <StreetSuffixText>WAY</StreetSuffixText>
+                                                            </ADDRESS>
+                                                            <COMPARABLE>
+                                                               <COMPARABLE_DETAIL>
+                                                                  <ComparableIdentifier>4</ComparableIdentifier>
+                                                                  <ProximityToSubjectDescription>0.25</ProximityToSubjectDescription>
+                                                               </COMPARABLE_DETAIL>
+                                                            </COMPARABLE>
+                                                            <IMPROVEMENT>
+                                                               <CAR_STORAGES>
+                                                                  <CAR_STORAGE>
+                                                                     <ParkingSpacesCount>2</ParkingSpacesCount>
+                                                                  </CAR_STORAGE>
+                                                               </CAR_STORAGES>
+                                                               <IMPROVEMENT_FEATURE>
+                                                                  <AMENITIES>
+                                                                     <AMENITY>
+                                                                        <AmenityCount>1</AmenityCount>
+                                                                        <AmenityType>Fireplace</AmenityType>
+                                                                     </AMENITY>
+                                                                  </AMENITIES>
+                                                               </IMPROVEMENT_FEATURE>
+                                                               <INTERIOR>
+                                                                  <INTERIOR_ROOM_SUMMARIES>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalBathsCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>3</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalRoomCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>9</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                  </INTERIOR_ROOM_SUMMARIES>
+                                                                  <ROOMS>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>FullBathroom</RoomType>
+                                                                           <RoomTypeSummaryCount>2</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>Bedroom</RoomType>
+                                                                           <RoomTypeSummaryCount>4</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>HalfBath</RoomType>
+                                                                           <RoomTypeSummaryCount>1</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                  </ROOMS>
+                                                               </INTERIOR>
+                                                               <STRUCTURE>
+                                                                  <STRUCTURE_DETAIL>
+                                                                     <StoriesCount>2</StoriesCount>
+                                                                  </STRUCTURE_DETAIL>
+                                                               </STRUCTURE>
+                                                            </IMPROVEMENT>
+                                                            <LEGAL_DESCRIPTIONS>
+                                                               <LEGAL_DESCRIPTION>
+                                                                  <PARCEL_IDENTIFICATIONS>
+                                                                     <PARCEL_IDENTIFICATION>
+                                                                        <ParcelIdentificationType>ParcelIdentificationNumber</ParcelIdentificationType>
+                                                                        <ParcelIdentifier>660-34-025</ParcelIdentifier>
+                                                                     </PARCEL_IDENTIFICATION>
+                                                                  </PARCEL_IDENTIFICATIONS>
+                                                               </LEGAL_DESCRIPTION>
+                                                            </LEGAL_DESCRIPTIONS>
+                                                            <LOCATION_IDENTIFIER>
+                                                               <CENSUS_INFORMATION>
+                                                                  <CensusTractIdentifier>5033.29</CensusTractIdentifier>
+                                                               </CENSUS_INFORMATION>
+                                                               <FIPS_INFORMATION>
+                                                                  <FIPSCountyCode>085</FIPSCountyCode>
+                                                                  <FIPSStateNumericCode>06</FIPSStateNumericCode>
+                                                               </FIPS_INFORMATION>
+                                                               <GENERAL_IDENTIFIER>
+                                                                  <MunicipalityName>06085SA001</MunicipalityName>
+                                                               </GENERAL_IDENTIFIER>
+                                                            </LOCATION_IDENTIFIER>
+                                                            <PROPERTY_DETAIL>
+                                                               <GrossLivingAreaSquareFeetNumber>2058.0</GrossLivingAreaSquareFeetNumber>
+                                                               <LandUseDescription>SFR</LandUseDescription>
+                                                               <PropertyCurrentOccupancyType>OwnerOccupied</PropertyCurrentOccupancyType>
+                                                               <PropertyStructureBuiltYear>1979</PropertyStructureBuiltYear>
+                                                            </PROPERTY_DETAIL>
+                                                            <PROPERTY_TAXES>
+                                                               <PROPERTY_TAX>
+                                                                  <PROPERTY_TAX_DETAIL>
+                                                                     <PropertyTaxAssessmentEndYear>2016</PropertyTaxAssessmentEndYear>
+                                                                     <PropertyTaxAssessmentStartYear>2016</PropertyTaxAssessmentStartYear>
+                                                                     <PropertyTaxImprovementValueAmount>344058.0</PropertyTaxImprovementValueAmount>
+                                                                     <PropertyTaxLandValueAmount>233696.0</PropertyTaxLandValueAmount>
+                                                                     <PropertyTaxTotalAssessedValueAmount>577754.0</PropertyTaxTotalAssessedValueAmount>
+                                                                  </PROPERTY_TAX_DETAIL>
+                                                               </PROPERTY_TAX>
+                                                            </PROPERTY_TAXES>
+                                                            <SALES_HISTORIES>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2017-03-29</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>1310000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Last</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>1999-10-19</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>445000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Prior</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                            </SALES_HISTORIES>
+                                                            <SITE>
+                                                               <SITE_SIZE_LAYOUT>
+                                                                  <LotSizeAreaNumber>7980</LotSizeAreaNumber>
+                                                                  <UnitOfMeasureType>SquareFeet</UnitOfMeasureType>
+                                                               </SITE_SIZE_LAYOUT>
+                                                            </SITE>
+                                                            <EXTENSION>
+                                                               <OTHER>
+                                                                  <cl:PROPERTY>
+                                                                     <cl:MORTGAGE_HISTORIES>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>400000.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Last</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>200000.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Prior</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                     </cl:MORTGAGE_HISTORIES>
+                                                                     <PARTIES>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>SHARMA PREM S &amp; SIMA</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <PROPERTY_OWNER>
+                                                                                    <PropertyOwnerStatusType>Current</PropertyOwnerStatusType>
+                                                                                 </PROPERTY_OWNER>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertyOwner</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>RYKEN LIVING TRUST</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>HAWLEY BETH F &amp; WILLIAM L</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                    <PartyRoleTypeAdditionalDescription>Prior</PartyRoleTypeAdditionalDescription>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                     </PARTIES>
+                                                                  </cl:PROPERTY>
+                                                               </OTHER>
+                                                            </EXTENSION>
+                                                         </PROPERTY>
+                                                         <PROPERTY SequenceNumber="6" ValuationUseType="Comparable">
+                                                            <ADDRESS>
+                                                               <CityName>SAN JOSE</CityName>
+                                                               <CountyName>SANTA CLARA</CountyName>
+                                                               <PlusFourZipCode>2057</PlusFourZipCode>
+                                                               <PostalCode>95135</PostalCode>
+                                                               <StateCode>CA</StateCode>
+                                                               <StreetName>MONTELENA</StreetName>
+                                                               <StreetPrimaryNumberText>3207</StreetPrimaryNumberText>
+                                                               <StreetSuffixText>DR</StreetSuffixText>
+                                                            </ADDRESS>
+                                                            <COMPARABLE>
+                                                               <COMPARABLE_DETAIL>
+                                                                  <ComparableIdentifier>5</ComparableIdentifier>
+                                                                  <ProximityToSubjectDescription>0.26</ProximityToSubjectDescription>
+                                                               </COMPARABLE_DETAIL>
+                                                            </COMPARABLE>
+                                                            <IMPROVEMENT>
+                                                               <CAR_STORAGES>
+                                                                  <CAR_STORAGE>
+                                                                     <ParkingSpacesCount>3</ParkingSpacesCount>
+                                                                  </CAR_STORAGE>
+                                                               </CAR_STORAGES>
+                                                               <INTERIOR>
+                                                                  <INTERIOR_ROOM_SUMMARIES>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalBathsCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>3</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                     <INTERIOR_ROOM_SUMMARY>
+                                                                        <RoomType>Other</RoomType>
+                                                                        <RoomTypeOtherDescription>TotalRoomCount</RoomTypeOtherDescription>
+                                                                        <TotalRoomCount>9</TotalRoomCount>
+                                                                     </INTERIOR_ROOM_SUMMARY>
+                                                                  </INTERIOR_ROOM_SUMMARIES>
+                                                                  <ROOMS>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>FullBathroom</RoomType>
+                                                                           <RoomTypeSummaryCount>3</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                     <ROOM>
+                                                                        <ROOM_DETAIL>
+                                                                           <RoomType>Bedroom</RoomType>
+                                                                           <RoomTypeSummaryCount>5</RoomTypeSummaryCount>
+                                                                        </ROOM_DETAIL>
+                                                                     </ROOM>
+                                                                  </ROOMS>
+                                                               </INTERIOR>
+                                                               <STRUCTURE>
+                                                                  <STRUCTURE_DETAIL>
+                                                                     <StoriesCount>2</StoriesCount>
+                                                                  </STRUCTURE_DETAIL>
+                                                               </STRUCTURE>
+                                                               <SYSTEM>
+                                                                  <COOLING_SYSTEMS>
+                                                                     <COOLING_SYSTEM>
+                                                                        <CoolingSystemType>Centralized</CoolingSystemType>
+                                                                     </COOLING_SYSTEM>
+                                                                  </COOLING_SYSTEMS>
+                                                               </SYSTEM>
+                                                            </IMPROVEMENT>
+                                                            <LEGAL_DESCRIPTIONS>
+                                                               <LEGAL_DESCRIPTION>
+                                                                  <PARCEL_IDENTIFICATIONS>
+                                                                     <PARCEL_IDENTIFICATION>
+                                                                        <ParcelIdentificationType>ParcelIdentificationNumber</ParcelIdentificationType>
+                                                                        <ParcelIdentifier>659-48-100</ParcelIdentifier>
+                                                                     </PARCEL_IDENTIFICATION>
+                                                                  </PARCEL_IDENTIFICATIONS>
+                                                               </LEGAL_DESCRIPTION>
+                                                            </LEGAL_DESCRIPTIONS>
+                                                            <LOCATION_IDENTIFIER>
+                                                               <CENSUS_INFORMATION>
+                                                                  <CensusTractIdentifier>5033.29</CensusTractIdentifier>
+                                                               </CENSUS_INFORMATION>
+                                                               <FIPS_INFORMATION>
+                                                                  <FIPSCountyCode>085</FIPSCountyCode>
+                                                                  <FIPSStateNumericCode>06</FIPSStateNumericCode>
+                                                               </FIPS_INFORMATION>
+                                                               <GENERAL_IDENTIFIER>
+                                                                  <MunicipalityName>06085SA001</MunicipalityName>
+                                                               </GENERAL_IDENTIFIER>
+                                                            </LOCATION_IDENTIFIER>
+                                                            <PROPERTY_DETAIL>
+                                                               <GrossLivingAreaSquareFeetNumber>2952.0</GrossLivingAreaSquareFeetNumber>
+                                                               <LandUseDescription>SFR</LandUseDescription>
+                                                               <PropertyCurrentOccupancyType>OwnerOccupied</PropertyCurrentOccupancyType>
+                                                               <PropertyStructureBuiltYear>1996</PropertyStructureBuiltYear>
+                                                            </PROPERTY_DETAIL>
+                                                            <PROPERTY_TAXES>
+                                                               <PROPERTY_TAX>
+                                                                  <PROPERTY_TAX_DETAIL>
+                                                                     <PropertyTaxAssessmentEndYear>2016</PropertyTaxAssessmentEndYear>
+                                                                     <PropertyTaxAssessmentStartYear>2016</PropertyTaxAssessmentStartYear>
+                                                                     <PropertyTaxImprovementValueAmount>576499.0</PropertyTaxImprovementValueAmount>
+                                                                     <PropertyTaxLandValueAmount>396341.0</PropertyTaxLandValueAmount>
+                                                                     <PropertyTaxTotalAssessedValueAmount>972840.0</PropertyTaxTotalAssessedValueAmount>
+                                                                  </PROPERTY_TAX_DETAIL>
+                                                               </PROPERTY_TAX>
+                                                            </PROPERTY_TAXES>
+                                                            <SALES_HISTORIES>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2016-08-04</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>1340000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Last</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                               <SALES_HISTORY>
+                                                                  <OwnershipTransferDate>2003-07-10</OwnershipTransferDate>
+                                                                  <OwnershipTransferTransactionAmount>810000.0</OwnershipTransferTransactionAmount>
+                                                                  <EXTENSION>
+                                                                     <OTHER>
+                                                                        <cl:SALES_HISTORY>
+                                                                           <cl:SalesHistoryType>Prior</cl:SalesHistoryType>
+                                                                           <cl:TransactionSaleTypeDescription>F</cl:TransactionSaleTypeDescription>
+                                                                        </cl:SALES_HISTORY>
+                                                                     </OTHER>
+                                                                  </EXTENSION>
+                                                               </SALES_HISTORY>
+                                                            </SALES_HISTORIES>
+                                                            <SITE>
+                                                               <SITE_SIZE_LAYOUT>
+                                                                  <LotSizeAreaNumber>6950</LotSizeAreaNumber>
+                                                                  <UnitOfMeasureType>SquareFeet</UnitOfMeasureType>
+                                                               </SITE_SIZE_LAYOUT>
+                                                            </SITE>
+                                                            <EXTENSION>
+                                                               <OTHER>
+                                                                  <cl:PROPERTY>
+                                                                     <cl:MORTGAGE_HISTORIES>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>1072000.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Last</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                        <cl:MORTGAGE_HISTORY>
+                                                                           <cl:FirstMortgageAmount>607500.0</cl:FirstMortgageAmount>
+                                                                           <cl:FirstMortgageTypeDescription>C</cl:FirstMortgageTypeDescription>
+                                                                           <cl:MortgageHistoryType>Prior</cl:MortgageHistoryType>
+                                                                        </cl:MORTGAGE_HISTORY>
+                                                                     </cl:MORTGAGE_HISTORIES>
+                                                                     <PARTIES>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>SINGH AJAY &amp; SHWETA</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <PROPERTY_OWNER>
+                                                                                    <PropertyOwnerStatusType>Current</PropertyOwnerStatusType>
+                                                                                 </PROPERTY_OWNER>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertyOwner</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>RAHMAN MOHAMED M &amp; NINA Q</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                        <PARTY>
+                                                                           <INDIVIDUAL>
+                                                                              <NAME>
+                                                                                 <FullName>ESPINOZA ALTAGRACIA</FullName>
+                                                                              </NAME>
+                                                                           </INDIVIDUAL>
+                                                                           <ROLES>
+                                                                              <ROLE>
+                                                                                 <ROLE_DETAIL>
+                                                                                    <PartyRoleType>PropertySeller</PartyRoleType>
+                                                                                    <PartyRoleTypeAdditionalDescription>Prior</PartyRoleTypeAdditionalDescription>
+                                                                                 </ROLE_DETAIL>
+                                                                              </ROLE>
+                                                                           </ROLES>
+                                                                        </PARTY>
+                                                                     </PARTIES>
+                                                                  </cl:PROPERTY>
+                                                               </OTHER>
+                                                            </EXTENSION>
+                                                         </PROPERTY>
+                                                      </PROPERTIES>
+                                                      <VIEWS>
+                                                         <VIEW>
+                                                            <VIEW_FILES>
+                                                               <VIEW_FILE>
+                                                                  <FOREIGN_OBJECT>
+                                                                     <EmbeddedContentXML>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
+hBOxO1FK7Y5z3q0+1xyOjTqA+ZYbWfrre5rjXnKNbj+G2WaTLnYchtME6VQuOXC6SEMkBI6yRLsv
+RUW5PyZZWQpTrIWFHo/kGYXq3y4DWowkzYhRlJgwDGRIhLV7yc9csf29YE07T8fZ83KBaky0Ql06
+Xz5/3aFOlqfbNP+WPpE6iP4LmBVW9AplbmRzdHJlYW0KZW5kb2JqCjYgMCBvYmoKPDwvVHlwZSAv
+WE9iamVjdAovU3VidHlwZSAvSW1hZ2UKL05hbWUgL0ltMQovTGVuZ3RoIDMwMDcKL1dpZHRoIDI1
+MgovSGVpZ2h0IDMxCi9CaXRzUGVyQ29tcG9uZW50IDgKL0NvbG9yU3BhY2UgL0RldmljZVJHQgov
+RmlsdGVyIC9GbGF0ZURlY29kZSAKPj4Kc3RyZWFtCnic3ZxNqx1FEIZ/aCAgghAIBoKgohACQYT4
+gYhZmV3QhQtBV8GFghAERUQXwUVAXShC8CtEDSSMD/fhFu30dE+dmTnn5qZpLnPP6emP6rffrqqu
+PsNwCtKDB//+/NMPd25/9+Od7+/f++uku/OEpEcPHyJY80n3ZW1iLPnCAMn8x293F7fIu1YCJvch
+wLu//nLjnatXLjx19flztLJ5/ftIzALdDvEimckH/rKcEeDhgff1rc+QKvmD62+vmf2TTfT8i09v
+fn7zI4bzz9/3M68w5FefewYsffLh+8saZXI/fu86lZCR3j54WMy//uL5a1deOC2YB8OKhW6/8dKz
+/J3Mb126yKAYHfJnaIfcxWjRWaMDrLt9NycDsMY3XF+ICyFfPn/20rkz7752mSYyb7FAnBdeWdYZ
+xIXQ3nz5AvnbL28tqGE2iXmQA0JOEeYBFWRCn5EMD62M/F+5+DSZYswgqDhMD2PqD4N5pOECh5Y3
+qRCydQjUCTZASAfzbAEsEDfTQCz9WdYZ2hXwNLonmmIxnlLM22dpfDKzM/ItUwD2wD/Ih3wOM0Za
+Ye7IzPu9P3/fd3MsZ9c4LW5SIcqMwEN6VNvCfGkMag+6BTM1ZOSf1IgiUQNzJJVtNZY6nV6ep89M
+B6AKazEyNIW0yazo2998xSwwOjLl89v0yrST6bcybcvzwECisE4eJjHPAME56gcSNosfHniR2eFd
+nndqmtoE/F6n6VTzvJifLQ97UIwpYIzMIEvgkIA8QBLzi9WJMsmBCBZxQdRgDw1nEvPsXzK8dm5g
+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
+YW1lIC9JbTMKL0xlbmd0aCAyNQovV2lkdGggNAovSGVpZ2h0IDcKL0JpdHNQZXJDb21wb25lbnQg
+OAovQ29sb3JTcGFjZSAvRGV2aWNlUkdCCi9NYXNrIFsyNTUgMjU1IDI1NSAyNTUgMjU1IDI1NV0K
+L0ZpbHRlciAvRmxhdGVEZWNvZGUgCj4+CnN0cmVhbQp4nPv/Hzu4xyAARFi5EDaEi8kAAgAryD0I
+CmVuZHN0cmVhbQplbmRvYmoKOSAwIG9iago8PCAvVHlwZSAvUGFnZQovUGFyZW50IDEgMCBSCi9N
+ZWRpYUJveCBbIDAgMCA2MTIgNzkyIF0KL1Jlc291cmNlcyAzIDAgUgovQ29udGVudHMgNSAwIFIK
+Pj4KZW5kb2JqCjEwIDAgb2JqCjw8IC9MZW5ndGggMjYxNiAvRmlsdGVyIC9GbGF0ZURlY29kZSAK
+ID4+CnN0cmVhbQp4nL1b23LiSBJ991coYomN7ghc1F2qeZNt2qYHsAfwTHi294Gxsc2ujTyC7o75
++y0BKlXitkiV2ZlL2Jg6JysrpcpzdDmZHHUnR38eUaKShIvo4UhoQqNYG2Ioi5QsPtkvo3wW3R/9
+cnTyeryy3zJuiFZsPVJLSuIagEq45WyCWE+pBNRMKYmlonZ8+dv5kbKhVBLFapMO15IYnUTHrJiC
+xf/h44u5bcfLmEhvPIzW+SQiY/GT+zXG5mD/tRMrYzHCExVNnqN/fTjNnl8+Rv+OJp83MQrYenQR
+P6EWEK+DFZO7fT7q9J5ldJbtSUqwmFCuq6yUIIabt7NygDKtLWA3LVamVaYklbKAnZzO5svVdHE7
++xgd8zixgA/3efZcfRp//eM/s9vVT9VfKOFiuwq7iyUkUWJLnN7d5bPl8qftUG+ZS5SxKxZLiBKM
+iirUp/7lqDs87VZ/uUpHP1efzkZtb6bpsPrw+XLc9b47TavfjWJCHXOqmJvaq6UqE2IJMeXULr8v
+ZnlNOoxzIpiCoJt0eF6F/r13ft17O6qrrM8wnj091cYVMSec70x24CX8uXdxWcxiX7JUE+GqdzXE
+pOpDtDLHMjmmWrwdilNGNN0B9uff5ouHar5pPpvWBOdak0QKyMHbui6uW1kQN1uhg7pF9glkO2H6
+7aBSUCIlg5jx9Mk7167y+e2sJqyilGizE7bF2pKrNqV0b021ESR2x+JsmlehT77On1aIGgMKZkxN
+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
+VX95nHpfr/LpYnk/y3P/eM4KCb58nL9Uf3rOcu/oWT1OFzt2pJyJbZPuDnsGPM73+epxvvBIvmfV
+h7+syvGmBf3Q6tGj+WZPtulqnnlMd/ZgJt55FJcVV3ZfY4VJY3YHsj+ltv9sjq5q97NLZ4rnmAm3
+xmh7jn2fgQU58ZbvNFssrDnj9gyaejEV4QpsecW731xEyh6gvKzM4PUk3cFYvH3DFZzH9MFL/B8f
+o+JQdp3XZaAoiZMksl5WGLNBfuGKbS5nVtPOZ/3sYX7ryYD0yZN4+fzhceWVwBrJWf5tdkeqo/R/
+BRu8KAplbmRzdHJlYW0KZW5kb2JqCjExIDAgb2JqCjw8L1R5cGUgL1hPYmplY3QKL1N1YnR5cGUg
+L0ltYWdlCi9OYW1lIC9JbTQKL0xlbmd0aCAzMTIKL1dpZHRoIDE1Ci9IZWlnaHQgMjAKL0JpdHNQ
+ZXJDb21wb25lbnQgOAovQ29sb3JTcGFjZSAvRGV2aWNlUkdCCi9NYXNrIFsyNTUgMjU1IDI1NSAy
+NTUgMjU1IDI1NV0KL0ZpbHRlciAvRmxhdGVEZWNvZGUgCj4+CnN0cmVhbQp4nPv/HwUwoIL/2MCP
+n78gssJx++FIKG4/ppbff/4ARYSQ1AhhaEG2WhhNQSyCLZJwWCzlBEQ9xEwhmCFAEm6IcPwBkcQj
+YqmnJDMvyuTdwHQnsmLRpGPiaWeksi7L5t+SL3kEUSyEZDVEmUjCIQhDKueKbMEdhbLHylWvkRUj
+GyuWchLCkCu6p1j+TLn6rVrDF3RnxB9AC1LFihcqte/VGr9ptvxGURx/EGp11iXZgtsKJY8gXI2m
+75qtf7Ta/8MVAx0plnwcIitbCHTkE+WqNxCuZttfoEqIYkjoAUNSIvO8dO51iCNVakCO1Gj5qdn2
+D1klPAaBISlf/EAJ6MgakCM1Wn5DlCGrREsbKnUf1WGOhLsTa3L6T1yqw6oeWbC7u5ug4m4YIGgy
+QZWYiol0M6ZKAHjKFHAKZW5kc3RyZWFtCmVuZG9iagoxMiAwIG9iago8PC9UeXBlIC9YT2JqZWN0
+Ci9TdWJ0eXBlIC9JbWFnZQovTmFtZSAvSW01Ci9MZW5ndGggMjk1Ci9XaWR0aCAxNQovSGVpZ2h0
+IDIwCi9CaXRzUGVyQ29tcG9uZW50IDgKL0NvbG9yU3BhY2UgL0RldmljZVJHQgovTWFzayBbMjU1
+IDI1NSAyNTUgMjU1IDI1NSAyNTVdCi9GaWx0ZXIgL0ZsYXRlRGVjb2RlIAo+PgpzdHJlYW0KeJz7
+/x8FMKCC/9jAj5+/ILLCcfvhSChuP6aW33/+AEWEkNQIYWhBtloYTUEsgi2ScFgs5QREPcRMIZgh
+aM4TSTwilnpKMvOiTN4NTHdC1IAMjD8AYUtlXZbNvyVf8giiWAjJaqiBCYfEko9D2LIFdxTKHitX
+vUZWjGwyHMgV3VMsf6Zc/Vat4Qu6M2BWS2aBHAlhq9S+V2v8ptnyG0Vx/EHRpGMwq28rlDyCsDWa
+vmu2/tFq/w9XDHGkRPo5NGdoNP/UbPsLVAlRDAk9YEhKZJ6Xzr0OcaRKDciRGi1Alf+QVcJjEOhI
++eIHShUvVGpAjtRo+Q1RhqwSLW2o1H1UhzkS7k6syek/cakOq3pkwe7uboKKu2GAoMkEVWIqJtLN
+mCoBp6sa8gplbmRzdHJlYW0KZW5kb2JqCjEzIDAgb2JqCjw8L1R5cGUgL1hPYmplY3QKL1N1YnR5
+cGUgL0ltYWdlCi9OYW1lIC9JbTYKL0xlbmd0aCAzMjYKL1dpZHRoIDE1Ci9IZWlnaHQgMjAKL0Jp
+dHNQZXJDb21wb25lbnQgOAovQ29sb3JTcGFjZSAvRGV2aWNlUkdCCi9NYXNrIFsyNTUgMjU1IDI1
+NSAyNTUgMjU1IDI1NV0KL0ZpbHRlciAvRmxhdGVEZWNvZGUgCj4+CnN0cmVhbQp4nPv/HwUwoIL/
+2MCPn78gssJx++FIKG4/ppbff/4ARYSQ1AhhaEG2WhhNQSyCLZJwWCzlBEQ9xEwhmCFAEm6IcPwB
+kcQjYqmnJDMvyuTdwHQnVBnQwPgDQIZ42hmprMuy+bfkSx5BFAshWQ1RLJJwSCz5uHj6WamcK7IF
+dxTKHitXvUZWjGyyWMpJyYzzMrnX5YruKZY/U65+q9bwBd0ZYKuBQDIL5Ej54geKFS9Uat+rNX7T
+bPmNojj+oGjSMYhi2YLbCiWPgAzVuo8aTd81W/9otf+HK4Y4UiL9nHTOFXhoqNV/0mj+qdn2F6gS
+ohgSesCQlMg8Lw1zpEoNyJEaLUCV/5BVwmMQ4kgloCNrQI7UaPkNUYasEi1tqNR9VIc5Eu5OrMmJ
+yFSHVT2yYHd3N0HF3TBA0GSCKjEVE+lmTJUAEX4F1QplbmRzdHJlYW0KZW5kb2JqCjE0IDAgb2Jq
+Cjw8L1R5cGUgL1hPYmplY3QKL1N1YnR5cGUgL0ltYWdlCi9OYW1lIC9JbTcKL0xlbmd0aCAzMDMK
+L1dpZHRoIDE1Ci9IZWlnaHQgMjAKL0JpdHNQZXJDb21wb25lbnQgOAovQ29sb3JTcGFjZSAvRGV2
+aWNlUkdCCi9NYXNrIFsyNTUgMjU1IDI1NSAyNTUgMjU1IDI1NV0KL0ZpbHRlciAvRmxhdGVEZWNv
+ZGUgCj4+CnN0cmVhbQp4nPv/HwUwoIL/2MCPn78gssJx++FIKG4/ppbff/4ARYSQ1AhhaEG2WhhN
+QSyCLZJwWCzlBEQ9xEwhmCFozhNJPCKWekoy86JM3g1Md0LUgAyMPwBhS2Vdls2/JV/yCKJYCMlq
+qIEJh8SSj4unn4VwFcoeK1e9RlaMbLJYyknJjPMyudchXOXqt2oNX9CdAbNaMgvkSPniBxCuWuM3
+zZbfKIrjD4omHYPIyhbcVih5BGFrNH3XbP2j1f4frhjiSIn0c2ihodH8U7PtL1AlRDEk9IAhKZF5
+Xjr3ulzRPcXyZyo1IEdqtABV/kNWCY9BiCOVKl6o1LwHOlKj5TdEGbJKtLShUvdRHeZIuDuxJqf/
+xKU6rOqRBbu7uwkq7oYBgiYTVImpmEg3Y6oEALD6GMAKZW5kc3RyZWFtCmVuZG9iagoxNSAwIG9i
+ago8PC9UeXBlIC9YT2JqZWN0Ci9TdWJ0eXBlIC9JbWFnZQovTmFtZSAvSW04Ci9MZW5ndGggMzEy
+Ci9XaWR0aCAxNQovSGVpZ2h0IDIwCi9CaXRzUGVyQ29tcG9uZW50IDgKL0NvbG9yU3BhY2UgL0Rl
+dmljZVJHQgovTWFzayBbMjU1IDI1NSAyNTUgMjU1IDI1NSAyNTVdCi9GaWx0ZXIgL0ZsYXRlRGVj
+b2RlIAo+PgpzdHJlYW0KeJz7/x8FMKCC/9jAj5+/ILLCcfvhSChuP6aW33/+AEWEkNQIYWhBtloY
+TUEsgi2ScFgs5QREPcRMIZghaM4TSTwilnpKMvOiTN4NTHdC1IAMjD8gmnRMPO2MVNZl2fxb8iWP
+IIqFkKyGGphwSCz5uHj6WamcK7IFdxTKHitXvUZWjGwyHMgV3VMsf6Zc/Vat4Qu6M+IPQNRIZoEc
+KV/8QLHihUrte7XGb5otv1EUxx8EOhKiWLbgtkLJI6XKV6p1HzWavmu2/tFq/w9XDHGkRPo5NGdo
+NP/UbPsLVAlRDAk9YEhKZJ6Xzr0OcaRKDciRGi1Alf+QVcJjEOJIJaAja0CO1Gj5DVGGrBItbajU
+fVSHORLuTqzJ6T9xqQ6remTB7u5ugoq7YYCgyQRVYiom0s2YKgHUSA5BCmVuZHN0cmVhbQplbmRv
+YmoKMTYgMCBvYmoKPDwvVHlwZSAvWE9iamVjdAovU3VidHlwZSAvSW1hZ2UKL05hbWUgL0ltOQov
+TGVuZ3RoIDI1NgovV2lkdGggMTUKL0hlaWdodCAyMAovQml0c1BlckNvbXBvbmVudCA4Ci9Db2xv
+clNwYWNlIC9EZXZpY2VSR0IKL01hc2sgWzI1NSAyNTUgMjU1IDI1NSAyNTUgMjU1XQovRmlsdGVy
+IC9GbGF0ZURlY29kZSAKPj4Kc3RyZWFtCnic+/8fBTCggv/YwI+fvyCywnH74Ugobj+mlt9//gBF
+hJDUCGFoQbZaGE1BLIItknBYLOUkRD3ETCGYIShk/AGRxCNAlVJZl2TybmC6E4HiD4gmHRNPOwNR
+qVDyCKJYCKvVyceBKqVzrsgW3gWqVK56g6wY7lqIIyUyzgMNBKpULH8GVKnW8AXdGaiOlC9+AFSp
+UvNOrfGbRgtq2CI5Em61at1Hjabvmq1/tNr/wxVDHAm0GuJIiNUglS2/ICohiiGhh+ZIkNUNX4Aq
+IcrgKuExiOlITJVoaQPZkXB3Yk1ORKY6rOqRBbu7uwkq7oYBgiYTVImpmEg3Y6oEAFk75vkKZW5k
+c3RyZWFtCmVuZG9iagoxNyAwIG9iago8PC9UeXBlIC9YT2JqZWN0Ci9TdWJ0eXBlIC9JbWFnZQov
+TmFtZSAvSW0xMAovTGVuZ3RoIDE5NwovV2lkdGggMjAKL0hlaWdodCAyMAovQml0c1BlckNvbXBv
+bmVudCA4Ci9Db2xvclNwYWNlIC9EZXZpY2VSR0IKL01hc2sgWzI1NSAyNTUgMjU1IDI1NSAyNTUg
+MjU1XQovRmlsdGVyIC9GbGF0ZURlY29kZSAKPj4Kc3RyZWFtCnicrZLZCgIxDEXP//fL3FBUFHFH
+FBF3EVfUobXjTNuZWvGSt+YkN0khU0+fVFrJFd4KOay3wvspHXc4WRW+YSPwAkfYwTIXN9gHXGXT
+PaxgDhPLv7lSDd7gDAfYwAKmMIQutDL2gOV2K93OYAw9aEMDqlCGggyDTbpda7cD6EATahIsalbN
+HrO225F2W4eK7FX4N2tIsX3XpDH46es6nGKTkxrJ3i+XOqXzb/wkJyuECGWFVlBfkVCo51DKYEPB
+SC/jJ3N8CmVuZHN0cmVhbQplbmRvYmoKMTggMCBvYmoKPDwgL1R5cGUgL1BhZ2UKL1BhcmVudCAx
+IDAgUgovTWVkaWFCb3ggWyAwIDAgNjEyIDc5MiBdCi9SZXNvdXJjZXMgMyAwIFIKL0NvbnRlbnRz
+IDEwIDAgUgo+PgplbmRvYmoKMTkgMCBvYmoKPDwgL0xlbmd0aCAyNTg5IC9GaWx0ZXIgL0ZsYXRl
+RGVjb2RlIAogPj4Kc3RyZWFtCnic5Vpbj9s2Fn6fXyFgH5oAGVV3WX3LpS2y2DTZzDQFdmcfaIlj
+s6FElZLscX/9Hvqmc2TSdoLuYtFNEMSWSZ77dy7Uq/ubb3+IvcIPvPvHm8CPAvjjLW5CL4C/oRdn
+8EueBX46S7372vvnsx/u3jz3bqN8Bj88e8MfRSN6oZrvnnv/8u7/CqeFh9PoGUnuB4cz7pd8PIMc
+WPFG9bwbH5SqeRTwtEQ7RDN+Zujzy0/vxi+860XNeo6XVuOXocNUGCHYia7nTT8+60omXQfVnDWi
+WYwPejV+XvCGa8oEOrWHg5iuxO+8sgu81ShVYxyPpqh5r0Xpj3vdehV2YYGFHoQVJWJ/yXoiXTdo
+rKoe05DiM5eb8btmzQL9rDSyrOharjtwla8y3lpIOX57ZPjbWvRL0bwYH8xZh1WKSRL2j7YukQzq
+0ar4KBj9lxwimkelgVkq2YoJyebYa7BfkAOI5Fj5ZBUohFMmJ8oC+le5Qom1PkerBqI0zG6pOTGG
+LSip31DW9YC+rZjEX5eMuqZF9UE2+vzRYxlygIovNHdop+S6Z6LpN/4RoWIrQmWzeLTwa4uEd6XS
+/BLOZVkxMkuM8MnI/UEBK8l5TXaGjj10IYRK8WiEx1FX8U4sGpfxWFVBAHf4wG7AEY21pVZc3xoL
+nfWnLxXl1KZZmo3K1rwFDgFxXTDTajVncyFFv7nK4SYuhjXYIM3URM9wHgqMMEDkuS5JPlhs40G7
+9l7v/Fj1U4mB6tZpj0GM0ZQ/sbqVHGEeO9H6eUDLkmh01BmSVjQVOFhPMX+iapd/Yi3MzmnwSy1K
+MPJ/ybwHQ024m0aORf9RMUbAFTAwSa1Y6Cy7DYPgIr4F6WjwTx8StDzxU7w8BSAMvSwM/Tgq9kj2
+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
+8mpDoqKBnizaXfUfaaZ+RN+eSXI/iczbM34WHdqZd6dMHl9hSlO/gIWED+LZf3kOEsD/8cR/ojTw
+89nMA9CLi/E1nTAKwhyzvU+cyDNf4rypxWLZEziAymDFK9Tj/Ru9Y48sCmVuZHN0cmVhbQplbmRv
+YmoKMjAgMCBvYmoKPDwgL1R5cGUgL1BhZ2UKL1BhcmVudCAxIDAgUgovTWVkaWFCb3ggWyAwIDAg
+NjEyIDc5MiBdCi9SZXNvdXJjZXMgMyAwIFIKL0NvbnRlbnRzIDE5IDAgUgovQW5ub3RzIDIxIDAg
+Ugo+PgplbmRvYmoKMjEgMCBvYmoKWwoyMiAwIFIKXQplbmRvYmoKMjIgMCBvYmoKPDwgL1R5cGUg
+L0Fubm90Ci9TdWJ0eXBlIC9MaW5rCi9SZWN0IFsgMzI2LjExNSAyMjkuNzAxIDUxNi42NDUgMjE3
+LjcwMSBdCi9DIFsgMCAwIDAgXQovQm9yZGVyIFsgMCAwIDAgXQovQSA8PCAvVVJJIChodHRwOi8v
+d3d3LmNvcmVsb2dpYy5jb20vc29sdXRpb25zL2F2bS1jb25zdW1lci1hc3Npc3RhbmNlLmFzcHgp
+Ci9TIC9VUkkgPj4KL0ggL0kKPj4KZW5kb2JqCjIzIDAgb2JqCjw8IC9UeXBlIC9Gb250Ci9TdWJ0
+eXBlIC9UeXBlMQovTmFtZSAvRjEKL0Jhc2VGb250IC9IZWx2ZXRpY2EKL0VuY29kaW5nIC9XaW5B
+bnNpRW5jb2RpbmcgPj4KZW5kb2JqCjI0IDAgb2JqCjw8IC9UeXBlIC9Gb250Ci9TdWJ0eXBlIC9U
+eXBlMQovTmFtZSAvRjMKL0Jhc2VGb250IC9IZWx2ZXRpY2EtQm9sZAovRW5jb2RpbmcgL1dpbkFu
+c2lFbmNvZGluZyA+PgplbmRvYmoKMSAwIG9iago8PCAvVHlwZSAvUGFnZXMKL0NvdW50IDMKL0tp
+ZHMgWzkgMCBSIDE4IDAgUiAyMCAwIFIgXSA+PgplbmRvYmoKMiAwIG9iago8PCAvVHlwZSAvQ2F0
+YWxvZwovUGFnZXMgMSAwIFIKID4+CmVuZG9iagozIDAgb2JqCjw8IAovRm9udCA8PCAvRjEgMjMg
+MCBSIC9GMyAyNCAwIFIgPj4gCi9Qcm9jU2V0IFsgL1BERiAvSW1hZ2VDIC9UZXh0IF0gL1hPYmpl
+Y3QgPDwvSW0xIDYgMCBSIAovSW0yIDcgMCBSIAovSW0zIDggMCBSIAovSW00IDExIDAgUiAKL0lt
+NSAxMiAwIFIgCi9JbTYgMTMgMCBSIAovSW03IDE0IDAgUiAKL0ltOCAxNSAwIFIgCi9JbTkgMTYg
+MCBSIAovSW0xMCAxNyAwIFIgCiA+Pgo+PiAKZW5kb2JqCnhyZWYKMCAyNQowMDAwMDAwMDAwIDY1
+NTM1IGYgCjAwMDAwMTg5NDUgMDAwMDAgbiAKMDAwMDAxOTAxNyAwMDAwMCBuIAowMDAwMDE5MDY3
+IDAwMDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2NSAwMDAwMCBuIAowMDAwMDAx
+OTc4IDAwMDAwIG4gCjAwMDAwMDUxNjUgMDAwMDAgbiAKMDAwMDAwOTA3NyAwMDAwMCBuIAowMDAw
+MDA5MzA5IDAwMDAwIG4gCjAwMDAwMDk0MTUgMDAwMDAgbiAKMDAwMDAxMjEwNiAwMDAwMCBuIAow
+MDAwMDEyNjI5IDAwMDAwIG4gCjAwMDAwMTMxMzUgMDAwMDAgbiAKMDAwMDAxMzY3MiAwMDAwMCBu
+IAowMDAwMDE0MTg2IDAwMDAwIG4gCjAwMDAwMTQ3MDkgMDAwMDAgbiAKMDAwMDAxNTE3NiAwMDAw
+MCBuIAowMDAwMDE1NTg1IDAwMDAwIG4gCjAwMDAwMTU2OTMgMDAwMDAgbiAKMDAwMDAxODM1NyAw
+MDAwMCBuIAowMDAwMDE4NDgwIDAwMDAwIG4gCjAwMDAwMTg1MDcgMDAwMDAgbiAKMDAwMDAxODcy
+NCAwMDAwMCBuIAowMDAwMDE4ODMyIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgMjUKL1Jvb3Qg
+MiAwIFIKL0luZm8gNCAwIFIKPj4Kc3RhcnR4cmVmCjE5MzAwCiUlRU9GCg==                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </EmbeddedContentXML>
+                                                                     <MIMETypeIdentifier>application/pdf</MIMETypeIdentifier>
+                                                                     <ObjectDescription>PDF Document</ObjectDescription>
+                                                                     <ObjectEncodingType>Base64</ObjectEncodingType>
+                                                                     <ObjectName>ValuePoint_4</ObjectName>
+                                                                     <EXTENSION>
+                                                                        <OTHER>
+                                                                           <cl:FOREIGN_OBJECT>
+                                                                              <cl:ObjectNameExtensionIdentifier>PDF</cl:ObjectNameExtensionIdentifier>
+                                                                           </cl:FOREIGN_OBJECT>
+                                                                        </OTHER>
+                                                                     </EXTENSION>
+                                                                  </FOREIGN_OBJECT>
+                                                               </VIEW_FILE>
+                                                            </VIEW_FILES>
+                                                         </VIEW>
+                                                      </VIEWS>
+                                                   </cl:CASCADING_AVM_RESULT>
+                                                </cl:CASCADING_AVM_RESULTS>
+                                                <cl:VALUATION_RESPONSE_DETAIL>
+                                                   <cl:OrderReferenceIdentifier>OMbdd0b6a7636811e7adf6005056b1540c</cl:OrderReferenceIdentifier>
+                                                   <cl:ReportIdentifier>1499468717155922</cl:ReportIdentifier>
+                                                </cl:VALUATION_RESPONSE_DETAIL>
+                                                <cl:VALUATION_RESPONSE_PRODUCT_DETAIL>
+                                                   <cl:CascadingAVMIndicator>true</cl:CascadingAVMIndicator>
+                                                   <cl:IncludeSearchCriteriaIndicator>true</cl:IncludeSearchCriteriaIndicator>
+                                                   <cl:PropertySearchCriteriaStrictMatchIndicator>false</cl:PropertySearchCriteriaStrictMatchIndicator>
+                                                   <cl:ReportType>CascadingAVM</cl:ReportType>
+                                                </cl:VALUATION_RESPONSE_PRODUCT_DETAIL>
+                                             </cl:VALUATION_RESPONSE>
+                                          </OTHER>
+                                       </EXTENSION>
+                                    </VALUATION_RESPONSE>
+                                 </VALUATION>
+                                 <SERVICE_PRODUCT>
+                                    <SERVICE_PRODUCT_RESPONSE>
+                                       <SERVICE_PRODUCT_NAMES>
+                                          <SERVICE_PRODUCT_NAME>
+                                             <SERVICE_PRODUCT_NAME_DETAIL>
+                                                <ServiceProductNameIdentifier>AVMGEOC1</ServiceProductNameIdentifier>
+                                             </SERVICE_PRODUCT_NAME_DETAIL>
+                                          </SERVICE_PRODUCT_NAME>
+                                       </SERVICE_PRODUCT_NAMES>
+                                    </SERVICE_PRODUCT_RESPONSE>
+                                 </SERVICE_PRODUCT>
+                                 <STATUSES>
+                                    <STATUS>
+                                       <StatusCode>1999</StatusCode>
+                                       <StatusConditionDescription>Status</StatusConditionDescription>
+                                       <StatusDescription>Order completed.    VP4 Valuation Successful</StatusDescription>
+                                       <StatusName>Vendor-Complete</StatusName>
+                                       <EXTENSION>
+                                          <OTHER>
+                                             <cl:STATUS>
+                                                <cl:StatusCreatedDatetime>2017-07-07T04:05:26.000-07:00</cl:StatusCreatedDatetime>
+                                             </cl:STATUS>
+                                          </OTHER>
+                                       </EXTENSION>
+                                    </STATUS>
+                                 </STATUSES>
+                              </SERVICE>
+                           </SERVICES>
+                           <EXTENSION>
+                              <OTHER>
+                                 <cl:DEAL>
+                                    <cl:KEYS>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>FulfillmentPartyOrderIdentifier</cl:KeyIdentifier>
+                                          <cl:KeyValue>1499468716203</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>SubmittingPartyOrderIdentifier</cl:KeyIdentifier>
+                                          <cl:KeyValue>2991672943844497905</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>RespondingPartyOrderIdentifier</cl:KeyIdentifier>
+                                          <cl:KeyValue>CLGGQ160935</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>LOSClientID</cl:KeyIdentifier>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>SubmittingPartySystemEnvironment</cl:KeyIdentifier>
+                                          <cl:KeyValue>https://design.calyxpath.com</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>ConsumerRefId</cl:KeyIdentifier>
+                                          <cl:KeyValue>2991672943844497905</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>OrderId</cl:KeyIdentifier>
+                                          <cl:KeyValue>CLGGQ160935</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>SubmittingPartySystemName</cl:KeyIdentifier>
+                                          <cl:KeyValue>CoreLogic Global Gateway</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>ValuationRequestActionType</cl:KeyIdentifier>
+                                          <cl:KeyValue>Original</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>LOSClientName</cl:KeyIdentifier>
+                                          <cl:KeyValue>ABC Lender</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>LOSName</cl:KeyIdentifier>
+                                          <cl:KeyValue>Calyx Software Origination System</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>GlobalGatewayLenderIdentifier</cl:KeyIdentifier>
+                                          <cl:KeyValue>GG123456</cl:KeyValue>
+                                       </cl:KEY>
+                                       <cl:KEY>
+                                          <cl:KeyIdentifier>CascadingAVMProductID</cl:KeyIdentifier>
+                                          <cl:KeyValue>AVMGEOC1</cl:KeyValue>
+                                       </cl:KEY>
+                                    </cl:KEYS>
+                                 </cl:DEAL>
+                              </OTHER>
+                           </EXTENSION>
+                        </DEAL>
+                     </DEALS>
+                  </DEAL_SET>
+               </DEAL_SETS>
+            </DOCUMENT>
+         </DOCUMENTS>
+      </DOCUMENT_SET>
+   </DOCUMENT_SETS>
+</MESSAGE>

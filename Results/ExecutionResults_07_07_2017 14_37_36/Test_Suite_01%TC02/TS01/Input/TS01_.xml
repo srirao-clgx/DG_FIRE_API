@@ -1,0 +1,403 @@
+<MESSAGE xmlns="http://www.mismo.org/residential/2009/schemas" xmlns:cl="http://globalgateway.corelogic.com/order/2015" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" MISMOReferenceModelIdentifier="3.4[B324]" xsi:schemaLocation="http://www.mismo.org/residential/2009/schemas file:///C:/data/clg2-configuration/schema/taxpte/taxpte_common/consumer-xsd/CORELOGIC_MISMO_3.4.0_B324.xsd">
+	<DOCUMENT_SETS>
+		<DOCUMENT_SET>
+			<DOCUMENTS>
+				<DOCUMENT>
+					<DEAL_SETS>
+						<DEAL_SET>
+							<DEALS>
+								<DEAL>
+									<ABOUT_VERSIONS>
+										<ABOUT_VERSION>
+											<!--Optional-->
+											<AboutVersionIdentifier>3.4</AboutVersionIdentifier>
+											<!--Required-->
+											<CreatedDatetime>2016-02-25T13:28:02.431Z</CreatedDatetime>
+										</ABOUT_VERSION>
+									</ABOUT_VERSIONS>
+									<COLLATERALS>
+										<COLLATERAL>
+											<SUBJECT_PROPERTY>
+												<ADDRESS>
+													<!--Optional-->
+													<AddressAdditionalLineText>2nd address line</AddressAdditionalLineText>
+													<!--Required: valid enums: HighwayContract;Individual;RuralRoute;Other-->
+													<AddressFormatType>Individual</AddressFormatType>
+													<!--Conditionally Required when AddressFormatType="Other" and value is LegalLotDescription,Unparsed-->
+													<AddressFormatTypeOtherDescription/>
+													<!--Conditionally Required when AddressFormatTypeOtherDescription = "Unparsed"-->
+													<AddressLineText>2490 N SYNC SW AVE</AddressLineText>
+													<!--Required-->
+													<AddressType>Primary</AddressType>
+													<!--Optional-->
+													<AddressUnitDesignatorType>Other</AddressUnitDesignatorType>
+													<!--Optional-->
+													<AddressUnitIdentifier>12</AddressUnitIdentifier>
+													<!--Required-->
+													<CityName>UPLAND</CityName>
+													<!--Required-->
+													<CountyName>SAN BERNARDINO</CountyName>
+													<!--Conditionally Required when AddressFormatType = "HighwayContract"
+													<HighwayContractRouteIdentifier>HWY 15</HighwayContractRouteIdentifier> -->
+													<!--Required-->
+													<PostalCode>91784</PostalCode>
+													<!--Conditionally Required when AddressFormatType = "RuralRoute"
+													<RuralRouteBoxIdentifier>RR BOX 13</RuralRouteBoxIdentifier>-->
+													<!--Conditionally Required when AddressFormatType = "RuralRoute"
+													<RuralRouteIdentifier>RR 11</RuralRouteIdentifier>-->
+													<!--Required-->
+													<StateCode>CA</StateCode>
+													<!--Conditionally Required when AddressFormatType = "Individual"-->
+													<StreetName>EUCLID AVE</StreetName>
+													<!--Optional-->
+													<StreetPostDirectionalText>SW</StreetPostDirectionalText>
+													<!--Optional-->
+													<StreetPreDirectionalText>N</StreetPreDirectionalText>
+													<!--Conditionally Required when AddressFormatType = "Individual"-->
+													<StreetPrimaryNumberText>2490</StreetPrimaryNumberText>
+													<!--Optional-->
+													<StreetSuffixText>AVE</StreetSuffixText>
+													<EXTENSION>
+														<OTHER>
+															<cl:ADDRESS>
+																<!--Optional-->
+																<cl:AddressEndUnitIdentifier>12</cl:AddressEndUnitIdentifier>
+																<!--Conditionally Required when AddressFormatType = "HighwayContract" 
+																<cl:HighwayContractRouteBoxIdentifier>HWY 15 BOX 10</cl:HighwayContractRouteBoxIdentifier>-->
+																<!--Conditionally Required when AddressFormatType = "LegalLotDescription"
+																<cl:PropertyLocationDescription>Property Location Description</cl:PropertyLocationDescription>-->
+															</cl:ADDRESS>
+														</OTHER>
+													</EXTENSION>
+												</ADDRESS>
+												<IMPROVEMENT>
+													<STRUCTURE>
+														<STRUCTURE_DETAIL>
+															<!--Optional-->
+															<StoriesCount>2</StoriesCount>
+														</STRUCTURE_DETAIL>
+													</STRUCTURE>
+												</IMPROVEMENT>
+												<LOCATION_IDENTIFIER>
+													<FIPS_INFORMATION>
+														<!--Optional-->
+														<FIPSCountyCode>036</FIPSCountyCode>
+													</FIPS_INFORMATION>
+												</LOCATION_IDENTIFIER>
+												<PROPERTY_DETAIL>
+													<!--Optional-->
+													<ConstructionStatusType>Existing</ConstructionStatusType>
+													<!--Conditionally Required if PurchasePriceAmount not sent-->
+													<PropertyEstimatedValueAmount>682000</PropertyEstimatedValueAmount>
+													<!--Optional-->
+													<PropertyUsageType>PrimaryResidence</PropertyUsageType>
+												</PROPERTY_DETAIL>
+											</SUBJECT_PROPERTY>
+										</COLLATERAL>
+									</COLLATERALS>
+									<LOANS>
+										<LOAN LoanRoleType="SubjectLoan">
+											<DOCUMENT_SPECIFIC_DATA_SETS>
+												<DOCUMENT_SPECIFIC_DATA_SET>
+													<URLA>
+														<URLA_DETAIL>
+															<!--Conditionally Required if PropertyEstimatedValueAmount not sent-->
+															<PurchasePriceAmount>575000</PurchasePriceAmount>
+														</URLA_DETAIL>
+													</URLA>
+												</DOCUMENT_SPECIFIC_DATA_SET>
+											</DOCUMENT_SPECIFIC_DATA_SETS>
+											<LOAN_IDENTIFIERS>
+												<LOAN_IDENTIFIER>
+													<!--Required CLGG-->
+													<LoanIdentifier>6208408343360386532</LoanIdentifier>
+													<!--Required CLGG-->
+													<LoanIdentifierType>LenderLoan</LoanIdentifierType>
+												</LOAN_IDENTIFIER>
+											</LOAN_IDENTIFIERS>
+											<ORIGINATION_SYSTEMS>
+												<ORIGINATION_SYSTEM>
+													<!--Optional-->
+													<LoanOriginationSystemName>myLoanOriginationSystemName</LoanOriginationSystemName>
+												</ORIGINATION_SYSTEM>
+											</ORIGINATION_SYSTEMS>
+										</LOAN>
+									</LOANS>
+									<PARTIES>
+										<PARTY SequenceNumber="1">
+											<LEGAL_ENTITY>
+												<LEGAL_ENTITY_DETAIL>
+													<!--Optional-->
+													<FullName>Client Name</FullName>
+												</LEGAL_ENTITY_DETAIL>
+											</LEGAL_ENTITY>
+											<ROLES>
+												<ROLE>
+													<PARTY_ROLE_IDENTIFIERS>
+														<PARTY_ROLE_IDENTIFIER>
+															<!--Optional-->
+															<PartyRoleIdentifier>88880</PartyRoleIdentifier>
+														</PARTY_ROLE_IDENTIFIER>
+													</PARTY_ROLE_IDENTIFIERS>
+													<ROLE_DETAIL>
+														<!--Optional-->
+														<PartyRoleType>Client</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="2">
+											<LEGAL_ENTITY>
+												<LEGAL_ENTITY_DETAIL>
+													<!--Optional-->
+													<FullName>Lender Name</FullName>
+												</LEGAL_ENTITY_DETAIL>
+											</LEGAL_ENTITY>
+											<ROLES>
+												<ROLE>
+													<PARTY_ROLE_IDENTIFIERS>
+														<PARTY_ROLE_IDENTIFIER>
+															<!--Optional-->
+															<PartyRoleIdentifier>88880</PartyRoleIdentifier>
+														</PARTY_ROLE_IDENTIFIER>
+													</PARTY_ROLE_IDENTIFIERS>
+													<ROLE_DETAIL>
+														<!--Optional-->
+														<PartyRoleType>Lender</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="3">
+											<LEGAL_ENTITY>
+												<LEGAL_ENTITY_DETAIL>
+													<!--Optional-->
+													<FullName>Lender Branch Name</FullName>
+												</LEGAL_ENTITY_DETAIL>
+											</LEGAL_ENTITY>
+											<ROLES>
+												<ROLE>
+													<PARTY_ROLE_IDENTIFIERS>
+														<PARTY_ROLE_IDENTIFIER>
+															<!--Optional-->
+															<PartyRoleIdentifier>LenderBranchID</PartyRoleIdentifier>
+														</PARTY_ROLE_IDENTIFIER>
+													</PARTY_ROLE_IDENTIFIERS>
+													<ROLE_DETAIL>
+														<!--Optional-->
+														<PartyRoleType>LenderBranch</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="4">
+											<INDIVIDUAL>
+												<CONTACT_POINTS>
+													<CONTACT_POINT SequenceNumber="1">
+														<CONTACT_POINT_EMAIL>
+															<!--Optional-->
+															<ContactPointEmailValue>loanofficer@email.com</ContactPointEmailValue>
+														</CONTACT_POINT_EMAIL>
+														<CONTACT_POINT_DETAIL>
+															<!--Optional-->
+															<ContactPointRoleType>Work</ContactPointRoleType>
+														</CONTACT_POINT_DETAIL>
+													</CONTACT_POINT>
+													<CONTACT_POINT SequenceNumber="2">
+														<CONTACT_POINT_TELEPHONE>
+															<!--Optional-->
+															<ContactPointTelephoneValue>8004445555</ContactPointTelephoneValue>
+														</CONTACT_POINT_TELEPHONE>
+														<CONTACT_POINT_DETAIL>
+															<!--Optional-->
+															<ContactPointRoleType>Work</ContactPointRoleType>
+														</CONTACT_POINT_DETAIL>
+													</CONTACT_POINT>
+													<CONTACT_POINT SequenceNumber="3">
+														<CONTACT_POINT_TELEPHONE>
+															<!--Optional-->
+															<ContactPointFaxValue>8004445557</ContactPointFaxValue>
+														</CONTACT_POINT_TELEPHONE>
+														<CONTACT_POINT_DETAIL>
+															<!--Optional-->
+															<ContactPointRoleType>Work</ContactPointRoleType>
+														</CONTACT_POINT_DETAIL>
+													</CONTACT_POINT>
+												</CONTACT_POINTS>
+												<NAME>
+													<!--Optional-->
+													<FullName>Loan Officer Name</FullName>
+												</NAME>
+											</INDIVIDUAL>
+											<ROLES>
+												<ROLE>
+													<PARTY_ROLE_IDENTIFIERS>
+														<PARTY_ROLE_IDENTIFIER>
+															<!--Optional-->
+															<PartyRoleIdentifier>LoanOfficerID</PartyRoleIdentifier>
+														</PARTY_ROLE_IDENTIFIER>
+													</PARTY_ROLE_IDENTIFIERS>
+													<ROLE_DETAIL>
+														<!--Optional-->
+														<PartyRoleType>LoanOfficer</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="5">
+											<!--Can only use Entity Name or Individual-->
+											<LEGAL_ENTITY>
+												<LEGAL_ENTITY_DETAIL>
+													<!--Optional-->
+													<FullName>Requesting Party Entity Name</FullName>
+												</LEGAL_ENTITY_DETAIL>
+											</LEGAL_ENTITY>
+											<ROLES>
+												<ROLE SequenceNumber="1">
+													<PARTY_ROLE_IDENTIFIERS>
+														<PARTY_ROLE_IDENTIFIER>
+															<!--Optional-->
+															<PartyRoleIdentifier>88880</PartyRoleIdentifier>
+														</PARTY_ROLE_IDENTIFIER>
+													</PARTY_ROLE_IDENTIFIERS>
+													<ROLE_DETAIL>
+														<!--Optional-->
+														<PartyRoleType>RequestingParty</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+												<ROLE SequenceNumber="2">
+													<REQUESTING_PARTY>
+														<!--Optional-->
+														<InternalAccountIdentifier>InternalAccountID</InternalAccountIdentifier>
+														<!--Optional-->
+														<RequestedByName>Requestor Name</RequestedByName>
+														<!--Optional-->
+														<RequestingPartyBranchIdentifier>RequestingPartyBranchID</RequestingPartyBranchIdentifier>
+														<EXTENSION>
+															<OTHER>
+																<cl:REQUESTING_PARTY>
+																	<!--Required CLGG-->
+																	<cl:LoginAccountIdentifier>12083</cl:LoginAccountIdentifier>
+																	<!--Required CLGG-->
+																	<cl:LoginAccountPassword>pwd12083</cl:LoginAccountPassword>
+																	<!--Optional: Only used if Requesting Party contains INDIVIDUAL element-->
+																	<cl:RequestingPartyLegalEntityFullName>RequestingPartyEntityFullName</cl:RequestingPartyLegalEntityFullName>
+																	<!--Optional: Only used if Requesting Party contains INDIVIDUAL element-->
+																	<cl:RequestingPartyLegalEntityIdentifier>RequestingPartyEntityID</cl:RequestingPartyLegalEntityIdentifier>
+																</cl:REQUESTING_PARTY>
+															</OTHER>
+														</EXTENSION>
+													</REQUESTING_PARTY>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="6">
+											<ROLES>
+												<ROLE SequenceNumber="1">
+													<RETURN_TO>
+														<PREFERRED_RESPONSES>
+															<PREFERRED_RESPONSE>
+																<!--Optional-->
+																<PreferredResponseDestinationDescription>UAT</PreferredResponseDestinationDescription>
+																<!--Optional-->
+																<PreferredResponseFormatType>XML</PreferredResponseFormatType>
+																<!--Optional-->
+																<PreferredResponseMethodType>HTTPS</PreferredResponseMethodType>
+															</PREFERRED_RESPONSE>
+														</PREFERRED_RESPONSES>
+													</RETURN_TO>
+													<ROLE_DETAIL>
+														<!--Optional-->
+														<PartyRoleType>SubmittingParty</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+												<ROLE SequenceNumber="2">
+													<SUBMITTING_PARTY>
+														<EXTENSION>
+															<OTHER>
+																<cl:SUBMITTING_PARTY>
+																	<!--Optional-->
+																	<cl:LoginAccountIdentifier>12083</cl:LoginAccountIdentifier>
+																	<!--Optional-->
+																	<cl:LoginAccountPassword>pwd12083</cl:LoginAccountPassword>
+																	<!--Optional: Only used if Submitting Party contains INDIVIDUAL-->
+																	<cl:SubmittingPartyLegalEntityFullName>SubmittingPartyEntityFullName</cl:SubmittingPartyLegalEntityFullName>
+																	<!--Optional: Only used if Requesting Party contains INDIVIDUAL-->
+																	<cl:SubmittingPartyLegalEntityIdentifier>SubmittingPartyEntityID</cl:SubmittingPartyLegalEntityIdentifier>
+																</cl:SUBMITTING_PARTY>
+															</OTHER>
+														</EXTENSION>
+													</SUBMITTING_PARTY>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="5">
+											<ROLES>
+												<ROLE SequenceNumber="1">
+													<RETURN_TO>
+														<PREFERRED_RESPONSES>
+															<PREFERRED_RESPONSE>
+																<!--Optional-->
+																<PreferredResponseDestinationDescription>https://qa2.globalgateway.corelogic.com</PreferredResponseDestinationDescription>
+																<!--Optional-->
+																<PreferredResponseFormatType>XML</PreferredResponseFormatType>
+																<!--Optional-->
+																<PreferredResponseMethodType>HTTPS</PreferredResponseMethodType>
+															</PREFERRED_RESPONSE>
+														</PREFERRED_RESPONSES>
+													</RETURN_TO>
+													<ROLE_DETAIL>
+														<!--Optional-->
+														<PartyRoleType>RespondToParty</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+									</PARTIES>
+									<SERVICES>
+										<SERVICE>
+											<TAX>
+												<EXTENSION>
+													<OTHER>
+														<cl:TAX>
+															<cl:TAX_REQUEST>
+																<cl:TAX_REQUEST_DETAIL>
+																	<!--Required-->
+																	<cl:TaxRequestActionType>Submit</cl:TaxRequestActionType>
+																</cl:TAX_REQUEST_DETAIL>
+															</cl:TAX_REQUEST>
+														</cl:TAX>
+													</OTHER>
+												</EXTENSION>
+											</TAX>
+											<SERVICE_PRODUCT>
+												<SERVICE_PRODUCT_REQUEST>
+													<SERVICE_PRODUCT_DETAIL>
+														<!--Required CLGG-->
+														<ServiceProductIdentifier>TAX0203</ServiceProductIdentifier>
+													</SERVICE_PRODUCT_DETAIL>
+												</SERVICE_PRODUCT_REQUEST>
+											</SERVICE_PRODUCT>
+										</SERVICE>
+									</SERVICES>
+									<EXTENSION>
+										<OTHER>
+											<cl:DEAL>
+												<cl:KEYS>
+													<cl:KEY>
+														<cl:KeyIdentifier>SubmittingPartyOrderIdentifier</cl:KeyIdentifier>
+														<cl:KeyValue>6208408343360386532</cl:KeyValue>
+													</cl:KEY>
+												</cl:KEYS>
+											</cl:DEAL>
+										</OTHER>
+									</EXTENSION>
+								</DEAL>
+							</DEALS>
+						</DEAL_SET>
+					</DEAL_SETS>
+				</DOCUMENT>
+			</DOCUMENTS>
+		</DOCUMENT_SET>
+	</DOCUMENT_SETS>
+</MESSAGE>

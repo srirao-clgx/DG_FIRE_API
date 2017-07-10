@@ -86,11 +86,12 @@ try {
 	  	
   	def response = new XmlParser().parseText(responsexml);
   	
-  	def respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][1][ns.KeyValue].text();
+  	String respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][1][ns.KeyValue].text();
   	
-  	if respondingPartyOrderId not like %CLG% then
+  	if (!respondingPartyOrderId.startsWith(&quot;CLG&quot;)){
   	respondingPartyOrderId = response.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.EXTENSION.OTHER[ns.DEAL][ns.KEYS][ns.KEY][0][ns.KeyValue].text();
-  
+    }
+  	
 	System.out.println (&quot;Responding Party Order Id is: \n&quot; + respondingPartyOrderId);
   		
   	
@@ -171,7 +172,7 @@ import groovy.xml.*;
 	def responsexml = &quot;Response xml&quot;
 	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
 	
-	sleep(5000);
+	sleep(15000);
 	ServerAddress serverAddress = new ServerAddress(host, port);
     MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
     MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
@@ -267,10 +268,7 @@ import groovy.xml.*;
 	def responsexml = &quot;Response xml&quot;
 	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
 	
-
-try {
-  	
-  	sleep(5000);
+	sleep(5000);
 	ServerAddress serverAddress = new ServerAddress(host, port);
     MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
     MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
@@ -279,6 +277,10 @@ try {
   	      
   	System.out.println(&quot;Awesome....Successfully connected to Mongo Database.&quot;);
 	
+
+try {
+  	
+  	
   	responsexml = responseHolder.get(testStep.getId()).getResponse();
 	
   	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
@@ -308,6 +310,10 @@ try {
 	assert orderMessagesRowCount == 4 : &quot;Number of Rows should be 4&quot;
   	
 	}
+	catch (AssertionError asserterror){
+      throw new Exception(&quot;Records Count does not match &quot;+ asserterror.getMessage());
+    }
+
 	catch (Exception e) {
       System.out.println(&quot;Oh No....Exception&quot;);
   	  e.printStackTrace();
@@ -362,10 +368,7 @@ import groovy.xml.*;
 	def responsexml = &quot;Response xml&quot;
 	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
 	
-
-try {
-  	
-  	sleep(5000);
+	sleep(5000);
 	ServerAddress serverAddress = new ServerAddress(host, port);
     MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
     MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
@@ -373,7 +376,11 @@ try {
   	DB db = mongoClient.getDB(databaseName);    
   	      
   	System.out.println(&quot;Awesome....Successfully connected to Mongo Database.&quot;);
-	
+		
+
+try {
+  	
+  	
   	responsexml = responseHolder.get(testStep.getId()).getResponse();
 	
   	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
@@ -403,6 +410,9 @@ try {
 	assert orderMessagesRowCount == 4 : &quot;Number of Rows should be 4&quot;
   	
 	}
+	catch (AssertionError asserterror){
+      throw new Exception(&quot;Records Count does not match &quot;+ asserterror.getMessage());
+    }
 	catch (Exception e) {
       System.out.println(&quot;Oh No....Exception&quot;);
   	  e.printStackTrace();
@@ -458,10 +468,7 @@ import groovy.xml.*;
 	def responsexml = &quot;Response xml&quot;
 	def ns = new groovy.xml.Namespace(&quot;http://globalgateway.corelogic.com/order/2015&quot;,&apos;cl&apos;);
 	
-
-try {
-  	
-  	sleep(5000);
+	sleep(5000);
 	ServerAddress serverAddress = new ServerAddress(host, port);
     MongoCredential mongoCredential = MongoCredential.createCredential(userName, databaseName, password.toCharArray());
     MongoClient mongoClient = new MongoClient(serverAddress, Arrays.asList(mongoCredential));
@@ -470,6 +477,9 @@ try {
   	      
   	System.out.println(&quot;Awesome....Successfully connected to Mongo Database.&quot;);
 	
+
+try {  	
+  	
   	responsexml = responseHolder.get(testStep.getId()).getResponse();
 	
   	//System.out.println (&quot;Response xml is: \n&quot; + 	responsexml);
@@ -480,7 +490,6 @@ try {
   	
 	System.out.println (&quot;Responding Party Order Id is: \n&quot; + respondingPartyOrderId);
   	
-	
   	
   	DBCollection coll = db.getCollection(&quot;orderMessages&quot;);
   	BasicDBObject query = new BasicDBObject();
@@ -499,6 +508,9 @@ try {
 	assert orderMessagesRowCount == 4 : &quot;Number of Rows should be 4&quot;
   	
 	}
+	catch (AssertionError asserterror){
+      throw new Exception(&quot;Records Count does not match &quot;+ asserterror.getMessage());
+    }
 	catch (Exception e) {
       System.out.println(&quot;Oh No....Exception&quot;);
   	  e.printStackTrace();

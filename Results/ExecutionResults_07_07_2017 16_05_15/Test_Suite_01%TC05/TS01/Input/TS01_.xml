@@ -1,0 +1,155 @@
+<MESSAGE xmlns="http://www.mismo.org/residential/2009/schemas" xmlns:cl="http://globalgateway.corelogic.com/order/2015" MISMOReferenceModelIdentifier="3.4[B324]">
+	<DOCUMENT_SETS>
+		<DOCUMENT_SET>
+			<DOCUMENTS>
+				<DOCUMENT>
+					<DEAL_SETS>
+						<DEAL_SET>
+							<DEALS>
+								<DEAL>
+									<ABOUT_VERSIONS>
+										<ABOUT_VERSION>
+											<AboutVersionIdentifier>3.4</AboutVersionIdentifier>
+											<CreatedDatetime>2016-08-01T03:02:24.045-05:00</CreatedDatetime>
+										</ABOUT_VERSION>
+									</ABOUT_VERSIONS>
+									<COLLATERALS>
+										<COLLATERAL>
+											<SUBJECT_PROPERTY>
+												<ADDRESS>
+													<AddressLineText>3049 MAGNUM DR</AddressLineText>
+													<CityName>SAN JOSE</CityName>
+													<CountyName>Santa Clara</CountyName>
+													<PostalCode>95135</PostalCode>
+													<StateCode>CA</StateCode>
+													<StreetName>3049</StreetName>
+													<StreetPrimaryNumberText>MAGNUM</StreetPrimaryNumberText>
+													<StreetSuffixText>CT</StreetSuffixText>
+												</ADDRESS>
+											</SUBJECT_PROPERTY>
+										</COLLATERAL>
+									</COLLATERALS>
+									<LOANS>
+										<LOAN LoanRoleType="SubjectLoan">
+											<LOAN_IDENTIFIERS>
+												<LOAN_IDENTIFIER>
+													<LoanIdentifier>2991672943844497905</LoanIdentifier>
+													<LoanIdentifierType>LenderLoan</LoanIdentifierType>
+												</LOAN_IDENTIFIER>
+											</LOAN_IDENTIFIERS>
+											<ORIGINATION_SYSTEMS>
+												<ORIGINATION_SYSTEM>
+													<LoanOriginationSystemName>Calyx Software Origination System</LoanOriginationSystemName>
+												</ORIGINATION_SYSTEM>
+											</ORIGINATION_SYSTEMS>
+										</LOAN>
+									</LOANS>
+									<PARTIES>
+										<PARTY SequenceNumber="1">
+											<LEGAL_ENTITY>
+												<LEGAL_ENTITY_DETAIL>
+													<FullName>ABC Lender</FullName>
+												</LEGAL_ENTITY_DETAIL>
+											</LEGAL_ENTITY>
+											<ROLES>
+												<ROLE SequenceNumber="1">
+													<RETURN_TO>
+														<PREFERRED_RESPONSES>
+															<PREFERRED_RESPONSE SequenceNumber="1">
+																<PreferredResponseFormatType>PDF</PreferredResponseFormatType>
+																<PreferredResponseUseEmbeddedFileIndicator>true</PreferredResponseUseEmbeddedFileIndicator>
+															</PREFERRED_RESPONSE>
+														</PREFERRED_RESPONSES>
+													</RETURN_TO>
+													<ROLE_DETAIL>
+														<PartyRoleType>RequestingParty</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+												<ROLE SequenceNumber="2">
+													<REQUESTING_PARTY>
+														<EXTENSION>
+															<OTHER>
+																<cl:REQUESTING_PARTY>
+																	<cl:LoginAccountIdentifier>CALYXTEST</cl:LoginAccountIdentifier>
+																	<cl:LoginAccountPassword>test123</cl:LoginAccountPassword>
+																</cl:REQUESTING_PARTY>
+															</OTHER>
+														</EXTENSION>
+													</REQUESTING_PARTY>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+										<PARTY SequenceNumber="2">
+											<ROLES>
+												<ROLE SequenceNumber="1">
+													<RETURN_TO>
+														<PREFERRED_RESPONSES>
+															<PREFERRED_RESPONSE>
+																<PreferredResponseDestinationDescription>https://design.calyxpath.com</PreferredResponseDestinationDescription>
+															</PREFERRED_RESPONSE>
+														</PREFERRED_RESPONSES>
+													</RETURN_TO>
+													<ROLE_DETAIL>
+														<PartyRoleType>SubmittingParty</PartyRoleType>
+													</ROLE_DETAIL>
+												</ROLE>
+											</ROLES>
+										</PARTY>
+									</PARTIES>
+									<SERVICES>
+										<SERVICE>
+											<VALUATION>
+												<VALUATION_REQUEST>
+													<VALUATION_REQUEST_DETAIL>
+														<ValuationRequestActionType>Original</ValuationRequestActionType>
+													</VALUATION_REQUEST_DETAIL>
+													<EXTENSION>
+														<OTHER>
+															<cl:VALUATION_REQUEST>
+																<cl:VALUATION_REQUEST_PRODUCT_DETAIL>
+																	<cl:CascadingAVMReportType>Full</cl:CascadingAVMReportType>
+																	<cl:CascadingAVMReportTypeOtherDescription>Populate if Type is Other</cl:CascadingAVMReportTypeOtherDescription>
+																	<cl:CascadingAVMReturnType>AllAVMs</cl:CascadingAVMReturnType>
+																	<cl:CascadingAVMReturnTypeOtherDescription>Populate if Type is Other</cl:CascadingAVMReturnTypeOtherDescription>
+																	<cl:IncludeSearchCriteriaIndicator>true</cl:IncludeSearchCriteriaIndicator>
+																</cl:VALUATION_REQUEST_PRODUCT_DETAIL>
+															</cl:VALUATION_REQUEST>
+														</OTHER>
+													</EXTENSION>
+												</VALUATION_REQUEST>
+											</VALUATION>
+											<REPORTING_INFORMATION>
+												<ReportingInformationIdentifier>GG123456</ReportingInformationIdentifier>
+												<ReportingInformationName>GlobalGatewayLenderIdentifier</ReportingInformationName>
+											</REPORTING_INFORMATION>
+											<SERVICE_PRODUCT>
+												<SERVICE_PRODUCT_REQUEST>
+													<SERVICE_PRODUCT_DETAIL>
+														<ServiceProductDescription>GEOAVM Core</ServiceProductDescription>
+														<ServiceProductIdentifier>AVMGEOC1</ServiceProductIdentifier>
+													</SERVICE_PRODUCT_DETAIL>
+												</SERVICE_PRODUCT_REQUEST>
+											</SERVICE_PRODUCT>
+										</SERVICE>
+									</SERVICES>
+									<EXTENSION>
+										<OTHER>
+											<cl:DEAL>
+												<cl:KEYS>
+													<cl:KEY>
+														<cl:KeyIdentifier>SubmittingPartyOrderIdentifier</cl:KeyIdentifier>
+														<cl:KeyValue>2991672943844497905</cl:KeyValue>
+													</cl:KEY>
+												</cl:KEYS>
+											</cl:DEAL>
+										</OTHER>
+									</EXTENSION>
+								</DEAL>
+							</DEALS>
+						</DEAL_SET>
+					</DEAL_SETS>
+				</DOCUMENT>
+			</DOCUMENTS>
+		</DOCUMENT_SET>
+	</DOCUMENT_SETS>
+</MESSAGE>
