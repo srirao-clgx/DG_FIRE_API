@@ -7,16 +7,16 @@
   <version>1.0-SNAPSHOT</version>
   <name>CoreLogic_Digital_Gateway</name>
   <url>http://maven.apache.org</url>
-  <distributionManagement>
+  <!-- distributionManagement>
     <repository>
       <id>releases</id>
-      <url>https://repo.corelogic.net/nexus/content/groups/m2</url>
+      <url>http://qa-coe:8081/nexus/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
       <id>snapshots</id>
-      <url>https://repo.corelogic.net/nexus/content/groups/m2</url>
+      <url>http://qa-coe:8081/nexus/content/repositories/snapshots</url>
     </snapshotRepository>
-  </distributionManagement>
+  </distributionManagement -->
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
